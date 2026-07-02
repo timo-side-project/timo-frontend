@@ -1,11 +1,9 @@
 import Image from 'next/image';
 import { useMemo } from 'react';
 
-import {
-  CATEGORY,
-  CATEGORY_CHARACTER_MAP,
-} from '@/src/lib/constants/character';
+import { CATEGORY_CHARACTER_MAP } from '@/src/lib/constants/character';
 import { cn } from '@/src/lib/helpers/cn';
+import { sortByCategory } from '@/src/lib/helpers/sortByCategory';
 
 import { useIdealScoreGraph } from '../hooks/useIdealScoreGraph';
 import { type ResponseType as TestRecordResponseType } from '../queries/useTestRecordQuery';
@@ -16,13 +14,7 @@ import { formatPolylinePoints } from '../utils/formatPolylinePoints';
 type ScoreGraphProps = Pick<TestRecordResponseType['result'], 'scores'>;
 
 const ScoreGraph = ({ scores }: ScoreGraphProps) => {
-  const sortedScores = useMemo(
-    () =>
-      [...scores].sort(
-        (a, b) => CATEGORY.indexOf(a.category) - CATEGORY.indexOf(b.category),
-      ),
-    [scores],
-  );
+  const sortedScores = useMemo(() => sortByCategory(scores), [scores]);
 
   const { containerRef, dotsRef, linePoints } = useIdealScoreGraph({
     scores: sortedScores,

@@ -75,3 +75,7 @@ export const CATEGORY_CHARACTER_MAP: Record<Category, CharacterAsset> = {
     profileSrc: '/character/profile-future-oriented.svg',
   },
 };
+
+export const CHARACTER_NAMES = Object.values(CATEGORY_CHARACTER_MAP).map(
+  ({ name }) => name,
+) as [string, ...string[]];

@@ -1,17 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { SORT_OPTIONS } from '../../constants/groupSort';
-import RankingSort from './RankingSort';
+import { SORT_OPTIONS } from '@/src/components/features/groups/constants/groupSort';
+
+import SortSelect from './SortSelect';
 
 const meta = {
-  title: 'Features/Groups/Ranking/RankingSort',
-  component: RankingSort,
+  title: 'UI/SortSelect',
+  component: SortSelect,
   parameters: {
     layout: 'fullscreen',
     viewport: { defaultViewport: 'mobile1' },
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof RankingSort>;
+} satisfies Meta<typeof SortSelect>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

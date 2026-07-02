@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Icon from '@/src/components/ui/Icon/Icon';
 import type { IconNameType } from '@/src/components/ui/Icon/Icon.types';
 
-export type TabKey = 'calendar' | 'home' | 'groups' | 'profile';
+export type TabKey = 'home' | 'calendar' | 'statistics' | 'groups' | 'profile';
 
 type BottomNavButtonProps = {
   tabKey: TabKey;

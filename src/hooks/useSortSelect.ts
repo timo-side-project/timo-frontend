@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface RankingSortOption<T extends string> {
+interface SortSelectOption<T extends string> {
   label: string;
   value: T;
 }
 
-interface UseRankingSortProps<T extends string> {
-  options: readonly RankingSortOption<T>[];
+interface UseSortSelectProps<T extends string> {
+  options: readonly SortSelectOption<T>[];
   value: T;
   onChange?: (value: T) => void;
 }
 
-export const useRankingSort = <T extends string>({
+export const useSortSelect = <T extends string>({
   options,
   value,
   onChange,
-}: UseRankingSortProps<T>) => {
+}: UseSortSelectProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 

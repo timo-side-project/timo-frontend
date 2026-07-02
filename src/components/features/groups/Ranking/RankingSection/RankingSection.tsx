@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 
+import SortSelect from '@/src/components/ui/SortSelect/SortSelect';
+
 import { SORT_OPTIONS } from '../../constants/groupSort';
 import { type GroupType, groupType } from '../../constants/groupType';
 import type { GroupFriendItem } from '../../queries/useGroupFriendListQuery';
 import RankingList from '../RankingList/RankingList';
-import RankingSort from '../RankingSort/RankingSort';
 
 interface RankingSectionProps {
   activeTab?: GroupType;
@@ -28,7 +29,7 @@ const RankingSection = ({
           {activeTab === 'FRIEND' ? groupType.FRIEND : groupType.CHARACTER}
         </p>
 
-        <RankingSort options={SORT_OPTIONS} value={sort} onChange={setSort} />
+        <SortSelect options={SORT_OPTIONS} value={sort} onChange={setSort} />
       </div>
 
       <div className="flex-1 overflow-y-auto pb-24">

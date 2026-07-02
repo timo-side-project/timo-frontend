@@ -1,8 +1,6 @@
 'use client';
 
-import Image from 'next/image';
-
-import { cn } from '@/src/lib/helpers/cn';
+import AvatarButton from '@/src/components/ui/AvatarButton/AvatarButton';
 
 import type { GroupType } from '../constants/groupType';
 
@@ -22,38 +20,16 @@ interface GroupListProps {
 const GroupList = ({ groups, selectedId, onSelect }: GroupListProps) => {
   return (
     <div className="flex h-28 items-start pt-4 gap-4 overflow-x-auto overflow-y-hidden scrollbar-hidden">
-      {groups.map((item, idx) => {
-        const isSelected = selectedId === item.id;
-        return (
-          <button
-            key={item.id}
-            type="button"
-            className="flex flex-col items-center gap-2 w-17.5 shrink-0 cursor-pointer"
-            aria-pressed={isSelected}
-            onClick={() => onSelect?.(item.id)}
-          >
-            <div className="relative w-13.75 h-13.75 rounded-[10px] overflow-hidden shrink-0">
-              <Image
-                src={item.image || '/images/default-group.svg'}
-                alt={item.name}
-                fill
-                sizes="55px"
-                className="object-cover"
-                preload={idx < 5}
-              />
-              {!isSelected && <div className="absolute inset-0 bg-g-900/60" />}
-            </div>
-            <p
-              className={cn(
-                'font-caption-n line-clamp-2 text-center',
-                isSelected ? 'text-g-0' : 'text-g-80',
-              )}
-            >
-              {item.name}
-            </p>
-          </button>
-        );
-      })}
+      {groups.map((item, idx) => (
+        <AvatarButton
+          key={item.id}
+          src={item.image || '/images/default-group.svg'}
+          label={item.name}
+          isSelected={selectedId === item.id}
+          onClick={() => onSelect?.(item.id)}
+          preload={idx < 5}
+        />
+      ))}
     </div>
   );
 };

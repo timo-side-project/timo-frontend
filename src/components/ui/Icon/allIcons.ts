@@ -25,6 +25,8 @@ const allIcons = {
   groupsInactive: '/icons/groups-inactive.svg',
   starFilled: '/icons/star-filled.svg',
   starOutline: '/icons/star-outline.svg',
+  statisticsActive: '/icons/statistics-active.svg',
+  statisticsInactive: '/icons/statistics-inactive.svg',
 } as const;
 
 export default allIcons;

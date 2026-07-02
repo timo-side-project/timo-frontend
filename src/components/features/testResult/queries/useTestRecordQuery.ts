@@ -2,14 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { get } from '@/src/lib/api';
-import { CATEGORY } from '@/src/lib/constants/character';
+import { CATEGORY, CHARACTER_NAMES } from '@/src/lib/constants/character';
 
 import { TEST_RESULT_QUERY_KEYS } from '../constants/queryKeys';
 import { TEST_RESULT_ENDPOINTS } from '../constants/url';
 
 const ClosestCategorySchema = z.object({
   name: z.enum(CATEGORY),
-  character: z.string(),
+  character: z.enum(CHARACTER_NAMES),
   personality: z.string(),
   description: z.string(),
 });

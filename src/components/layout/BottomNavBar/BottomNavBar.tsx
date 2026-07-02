@@ -27,6 +27,12 @@ const bottomTabs: BottomTabItem[] = [
     href: '/calendar',
   },
   {
+    key: 'statistics',
+    activeIconName: 'statisticsActive',
+    inactiveIconName: 'statisticsInactive',
+    href: '/statistics',
+  },
+  {
     key: 'groups',
     activeIconName: 'groupsActive',
     inactiveIconName: 'groupsInactive',

@@ -2,28 +2,27 @@
 
 import Image from 'next/image';
 
+import { useSortSelect } from '@/src/hooks/useSortSelect';
 import { cn } from '@/src/lib/helpers/cn';
 
-import { useRankingSort } from '../../hooks/useRankingSort';
-
-interface RankingSortOption<T extends string> {
+interface SortSelectOption<T extends string> {
   label: string;
   value: T;
 }
 
-interface RankingSortProps<T extends string> {
-  options: readonly RankingSortOption<T>[];
+interface SortSelectProps<T extends string> {
+  options: readonly SortSelectOption<T>[];
   value: T;
   onChange?: (value: T) => void;
 }
 
-const RankingSort = <T extends string>({
+const SortSelect = <T extends string>({
   options,
   value,
   onChange,
-}: RankingSortProps<T>) => {
+}: SortSelectProps<T>) => {
   const { ref, selected, selectedLabel, isOpen, toggleOpen, handleSelect } =
-    useRankingSort({ options, value, onChange });
+    useSortSelect({ options, value, onChange });
 
   return (
     <div ref={ref} className="relative">
@@ -67,4 +66,4 @@ const RankingSort = <T extends string>({
   );
 };
 
-export default RankingSort;
+export default SortSelect;
