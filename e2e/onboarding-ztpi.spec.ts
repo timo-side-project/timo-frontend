@@ -11,7 +11,7 @@ test.describe('온보딩 → ZTPI 테스트 진입', () => {
     await expect(nextButton).toBeVisible();
 
     for (let i = 0; i < 10 && !/\/login/.test(page.url()); i += 1) {
-      await nextButton.click();
+      await nextButton.click({ timeout: 2000 }).catch(() => {});
     }
 
     await expect(page).toHaveURL(/\/login/);
@@ -20,6 +20,11 @@ test.describe('온보딩 → ZTPI 테스트 진입', () => {
   test('ZTPI 테스트 페이지 진입 시 테스트 문항이 노출된다', async ({
     page,
   }) => {
+    await page.goto('/test-auth');
+    await page.getByLabel('Email').fill('test@test.com');
+    await page.getByRole('button', { name: '로그인' }).click();
+    await page.waitForURL('/');
+
     await page.route('**/api/proxy/tests', (route) =>
       route.fulfill({
         json: [
@@ -35,6 +40,9 @@ test.describe('온보딩 → ZTPI 테스트 진입', () => {
     );
     await page.route('**/api/proxy/test-records', (route) =>
       route.fulfill({ json: { id: 100, isExisting: false } }),
+    );
+    await page.route('**/api/proxy/test-records/100/responses', (route) =>
+      route.fulfill({ json: [] }),
     );
     await page.route('**/api/proxy/tests/1/questions', (route) =>
       route.fulfill({

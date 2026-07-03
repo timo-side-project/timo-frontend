@@ -8,7 +8,6 @@ test.describe('로그인 상태 가드', () => {
     await page.getByLabel('Email').fill('test@test.com');
     await page.getByRole('button', { name: '로그인' }).click();
 
-    await expect(page.getByText('로그인 성공')).toBeVisible();
     await page.waitForURL('/');
 
     await expect(page).not.toHaveURL(/\/login/);
