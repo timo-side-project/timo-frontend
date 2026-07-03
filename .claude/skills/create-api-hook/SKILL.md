@@ -87,7 +87,7 @@ export const useLoginMutation = () =>
 ```
 
 - 래퍼 시그니처: `get<TResponse, TParams>`, `post<TRequest, TResponse, TParams>`, `patch<TRequest, TResponse>`, `del<TRequest, TResponse>`
-- 변경 후 관련 쿼리 무효화가 필요하면 `queryClient.invalidateQueries({ queryKey: ...keys })` 사용
+- 변경 후 관련 쿼리 무효화가 필요하면 `queryClient.invalidateQueries({ queryKey: keys })` 사용
 
 ## 검증
 
