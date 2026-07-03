@@ -45,7 +45,7 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 
 0. **문서 동기화 확인 (PR 전 1회)** — 이번 브랜치에서 구조/설정 파일이 바뀌었는지 본다.
    ```bash
-   git diff --name-only main...HEAD | grep -qE 'app/.*(page|route)\.(tsx|ts)|package\.json|proxy\.ts|\.claude/(skills|agents)/'
+   git diff --name-only main...HEAD | grep -qE 'app/.*(page|route)\.(tsx|ts)|src/.*|package\.json|proxy\.ts|\.claude/(skills|agents)/'
    ```
    해당되면 `docs/architecture.md`·`AGENTS.md`·`docs/tech-stack.md`가 최신인지 확인하고, 낡았으면 **`sync-docs` 스킬로 먼저 갱신**한 뒤 그 변경도 커밋에 포함한다.
 1. 푸시

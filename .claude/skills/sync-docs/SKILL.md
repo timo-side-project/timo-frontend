@@ -16,8 +16,6 @@ find app -type f \( -name 'page.tsx' -o -name 'route.ts' \) | sort
 find src -maxdepth 3 -type d | sort
 # UI / layout / features 목록
 ls src/components/ui src/components/layout src/components/features
-# 스킬 / 에이전트
-ls .claude/skills .claude/agents
 # 의존성 버전
 cat package.json  # dependencies / scripts
 # 미들웨어 존재
@@ -33,8 +31,7 @@ ls proxy.ts middleware.ts 2>/dev/null
   - 라우트 표: 추가/삭제된 `page.tsx`·`route.ts` 반영
   - 미들웨어/인증: `proxy.ts` 또는 페이지 서버 컴포넌트 로직 변경 시 갱신
 - **AGENTS.md** (인덱스)
-  - "문서" 표의 스킬 목록 = `.claude/skills/` 실제 폴더와 일치
-  - 에이전트 목록 = `.claude/agents/` 실제 파일과 일치
+  - 사용자가 스킬/에이전트를 새로 추가·삭제했다고 알려준 경우에만 "문서" 표에 반영 (다른 스킬의 내부 파일을 직접 열람하지 않는다)
 - **docs/tech-stack.md**
   - `package.json` 주요 의존성 버전/추가·제거 반영
 - **docs/conventions.md**
