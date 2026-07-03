@@ -18,6 +18,7 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 ## Phase 2: 커밋 메시지 (AGENTS.md 규칙)
 
 ### 형식
+
 ```
 <type>: 요약
 
@@ -26,6 +27,7 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 ```
 
 ### 규칙
+
 - **type**: `feat` `fix` `docs` `style` `refactor` `test` `chore`
 - **subject**: 50자 이내, **마침표 금지**, 한글 가능
 - **scope 금지** (commitlint 정책)
@@ -49,14 +51,20 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 1. 푸시
    - 첫 푸시(upstream 없음): `git push -u origin <branch>` — `-u`는 upstream을 걸어 이후 `git push`/`pull`을 인자 없이 쓰게 함
    - 이미 tracking 중이면 `-u` 불필요, 그냥 `git push`
-2. `gh pr create`로 생성:
-   - `--title` — 변경 내용을 설명하는 적절한 이름
-   - `--body` — 변경 요약 + 체크리스트
-   - `--assignee @me` — 본인을 담당자로 지정
-   - `--label <이름>` — 레포에 존재하는 라벨만 지정 (없으면 생략; `gh label list`로 확인)
-3. **머지 전략은 팀 합의** 따름 (직접 머지 금지)
+2. **제목**: `[Type] 요약` — type 첫 글자 대문자 + 대괄호 (`[Feat]` `[Fix]` `[Docs]` `[Refactor]` `[Style]` `[Test]` `[Chore]`)
+3. **본문**: `.github/PULL_REQUEST_TEMPLATE.md` 형식을 그대로 채운다.
+   - 섹션: `What is this PR?` / `Changes` / `Related Issues` / `Screenshot`
+   - **Related Issues**: 관련 이슈가 있으면 `close #{이슈번호}` (머지 시 자동 닫힘). 브랜치명 `...-#{이슈번호}`에서 추출하거나 사용자에게 확인. 없으면 `없음`
+   - **Check List**: 템플릿의 6개 항목을 **항상 전부 표시**하고, 충족된 항목은 `[x]`로 체크
+4. `gh pr create` 옵션:
+   - `--title "[Type] 요약"` / `--body <채운 템플릿>`
+   - `--assignee @me`
+   - `--reviewer <상대>` — 작성자와 **교차 리뷰**: 작성자 `jeongyou` → 리뷰어 `baegyeong`, 작성자 `baegyeong` → 리뷰어 `jeongyou` (작성자는 `git config user.name` 또는 `gh api user --jq .login`로 확인)
+   - `--label <이름>` — 레포에 존재하는 라벨만 (`gh label list`로 확인)
+5. **머지 전략은 팀 합의** 따름 (직접 머지 금지)
 
 ## 결과 리포트
+
 ```
 ### 커밋: <type>: 요약
 ### 브랜치: feature/...
