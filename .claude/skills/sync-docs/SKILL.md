@@ -39,7 +39,7 @@ ls proxy.ts middleware.ts 2>/dev/null
 
 ## Phase 3: 리포트
 
-```
+```text
 ### 동기화 결과
 - [문서]: [무엇을 어떻게 바꿈]
 ### 변경 없음: [최신 상태인 문서]

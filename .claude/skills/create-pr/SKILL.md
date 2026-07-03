@@ -19,7 +19,7 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 
 ### 형식
 
-```
+```text
 <type>: 요약
 
 - body 1
@@ -69,7 +69,7 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 
 ## 결과 리포트
 
-```
+```text
 ### 커밋: <type>: 요약
 ### 브랜치: feature/...
 ### PR: <url> (생성 시)

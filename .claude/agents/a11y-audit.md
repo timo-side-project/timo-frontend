@@ -39,7 +39,7 @@ tools: Read, Grep, Glob
 
 ## 결과 형식
 
-```
+```text
 ## Critical (반드시 수정 — 조작·인지 불가)
 | 파일:라인 | 문제 | 수정 |
 

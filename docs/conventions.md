@@ -33,7 +33,7 @@ TIMO 프론트 코드 생성/수정/리뷰의 **단일 기준**. 규칙과 실�
   - 지양: `ui` → `features` / `lib` → 컴포넌트(`components`·`hooks`) / feature 간 직접 import
 - 한 기능(feature)은 아래 구조를 가진다. 컴포넌트는 위치와 무관하게 항상 `[Name]/[Name].tsx` 폴더 방식.
 
-```
+```text
 src/components/features/[feature]/
   [Component]/
     [Component].tsx

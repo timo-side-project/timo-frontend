@@ -4,7 +4,7 @@
 
 ## 디렉토리 구조
 
-```
+```text
 app/                                  # 라우트 (App Router) — URL·레이아웃 정의만
   layout.tsx                          # 루트 레이아웃 (폰트, 메타, providers)
   providers.tsx                       # 클라이언트 프로바이더 (React Query 등)
