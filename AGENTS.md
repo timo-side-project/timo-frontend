@@ -16,7 +16,7 @@
 | 아키텍처 · 라우트 · 인증 | `docs/architecture.md` |
 | 기술 스택과 선택 이유 | `docs/tech-stack.md` |
 | React/Next 성능 규칙 | `.agents/skills/vercel-react-best-practices/` |
-| 작업 코드 템플릿 | `.claude/skills/` (`create-api-hook`, `create-component`, `create-pr`, `code-review`, `refactor`, `sync-docs`) |
+| 작업 코드 템플릿 | `.claude/skills/` (`create-api-hook`, `create-component`, `create-test`, `create-e2e`, `create-pr`, `code-review`, `refactor`, `sync-docs`) |
 | 전수 감사 에이전트 | `.claude/agents/` (`a11y-audit`) |
 | 작업 금지선 (main push 금지 등) | `.claude/rules.md` |
 
