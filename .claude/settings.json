@@ -1,0 +1,31 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(jq -r '.tool_input.file_path // empty'); case \"$FILE\" in *.ts|*.tsx) [ -f \"$FILE\" ] && HITS=$(grep -nE 'console\\.[a-zA-Z]+|\\bany\\b' \"$FILE\"); [ -n \"$HITS\" ] && printf '[TIMO 경고] %s\\n%s\\n' \"$FILE\" \"$HITS\" ;; esac; exit 0"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "N=$(git status --porcelain 2>/dev/null | grep -cE '\\.(ts|tsx)$'); [ \"$N\" -gt 0 ] && echo \"[TIMO] 미커밋 TS 파일 ${N}개 — 머지 전 pnpm typecheck / pnpm lint 확인, 커밋은 /create-pr\"; exit 0"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Edit(/.claude/skills/create-test/**)"
+    ]
+  }
+}
