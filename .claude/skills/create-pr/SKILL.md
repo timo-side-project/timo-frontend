@@ -36,9 +36,15 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
 
 ## Phase 4: PR 생성 (요청 시)
 
-1. `git push -u origin <branch>`
-2. `gh pr create` — 제목은 변경 내용을 설명하는 적절한 이름
-3. 본문: 변경 요약 + 체크리스트. **머지 전략은 팀 합의** 따름 (직접 머지 금지)
+1. 푸시
+   - 첫 푸시(upstream 없음): `git push -u origin <branch>` — `-u`는 upstream을 걸어 이후 `git push`/`pull`을 인자 없이 쓰게 함
+   - 이미 tracking 중이면 `-u` 불필요, 그냥 `git push`
+2. `gh pr create`로 생성:
+   - `--title` — 변경 내용을 설명하는 적절한 이름
+   - `--body` — 변경 요약 + 체크리스트
+   - `--assignee @me` — 본인을 담당자로 지정
+   - `--label <이름>` — 레포에 존재하는 라벨만 지정 (없으면 생략; `gh label list`로 확인)
+3. **머지 전략은 팀 합의** 따름 (직접 머지 금지)
 
 ## 결과 리포트
 ```
