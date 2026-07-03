@@ -52,9 +52,13 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
    - 첫 푸시(upstream 없음): `git push -u origin <branch>` — `-u`는 upstream을 걸어 이후 `git push`/`pull`을 인자 없이 쓰게 함
    - 이미 tracking 중이면 `-u` 불필요, 그냥 `git push`
 2. **제목**: `[Type] 요약` — type 첫 글자 대문자 + 대괄호 (`[Feat]` `[Fix]` `[Docs]` `[Refactor]` `[Style]` `[Test]` `[Chore]`)
-3. **본문**: `.github/PULL_REQUEST_TEMPLATE.md` 형식을 그대로 채운다.
-   - 섹션: `What is this PR?` / `Changes` / `Related Issues` / `Screenshot`
+3. **본문**: `.github/PULL_REQUEST_TEMPLATE.md` 형식을 그대로 채운다. 기준은 **이 PR 링크만 처음 본 사람(팀 외부·채용 리뷰 포함)도 배경 없이 읽고 이해**할 수 있는 자기완결적인 글이다. 단순 파일 나열 금지.
+   - **What is this PR?**: 문제·배경 → 이 PR이 해결하는 것을 서술한다. "무엇을/왜"가 먼저 오고, 코드를 안 봐도 큰 그림과 **결과·효과(임팩트)**가 잡히게 쓴다
+   - **Changes**: 주요 변경을 **왜 그렇게 했는지**(설계 결정·트레이드오프) 중심으로 설명한다. 필요하면 Before → After로 대비한다. 사소한 파일까지 나열하지 말고 핵심 위주로 묶는다
+   - 리뷰 포인트나 확인 방법(테스트/재현 절차)이 있으면 함께 적어 리뷰를 돕는다
+   - 과장 없이 사실 기반으로 쓰되, 무엇을 얻었는지(중복 제거·자동화·토큰 절감 등)를 분명히 드러낸다
    - **Related Issues**: 관련 이슈가 있으면 `close #{이슈번호}` (머지 시 자동 닫힘). 브랜치명 `...-#{이슈번호}`에서 추출하거나 사용자에게 확인. 없으면 `없음`
+   - **Screenshot**: UI 변경이면 스크린샷/GIF, 아니면 `해당 없음`
    - **Check List**: 템플릿의 6개 항목을 **항상 전부 표시**하고, 충족된 항목은 `[x]`로 체크
 4. `gh pr create` 옵션:
    - `--title "[Type] 요약"` / `--body <채운 템플릿>`
