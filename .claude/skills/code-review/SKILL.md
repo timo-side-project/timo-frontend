@@ -18,7 +18,7 @@ description: TIMO 프론트 코드 리뷰 — 프로젝트 컨벤션·아키텍�
 - ❌ `console.log`가 남아 있다 → ✅ 제거
 - ❌ `src/**`에 `.js`/`.jsx`/`.mts` 파일이 있다 → ✅ `.ts`/`.tsx`
 - ❌ 배럴 파일(`index.ts`)에서 임포트한다 → ✅ 직접 경로
-- ❌ import 방향을 어긴다 (`ui`→`features`, feature 간 직접 import, `lib`→컴포넌트) → ✅ 하위→상위 방향만
+- ❌ import 방향을 어긴다 (`ui`→`features`, feature 간 직접 import, `lib`→컴포넌트) → ✅ 상위→하위 방향만
 - ❌ 색상/간격에 임의 값을 쓴다 → ✅ 디자인 토큰(`bg-g-0`, `text-g-100`)
 
 ### 2. 데이터 패턴 (docs/conventions.md)

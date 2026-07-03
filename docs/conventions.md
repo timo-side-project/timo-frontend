@@ -28,7 +28,7 @@ TIMO 프론트 코드 생성/수정/리뷰의 **단일 기준**. 규칙과 실�
 
 - import 경로 별칭은 `@/src/...`
 - 배럴 파일(`index.ts`) 임포트 금지 — 직접 경로로 임포트
-- import 방향은 **하위 역할 → 상위 역할**만 허용
+- import 방향은 **상위 역할 → 하위 역할**만 허용
   - 허용: `app` → 전부 / `features` → `ui`·`hooks`·`lib`·`types` / `layout` → `ui`·`features` / `hooks` → `lib`·`types`
   - 지양: `ui` → `features` / `lib` → 컴포넌트(`components`·`hooks`) / feature 간 직접 import
 - 한 기능(feature)은 아래 구조를 가진다. 컴포넌트는 위치와 무관하게 항상 `[Name]/[Name].tsx` 폴더 방식.
