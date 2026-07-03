@@ -20,8 +20,7 @@ const GroupShareModal = ({
   const handleShare = async () => {
     if (!groupCode) return;
 
-    // TODO: /groups/join 페이지 구현 필요
-    const url = `${window.location.origin}/groups/join?code=${groupCode}`;
+    const url = `${window.location.origin}/groups?join=friend&code=${groupCode}`;
 
     if (navigator.share) {
       try {
@@ -31,8 +30,12 @@ const GroupShareModal = ({
         showToast({ message: '공유에 실패했어요.' });
       }
     } else if (navigator.clipboard) {
-      await navigator.clipboard.writeText(url);
-      showToast({ message: '초대 링크가 복사되었어요.' });
+      try {
+        await navigator.clipboard.writeText(url);
+        showToast({ message: '초대 링크가 복사되었어요.' });
+      } catch {
+        showToast({ message: '초대 링크 복사에 실패했어요.' });
+      }
     }
   };
 

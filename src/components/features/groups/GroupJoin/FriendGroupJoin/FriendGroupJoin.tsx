@@ -3,7 +3,11 @@ import Modal from '@/src/components/ui/Modal/Modal';
 
 import { useFriendGroupJoin } from '../../hooks/useFriendGroupJoin';
 
-const FriendGroupJoin = () => {
+interface FriendGroupJoinProps {
+  initialCode?: string;
+}
+
+const FriendGroupJoin = ({ initialCode }: FriendGroupJoinProps) => {
   const {
     groupCode,
     errorMessage,
@@ -11,7 +15,7 @@ const FriendGroupJoin = () => {
     handleClose,
     handleChange,
     handleSubmit,
-  } = useFriendGroupJoin();
+  } = useFriendGroupJoin(initialCode);
 
   return (
     <Modal isOpen onClose={handleClose}>

@@ -17,9 +17,10 @@ import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
 
 interface GroupsPageClientProps {
   joinParam: string | null;
+  code: string | null;
 }
 
-const GroupsPageClient = ({ joinParam }: GroupsPageClientProps) => {
+const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
   const [activeTab, setActiveTab] = useState<GroupType>('FRIEND');
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
   const [selectedFriend, setSelectedFriend] = useState<GroupFriendItem | null>(
@@ -81,7 +82,9 @@ const GroupsPageClient = ({ joinParam }: GroupsPageClientProps) => {
       </div>
 
       {joinParam === 'character' && <CharacterGroupJoin />}
-      {joinParam === 'friend' && <FriendGroupJoin />}
+      {joinParam === 'friend' && (
+        <FriendGroupJoin initialCode={code ?? undefined} />
+      )}
     </div>
   );
 };

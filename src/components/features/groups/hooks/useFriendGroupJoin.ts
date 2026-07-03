@@ -11,9 +11,9 @@ const JOIN_ERROR_MESSAGES: Record<number, string> = {
   409: '이미 참여한 그룹이에요',
 };
 
-export const useFriendGroupJoin = () => {
+export const useFriendGroupJoin = (initialCode?: string) => {
   const router = useRouter();
-  const [groupCode, setGroupCode] = useState('');
+  const [groupCode, setGroupCode] = useState(initialCode ?? '');
   const [errorMessage, setErrorMessage] = useState('');
 
   const { mutate, isPending } = useGroupJoinQuery();
