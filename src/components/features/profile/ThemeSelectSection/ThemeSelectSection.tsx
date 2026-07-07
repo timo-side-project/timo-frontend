@@ -24,7 +24,7 @@ const ThemeSelectSection = () => {
 
   const handleConfirm = () => {
     setIsApplyModalOpen(false);
-    router.push('/profile');
+    router.push('/');
   };
 
   return (
