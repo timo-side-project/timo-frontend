@@ -27,7 +27,8 @@ src/
     layout/       # 페이지 레이아웃 (BottomNavBar, PageHeader, BottomCTA)
     features/     # 기능별 묶음 (home, reflection, reflectionDetail, reflectionFeedback,
                   #   calendar, groups, characters, notification, onboarding, profile,
-                  #   test, testAuth, testResult, serviceFeedback, users, pwa)
+                  #   reward, statistics, test, testAuth, testResult, serviceFeedback,
+                  #   users, pwa)
                   #   각 feature: 컴포넌트 폴더 + queries/ + constants/ + hooks/
   hooks/          # 공용 커스텀 훅 (useToast)
   lib/
