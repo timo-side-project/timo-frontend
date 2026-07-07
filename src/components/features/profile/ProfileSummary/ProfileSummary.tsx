@@ -24,12 +24,14 @@ const ProfileSummary = () => {
 
   if (isPending) {
     return (
-      <div className="flex items-center h-20 gap-4">
-        <Skeleton
-          className="h-18 w-18 rounded-full"
-          ariaLabel="프로필 캐릭터 로딩 중"
-        />
-        <div className="flex flex-1 flex-col gap-2">
+      <div className="flex flex-col items-center">
+        <div className="w-screen mx-[calc(50%-50vw)] -mt-14 flex justify-center bg-g-600 pt-16 pb-7">
+          <Skeleton
+            className="h-37 w-37 rounded-2xl"
+            ariaLabel="프로필 캐릭터 로딩 중"
+          />
+        </div>
+        <div className="flex flex-col items-center gap-2 pt-5">
           <Skeleton className="h-5 w-44" ariaLabel="프로필 문구 로딩 중" />
           <Skeleton className="h-5 w-52" ariaLabel="프로필 문구 로딩 중" />
         </div>
@@ -44,14 +46,16 @@ const ProfileSummary = () => {
     : '현재쾌락형';
 
   return (
-    <div className="flex items-center h-20 gap-4">
-      <Image
-        src={characterAsset.src}
-        alt={characterAsset.alt}
-        width={80}
-        height={80}
-      />
-      <div className="flex flex-col font-body-s">
+    <div className="flex flex-col items-center">
+      <div className="w-screen mx-[calc(50%-50vw)] -mt-14 flex justify-center bg-g-600 pt-16 py-4">
+        <Image
+          src={characterAsset.src}
+          alt={characterAsset.alt}
+          width={150}
+          height={150}
+        />
+      </div>
+      <div className="pt-4 text-center font-body-s">
         <p>
           {data?.name ?? '사용자'}님은{' '}
           <span className="font-bold">
