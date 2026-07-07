@@ -14,7 +14,7 @@ app/                                  # 라우트 (App Router) — URL·레이�
   login/ onboarding/ calendar/ …      # 각 라우트 page.tsx
   ztpi-test/(complete) ztpi/[ztpiTestId]/
   reflection/[reflectionId]/feedback/
-  groups/create/  profile/nickname/
+  groups/create/  profile/nickname/  profile/theme/
   test-auth/                          # 개발용 로그인 화면
   api/proxy/[...path]/route.ts        # 개발용 API 프록시 (route handler)
 
@@ -50,7 +50,7 @@ src/
 
 ### 1. 미들웨어 — `proxy.ts`
 
-Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['/']` 라서 **홈 `/` 진입 시에만** 실행된다.
+Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['/', '/statistics']` 라서 **홈 `/`과 `/statistics` 진입 시에만** 실행된다.
 
 - `access_token` 쿠키가 유효하면 → 통과 (`NextResponse.next()`)
 - 만료됐고 `refresh_token`이 있으면 → 백엔드 `reissue` 엔드포인트로 토큰 재발급 → 응답의 `set-cookie`를 실어 원 URL로 재요청 (dev 환경에선 `domain=`·`secure` 속성 제거)
@@ -73,12 +73,13 @@ Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['
 | `/onboarding` | 온보딩 |
 | `/ztpi-test`, `/ztpi-test/complete`, `/ztpi/[ztpiTestId]` | ZTPI 성격 테스트 |
 | `/calendar` | 캘린더 |
+| `/statistics` | 통계 (미들웨어 `proxy.ts`가 토큰 가드) |
 | `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback` | 회고 (목록·상세·피드백) |
 | `/groups`, `/groups/create` | 그룹 회고 (목록·생성) |
 | `/characters` | 캐릭터 선택 |
 | `/reward` | 보상(커스터마이징) 획득 화면 — 회고 피드백 완료 시 해금분 있으면 진입 |
 | `/notification` | 알림 |
-| `/profile`, `/profile/nickname` | 프로필 (프로필·닉네임 변경) |
+| `/profile`, `/profile/nickname`, `/profile/theme` | 프로필 (프로필·닉네임 변경·테마 선택) |
 | `/test-auth` | 개발용 로그인 |
 | `/api/proxy/[...path]` | 개발용 API 프록시 (route handler) |
 
