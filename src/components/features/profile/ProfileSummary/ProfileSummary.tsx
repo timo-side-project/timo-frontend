@@ -25,9 +25,9 @@ const ProfileSummary = () => {
   if (isPending) {
     return (
       <div className="flex flex-col items-center">
-        <div className="w-screen mx-[calc(50%-50vw)] -mt-14 flex justify-center bg-g-600 pt-16 pb-7">
+        <div className="-mx-7.5 -mt-14 flex self-stretch justify-center bg-g-600 px-7.5 pt-16 pb-4">
           <Skeleton
-            className="h-37 w-37 rounded-2xl"
+            className="h-37.5 w-37.5 rounded-2xl"
             ariaLabel="프로필 캐릭터 로딩 중"
           />
         </div>
@@ -47,7 +47,7 @@ const ProfileSummary = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-screen mx-[calc(50%-50vw)] -mt-14 flex justify-center bg-g-600 pt-16 py-4">
+      <div className="-mx-7.5 -mt-14 flex self-stretch justify-center bg-g-600 px-7.5 pt-16 pb-4">
         <Image
           src={characterAsset.src}
           alt={characterAsset.alt}
