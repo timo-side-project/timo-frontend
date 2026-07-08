@@ -28,7 +28,7 @@ const RewardAcquireScreen = ({
     <div className="fixed inset-y-0 left-1/2 z-50 flex w-full max-w-110 -translate-x-1/2 flex-col bg-g-700 px-7.5">
       <div className="flex flex-1 flex-col items-center justify-center gap-15">
         <div className="relative aspect-269/332 w-full max-w-67 overflow-hidden rounded-2xl bg-g-600">
-          {imageSrc && (
+          {imageSrc ? (
             <Image
               src={imageSrc}
               alt={imageAlt}
@@ -36,7 +36,7 @@ const RewardAcquireScreen = ({
               className="object-cover"
               sizes="(max-width: 440px) 100vw, 440px"
             />
-          )}
+          ) : null}
         </div>
 
         <div className="flex flex-col items-center gap-5">

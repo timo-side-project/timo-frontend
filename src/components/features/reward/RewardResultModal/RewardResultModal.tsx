@@ -32,7 +32,7 @@ const RewardResultModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-6">
-        {imageSrc && (
+        {imageSrc ? (
           <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-g-600">
             <Image
               src={imageSrc}
@@ -42,7 +42,7 @@ const RewardResultModal = ({
               sizes="(max-width: 440px) 100vw, 440px"
             />
           </div>
-        )}
+        ) : null}
 
         <div className="text-center">
           <h3 className="font-button-l text-primary">{title}</h3>
@@ -51,7 +51,7 @@ const RewardResultModal = ({
 
         <div className="flex flex-col gap-4">
           <Button label="완료" onClick={onClose} size="s" />
-          {onView && (
+          {onView ? (
             <button
               type="button"
               onClick={onView}
@@ -59,7 +59,7 @@ const RewardResultModal = ({
             >
               {viewLabel}
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </Modal>
