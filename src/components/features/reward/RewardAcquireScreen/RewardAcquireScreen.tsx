@@ -25,8 +25,8 @@ const RewardAcquireScreen = ({
   onSave,
 }: RewardAcquireScreenProps) => {
   return (
-    <div className="fixed inset-y-0 left-1/2 z-50 flex w-full max-w-110 -translate-x-1/2 flex-col bg-g-700 px-7.5">
-      <div className="flex flex-1 flex-col items-center justify-center gap-15">
+    <div className="fixed inset-y-0 left-1/2 z-50 flex w-full max-w-110 -translate-x-1/2 flex-col overflow-y-auto bg-g-700 px-7.5 py-8">
+      <div className="my-auto flex flex-col items-center gap-15">
         <div className="relative aspect-269/332 w-full max-w-67 overflow-hidden rounded-2xl bg-g-600">
           {imageSrc ? (
             <Image
@@ -50,7 +50,7 @@ const RewardAcquireScreen = ({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 pb-8">
+      <div className="mt-8 flex flex-col gap-3">
         <Button label="바로 적용하기" onClick={onApply} />
         <Button label="저장하기" variant="secondary" onClick={onSave} />
       </div>
