@@ -20,7 +20,7 @@ const RewardAcquireScreen = ({
   rewardName,
   suffix,
   imageSrc,
-  imageAlt = '',
+  imageAlt = `${rewardName} 이미지`,
   onApply,
   onSave,
 }: RewardAcquireScreenProps) => {

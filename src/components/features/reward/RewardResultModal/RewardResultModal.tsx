@@ -25,7 +25,7 @@ const RewardResultModal = ({
   title,
   description,
   imageSrc,
-  imageAlt = '',
+  imageAlt = title,
   onView,
   viewLabel = '보러가기',
 }: RewardResultModalProps) => {
