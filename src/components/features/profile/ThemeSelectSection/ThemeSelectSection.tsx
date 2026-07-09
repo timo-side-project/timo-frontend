@@ -1,31 +1,13 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-
+import { useThemeSelect } from '@/src/components/features/profile/hooks/useThemeSelect';
 import ThemeApplyModal from '@/src/components/features/profile/ThemeApplyModal/ThemeApplyModal';
 import ThemeHeader from '@/src/components/features/profile/ThemeHeader/ThemeHeader';
 import ThemePreview from '@/src/components/features/profile/ThemePreview/ThemePreview';
-import ThemeSelectGrid, {
-  DEFAULT_THEME_ID,
-} from '@/src/components/features/profile/ThemeSelectGrid/ThemeSelectGrid';
+import ThemeSelectGrid from '@/src/components/features/profile/ThemeSelectGrid/ThemeSelectGrid';
 
 const ThemeSelectSection = () => {
-  const router = useRouter();
-  const [selectedThemeId, setSelectedThemeId] = useState<string | null>(
-    DEFAULT_THEME_ID,
-  );
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
-
-  const handleSave = () => {
-    // TODO: 테마 API 명세 확정되면 mutate 연결
-    setIsApplyModalOpen(true);
-  };
-
-  const handleConfirm = () => {
-    setIsApplyModalOpen(false);
-    router.push('/');
-  };
+  const { grid, modal, handleSave } = useThemeSelect();
 
   return (
     <>
@@ -35,14 +17,18 @@ const ThemeSelectSection = () => {
       </div>
       <div className="pb-32">
         <ThemeSelectGrid
-          selectedThemeId={selectedThemeId}
-          onSelect={setSelectedThemeId}
+          items={grid.items}
+          selectedThemeId={grid.selectedThemeId}
+          onSelect={grid.onSelect}
+          isPending={grid.isPending}
+          isError={grid.isError}
+          onRetry={grid.onRetry}
         />
       </div>
       <ThemeApplyModal
-        isOpen={isApplyModalOpen}
-        onClose={() => setIsApplyModalOpen(false)}
-        onConfirm={handleConfirm}
+        isOpen={modal.isOpen}
+        onClose={modal.onClose}
+        onConfirm={modal.onConfirm}
       />
     </>
   );
