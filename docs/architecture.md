@@ -76,6 +76,7 @@ Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['
 | `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback` | 회고 (목록·상세·피드백) |
 | `/groups`, `/groups/create` | 그룹 회고 (목록·생성) |
 | `/characters` | 캐릭터 선택 |
+| `/reward` | 보상(커스터마이징) 획득 화면 — 회고 피드백 완료 시 해금분 있으면 진입 |
 | `/notification` | 알림 |
 | `/profile`, `/profile/nickname` | 프로필 (프로필·닉네임 변경) |
 | `/test-auth` | 개발용 로그인 |
