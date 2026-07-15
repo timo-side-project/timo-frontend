@@ -59,7 +59,7 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
   const handleView = () => router.push('/profile/theme');
 
   const isTheme = current.type === 'THEME';
-  const subject = isTheme ? `${current.name}테마` : '나의 캐릭터 펫';
+  const subject = isTheme ? current.name : '나의 캐릭터 펫';
   const acquireSuffix = isTheme ? '를 획득했습니다!' : '을 획득했습니다!';
 
   if (phase === 'acquire') {
