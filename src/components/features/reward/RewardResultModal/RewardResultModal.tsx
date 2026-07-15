@@ -16,9 +16,6 @@ interface RewardResultModalProps {
   viewLabel?: string;
 }
 
-// TODO(#189): 후속 연동 필요
-// - imageSrc: 적용 완료 프리뷰 이미지 asset/API 연결
-// - onView: 보러가기 라우팅 연결
 const RewardResultModal = ({
   isOpen,
   onClose,
