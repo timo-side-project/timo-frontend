@@ -29,6 +29,7 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleTabChange = (tab: GroupType) => {
+    if (activeTab === tab) return;
     setActiveTab(tab);
     setSelectedGroupId(null);
   };
