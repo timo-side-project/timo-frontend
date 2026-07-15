@@ -7,6 +7,13 @@ const meta = {
   title: 'features/reward/RewardAcquireScreen',
   component: RewardAcquireScreen,
   parameters: { layout: 'fullscreen' },
+  decorators: [
+    (Story) => (
+      <div className="mx-auto min-h-dvh w-full max-w-110 bg-g-700 px-7.5">
+        <Story />
+      </div>
+    ),
+  ],
   args: {
     onApply: fn(),
     onSave: fn(),
