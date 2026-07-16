@@ -32,6 +32,7 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
     if (activeTab === tab) return;
     setActiveTab(tab);
     setSelectedGroupId(null);
+    setSelectedFriend(null);
   };
 
   return (
