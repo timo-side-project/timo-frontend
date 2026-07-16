@@ -18,7 +18,7 @@ const ViewResultButton = ({ resultId }: ViewResultButtonProps) => {
   return (
     <Button
       label="결과 확인하기"
-      className="text-g-900 h-10"
+      className="text-g-900"
       onClick={handleViewResultClick}
     />
   );
