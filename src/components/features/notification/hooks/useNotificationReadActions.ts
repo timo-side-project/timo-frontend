@@ -17,7 +17,9 @@ export const useNotificationReadActions = () => {
   const { data, isPending } = useNotificationHistoriesQuery();
   const { mutateAsync: readNotificationHistory, isPending: isMutating } =
     useReadNotificationHistoryMutation();
-  const notifications = data ?? [];
+  const notifications = [...(data ?? [])].sort(
+    (a, b) => b.notifiedAt.getTime() - a.notifiedAt.getTime(),
+  );
 
   const refetchNotifications = () => {
     queryClient.invalidateQueries({
