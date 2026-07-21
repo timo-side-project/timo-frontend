@@ -88,7 +88,11 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
       title={`${subject} ${actionLabel} 완료`}
       description={`${subject} ${actionLabel}이 완료되었습니다`}
       imageSrc={isApplied ? current.image : undefined}
-      onView={!isApplied && isTheme ? handleView : undefined}
+      onView={
+        index === items.length - 1 && !isApplied && isTheme
+          ? handleView
+          : undefined
+      }
     />
   );
 };
