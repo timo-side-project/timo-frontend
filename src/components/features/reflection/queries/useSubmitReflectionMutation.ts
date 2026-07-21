@@ -1,6 +1,7 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 
+import { groupKeys } from '@/src/components/features/groups/constants/queryKey';
 import { post } from '@/src/lib/api';
 
 import { reflectionKeys } from '../constants/queryKeys';
@@ -32,17 +33,14 @@ const submitReflection = async ({ content }: SubmitReflectionRequestType) => {
   );
 };
 
-interface UseSubmitReflectionMutationOptions {
-  onSuccess?: (data: SubmitReflectionResponseType) => void;
-  onError?: () => void;
-}
+export const useSubmitReflectionMutation = () => {
+  const queryClient = useQueryClient();
 
-export const useSubmitReflectionMutation = (
-  options?: UseSubmitReflectionMutationOptions,
-) =>
-  useMutation({
+  return useMutation({
     mutationKey: reflectionKeys.submitReflection(),
     mutationFn: submitReflection,
-    onSuccess: options?.onSuccess,
-    onError: options?.onError,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: groupKeys.all() });
+    },
   });
+};
