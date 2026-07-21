@@ -1,9 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import Button from '@/src/components/ui/Button/Button';
 import Modal from '@/src/components/ui/Modal/Modal';
+
+import { PROFILE_THEME_ROUTE } from '../constants/url';
 
 interface RewardResultModalProps {
   isOpen: boolean;
@@ -12,7 +15,7 @@ interface RewardResultModalProps {
   description: string;
   imageSrc?: string;
   imageAlt?: string;
-  onView?: () => void;
+  showViewLink?: boolean;
   viewLabel?: string;
 }
 
@@ -23,7 +26,7 @@ const RewardResultModal = ({
   description,
   imageSrc,
   imageAlt = title,
-  onView,
+  showViewLink = false,
   viewLabel = '보러가기',
 }: RewardResultModalProps) => {
   return (
@@ -48,14 +51,13 @@ const RewardResultModal = ({
 
         <div className="flex flex-col gap-4">
           <Button label="완료" onClick={onClose} size="s" />
-          {onView ? (
-            <button
-              type="button"
-              onClick={onView}
-              className="font-button-s text-primary underline"
+          {showViewLink ? (
+            <Link
+              href={PROFILE_THEME_ROUTE}
+              className="text-center font-button-s text-primary underline"
             >
               {viewLabel}
-            </button>
+            </Link>
           ) : null}
         </div>
       </div>

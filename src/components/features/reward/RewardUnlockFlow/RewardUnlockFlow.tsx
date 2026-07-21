@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useToast } from '@/src/hooks/useToast';
@@ -23,7 +22,6 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
   const [phase, setPhase] = useState<Phase>('acquire');
   const { mutateAsync: equip, isPending } = useEquipCustomizationMutation();
   const { showToast } = useToast();
-  const router = useRouter();
 
   const current = items[index];
   if (!current) {
@@ -55,9 +53,6 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
 
   const handleSave = () => setPhase('saved');
 
-  // TODO(#193): 보러가기 목적지 경로 확인 필요 (/profile/theme)
-  const handleView = () => router.push('/profile/theme');
-
   const isTheme = current.type === 'THEME';
   const subject = isTheme ? current.name : '나의 캐릭터 펫';
   const acquireSuffix = isTheme ? '를 획득했습니다!' : '을 획득했습니다!';
@@ -88,11 +83,7 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
       title={`${subject} ${actionLabel} 완료`}
       description={`${subject} ${actionLabel}이 완료되었습니다`}
       imageSrc={isApplied ? current.image : undefined}
-      onView={
-        index === items.length - 1 && !isApplied && isTheme
-          ? handleView
-          : undefined
-      }
+      showViewLink={index === items.length - 1 && !isApplied && isTheme}
     />
   );
 };
