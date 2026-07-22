@@ -104,7 +104,10 @@ export const useGroupDialIndicator = <T extends GroupDialItem>({
     moveIndicatorTo(getScreenCenter(closest.el, container.scrollLeft));
   }, [findClosestToPointer, moveIndicatorTo, onSelect]);
 
-  useEffect(() => {
+  // 스크롤 리스너 등록을 useEffect(커밋 이후 비동기 스케줄)가 아닌
+  // useLayoutEffect(커밋 중 동기 실행)로 붙여야, 마운트 직후 곧바로 스크롤이
+  // 발생해도 리스너가 이미 붙어있어 놓치지 않는다.
+  useLayoutEffect(() => {
     const container = scrollRef.current;
     if (!container) return;
 
