@@ -66,7 +66,7 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
         )}
         rewardName={subject}
         suffix={acquireSuffix}
-        imageSrc={current.image}
+        imageSrc={current.image ?? undefined}
         onApply={handleApply}
         onSave={handleSave}
       />
@@ -82,7 +82,7 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
       onClose={goNext}
       title={`${subject} ${actionLabel} 완료`}
       description={`${subject} ${actionLabel}이 완료되었습니다`}
-      imageSrc={isApplied ? current.image : undefined}
+      imageSrc={isApplied ? (current.image ?? undefined) : undefined}
       showViewLink={index === items.length - 1 && !isApplied && isTheme}
     />
   );

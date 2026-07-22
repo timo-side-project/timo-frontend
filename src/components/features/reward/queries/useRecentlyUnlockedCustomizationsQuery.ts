@@ -16,7 +16,8 @@ const unlockedCustomizationItemSchema = z.object({
   description: z.string(),
   unlockConditionType: unlockConditionTypeSchema,
   unlockConditionCount: z.number(),
-  image: z.string(),
+  image: z.string().nullish(),
+  imageWithoutBackground: z.string().nullish(),
 });
 
 const recentlyUnlockedCustomizationsSchema = z.array(
