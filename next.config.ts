@@ -37,6 +37,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'api.timo.io.kr',
       },
+      {
+        protocol: 'https',
+        hostname:
+          'timo-uploads-216016752848-ap-northeast-2-an.s3.ap-northeast-2.amazonaws.com',
+      },
     ],
   },
 };
