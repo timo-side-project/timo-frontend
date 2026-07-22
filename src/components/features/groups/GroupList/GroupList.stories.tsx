@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fireEvent, fn, waitFor, within } from 'storybook/test';
 
 import RankingItem from '@/src/components/features/groups/Ranking/RankingItem/RankingItem';
 
@@ -107,10 +107,8 @@ export const DialScroll: Story = {
     scrollContainer.dispatchEvent(new Event('scroll'));
     scrollContainer.dispatchEvent(new Event('scrollend'));
 
-    // scrollend 미지원 환경의 debounce(120ms) 폴백까지 여유를 둔다
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    await expect(args.onSelect).toHaveBeenCalled();
+    // scrollend 미지원 환경의 debounce(120ms) 폴백까지 여유를 두고 폴링한다
+    await waitFor(() => expect(args.onSelect).toHaveBeenCalled());
 
     const canvas = within(canvasElement);
     const focusedButton = canvas.getAllByRole('button', { pressed: true })[0];
@@ -143,21 +141,28 @@ export const DialEdgeClick: Story = {
     const lastButton = buttons[buttons.length - 1];
     const lastGroup = groups[groups.length - 1];
 
-    await userEvent.click(lastButton);
-    await expect(args.onSelect).toHaveBeenCalledWith(lastGroup.id);
-
-    const indicator = canvasElement.querySelector(
-      '.border-b-g-500',
-    ) as HTMLElement;
-    const lastRect = lastButton.parentElement!.getBoundingClientRect();
-    const indicatorRect = indicator.getBoundingClientRect();
-
-    const lastCenterX = Math.round(lastRect.left + lastRect.width / 2);
-    const indicatorCenterX = Math.round(
-      indicatorRect.left + indicatorRect.width / 2,
+    // userEvent.click은 클릭 전에 요소를 자동으로 scrollIntoView 시켜
+    // 다이얼의 자체 스크롤 추적 로직과 충돌한다. 순수 클릭 이벤트만 보내는
+    // fireEvent를 사용해 리스트 밖으로 스크롤된 그룹을 실제로 클릭한 것처럼 재현한다.
+    fireEvent.click(lastButton);
+    await waitFor(() =>
+      expect(args.onSelect).toHaveBeenCalledWith(lastGroup.id),
     );
 
-    await expect(indicatorCenterX).toBe(lastCenterX);
+    await waitFor(() => {
+      const indicator = canvasElement.querySelector(
+        '.border-b-g-500',
+      ) as HTMLElement;
+      const lastRect = lastButton.parentElement!.getBoundingClientRect();
+      const indicatorRect = indicator.getBoundingClientRect();
+
+      const lastCenterX = Math.round(lastRect.left + lastRect.width / 2);
+      const indicatorCenterX = Math.round(
+        indicatorRect.left + indicatorRect.width / 2,
+      );
+
+      expect(indicatorCenterX).toBe(lastCenterX);
+    });
   },
 };
 
@@ -232,10 +237,11 @@ export const WithFriendRanking: Story = {
     scrollContainer.scrollLeft = 86;
     scrollContainer.dispatchEvent(new Event('scroll'));
     scrollContainer.dispatchEvent(new Event('scrollend'));
-    await new Promise((resolve) => setTimeout(resolve, 200));
 
     // 랭킹도 두 번째 그룹 멤버로 함께 바뀐다
-    await expect(canvas.getByText('어떤 모임 멤버1')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(canvas.getByText('어떤 모임 멤버1')).toBeInTheDocument(),
+    );
     await expect(
       canvas.queryByText('친구 많은 모임 멤버1'),
     ).not.toBeInTheDocument();
