@@ -7,28 +7,46 @@ import ThemePreview from '@/src/components/features/profile/ThemePreview/ThemePr
 import ThemeSelectGrid from '@/src/components/features/profile/ThemeSelectGrid/ThemeSelectGrid';
 
 const ThemeSelectSection = () => {
-  const { grid, modal, handleSave } = useThemeSelect();
+  const { preview, themeGrid, decorationGrid, modal, handleSave } =
+    useThemeSelect();
 
   return (
     <>
       <div className="-mx-7.5 bg-g-600 px-7.5">
         <ThemeHeader onSave={handleSave} />
-        <ThemePreview />
+        <ThemePreview
+          imageUrl={preview.imageUrl}
+          name={preview.name}
+          isPending={preview.isPending}
+          decorationImageUrl={preview.decorationImageUrl}
+          decorationName={preview.decorationName}
+        />
       </div>
       <div className="pb-32">
         <ThemeSelectGrid
-          items={grid.items}
-          selectedThemeId={grid.selectedThemeId}
-          onSelect={grid.onSelect}
-          isPending={grid.isPending}
-          isError={grid.isError}
-          onRetry={grid.onRetry}
+          title="테마"
+          items={themeGrid.items}
+          selectedId={themeGrid.selectedId}
+          onSelect={themeGrid.onSelect}
+          isPending={themeGrid.isPending}
+          isError={themeGrid.isError}
+        />
+        <ThemeSelectGrid
+          title="펫"
+          items={decorationGrid.items}
+          selectedId={decorationGrid.selectedId}
+          onSelect={decorationGrid.onSelect}
+          isPending={decorationGrid.isPending}
+          isError={decorationGrid.isError}
         />
       </div>
       <ThemeApplyModal
         isOpen={modal.isOpen}
         onClose={modal.onClose}
         onConfirm={modal.onConfirm}
+        imageUrl={modal.imageUrl}
+        name={modal.name}
+        decorationImageUrl={modal.decorationImageUrl}
       />
     </>
   );

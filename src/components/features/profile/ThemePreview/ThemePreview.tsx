@@ -2,15 +2,24 @@
 
 import Image from 'next/image';
 
-import { useUserDetailQuery } from '@/src/components/features/users/queries/useUserDetailQuery';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
-import { getCharacterAsset } from '@/src/lib/helpers/getCharacterAsset';
 
-const ThemePreview = () => {
-  const { data, isPending } = useUserDetailQuery();
-  const characterAsset = getCharacterAsset(data?.category);
+interface ThemePreviewProps {
+  imageUrl: string | null;
+  name: string;
+  isPending: boolean;
+  decorationImageUrl?: string | null;
+  decorationName?: string;
+}
 
-  if (isPending) {
+const ThemePreview = ({
+  imageUrl,
+  name,
+  isPending,
+  decorationImageUrl,
+  decorationName,
+}: ThemePreviewProps) => {
+  if (isPending || !imageUrl) {
     return (
       <div className="flex justify-center py-9">
         <Skeleton
@@ -22,13 +31,25 @@ const ThemePreview = () => {
   }
 
   return (
-    <div className="flex justify-center py-9">
-      <Image
-        src={characterAsset.src}
-        alt={characterAsset.alt}
-        width={173}
-        height={173}
-      />
+    <div className="flex justify-center">
+      <div className="relative h-50 w-50">
+        <Image
+          src={imageUrl}
+          alt={name}
+          fill
+          sizes="200px"
+          className="object-cover"
+        />
+        {decorationImageUrl && (
+          <Image
+            src={decorationImageUrl}
+            alt={decorationName ?? ''}
+            width={56}
+            height={56}
+            className="absolute right-1 bottom-1"
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -5,33 +5,62 @@ import { useState } from 'react';
 
 import { useCustomizationsQuery } from '@/src/components/features/customization/queries/useCustomizationsQuery';
 import { useEquipCustomizationMutation } from '@/src/components/features/customization/queries/useEquipCustomizationMutation';
+import { useUserDetailQuery } from '@/src/components/features/users/queries/useUserDetailQuery';
+import { getCharacterAsset } from '@/src/lib/helpers/getCharacterAsset';
 
 export const useThemeSelect = () => {
   const router = useRouter();
-  const {
-    data: customizations,
-    isPending,
-    isError,
-    refetch,
-  } = useCustomizationsQuery();
-  const { mutate } = useEquipCustomizationMutation();
+  const { data: customizations, isPending, isError } = useCustomizationsQuery();
+  const { data: userDetail, isPending: isUserDetailPending } =
+    useUserDetailQuery();
+  const { mutateAsync } = useEquipCustomizationMutation();
 
-  const themeItems = customizations ?? [];
-  const defaultThemeId =
-    (themeItems.find((item) => item.isEquipped) ?? themeItems[0])?.id ?? null;
+  const themeItems = (customizations ?? []).filter(
+    (item) => item.type === 'THEME',
+  );
+  const decorationItems = (customizations ?? []).filter(
+    (item) => item.type === 'DECORATION',
+  );
 
   const [selectedThemeId, setSelectedThemeId] = useState<number | null>(null);
+  const [selectedDecorationId, setSelectedDecorationId] = useState<
+    number | null
+  >(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const activeThemeId = selectedThemeId ?? defaultThemeId;
+  const equippedTheme = userDetail?.equippedCustomizations.find(
+    (item) => item.type === 'THEME',
+  );
+  const equippedDecoration = userDetail?.equippedCustomizations.find(
+    (item) => item.type === 'DECORATION',
+  );
 
-  const handleSave = () => {
-    if (activeThemeId === null) return;
+  const selectedTheme =
+    selectedThemeId !== null
+      ? themeItems.find((item) => item.id === selectedThemeId)
+      : undefined;
+  const selectedDecoration =
+    selectedDecorationId !== null
+      ? decorationItems.find((item) => item.id === selectedDecorationId)
+      : undefined;
 
-    mutate(
-      { customizationItemId: activeThemeId },
-      { onSuccess: () => setIsApplyModalOpen(true) },
+  const previewTheme = selectedTheme ?? equippedTheme;
+  const previewDecoration = selectedDecoration ?? equippedDecoration;
+  const isPreviewPending = selectedTheme
+    ? false
+    : isUserDetailPending || isPending;
+  const defaultCharacter = getCharacterAsset(userDetail?.category);
+
+  const handleSave = async () => {
+    const idsToEquip = [selectedThemeId, selectedDecorationId].filter(
+      (id): id is number => id !== null,
     );
+    if (idsToEquip.length === 0) return;
+
+    await Promise.all(
+      idsToEquip.map((id) => mutateAsync({ customizationItemId: id })),
+    );
+    setIsApplyModalOpen(true);
   };
 
   const handleCloseModal = () => setIsApplyModalOpen(false);
@@ -41,21 +70,47 @@ export const useThemeSelect = () => {
     router.push('/');
   };
 
-  const handleRetry = () => refetch();
+  const previewImageUrl =
+    previewTheme?.imageWithoutBackground ??
+    previewTheme?.image ??
+    defaultCharacter.src;
+  const previewName = previewTheme?.name ?? defaultCharacter.alt;
+
+  const previewDecorationImageUrl =
+    previewDecoration?.imageWithoutBackground ??
+    previewDecoration?.image ??
+    null;
+  const previewDecorationName = previewDecoration?.name ?? '';
 
   return {
-    grid: {
+    preview: {
+      imageUrl: previewImageUrl,
+      name: previewName,
+      isPending: isPreviewPending,
+      decorationImageUrl: previewDecorationImageUrl,
+      decorationName: previewDecorationName,
+    },
+    themeGrid: {
       items: themeItems,
-      selectedThemeId: activeThemeId,
+      selectedId: selectedThemeId,
       onSelect: setSelectedThemeId,
       isPending,
       isError,
-      onRetry: handleRetry,
+    },
+    decorationGrid: {
+      items: decorationItems,
+      selectedId: selectedDecorationId,
+      onSelect: setSelectedDecorationId,
+      isPending,
+      isError,
     },
     modal: {
       isOpen: isApplyModalOpen,
       onClose: handleCloseModal,
       onConfirm: handleConfirm,
+      imageUrl: previewImageUrl,
+      name: previewName,
+      decorationImageUrl: previewDecorationImageUrl,
     },
     handleSave,
   };
