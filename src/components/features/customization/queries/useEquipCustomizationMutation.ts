@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { userKeys } from '@/src/components/features/users/constants/queryKeys';
 import { post } from '@/src/lib/api';
 
 import { customizationKeys } from '../constants/queryKeys';
@@ -25,6 +26,7 @@ export const useEquipCustomizationMutation = () => {
     mutationFn: equipCustomization,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: customizationKeys.list() });
+      queryClient.invalidateQueries({ queryKey: userKeys.detail() });
     },
   });
 };

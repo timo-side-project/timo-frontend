@@ -10,7 +10,8 @@ const customizationSchema = z.object({
   id: z.number(),
   name: z.string(),
   type: z.enum(['THEME', 'DECORATION']),
-  description: z.string(),
+  image: z.string(),
+  imageWithoutBackground: z.string().nullable(),
   isUnlocked: z.boolean(),
   isEquipped: z.boolean(),
 });
