@@ -21,8 +21,47 @@ test.describe('테마 선택', () => {
           streakDays: 3,
           isOnboarded: true,
           createdAt: new Date().toISOString(),
+          equippedCustomizations: [],
         },
       }),
+    );
+
+    await page.route('**/api/proxy/customizations', (route) =>
+      route.fulfill({
+        json: [
+          {
+            id: 1,
+            name: '테마 1',
+            type: 'THEME',
+            image: '/images/theme-1.png',
+            imageWithoutBackground: null,
+            isUnlocked: true,
+            isEquipped: true,
+          },
+          {
+            id: 2,
+            name: '테마 2',
+            type: 'THEME',
+            image: '/images/theme-2.png',
+            imageWithoutBackground: null,
+            isUnlocked: true,
+            isEquipped: false,
+          },
+          {
+            id: 3,
+            name: '펫 1',
+            type: 'DECORATION',
+            image: '/images/pet-1.png',
+            imageWithoutBackground: null,
+            isUnlocked: true,
+            isEquipped: false,
+          },
+        ],
+      }),
+    );
+
+    await page.route('**/api/proxy/customizations/2/equip', (route) =>
+      route.fulfill({ status: 200, json: {} }),
     );
 
     await page.goto('/profile/theme');
@@ -31,12 +70,12 @@ test.describe('테마 선택', () => {
       page.getByRole('heading', { name: '테마 선택하기' }),
     ).toBeVisible();
 
-    await page.getByRole('button', { name: '테마 2 이름' }).click();
+    await page.getByRole('button', { name: '테마 2' }).click();
 
     await page.getByRole('button', { name: 'right action' }).click();
 
     await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page.getByText('나의 캐릭터 펫 적용 완료')).toBeVisible();
+    await expect(page.getByText('나의 캐릭터 테마 적용 완료')).toBeVisible();
 
     await page.getByRole('button', { name: '보러가기' }).click();
 
