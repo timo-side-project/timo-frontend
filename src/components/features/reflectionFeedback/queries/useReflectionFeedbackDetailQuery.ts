@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { skipToken, useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { get } from '@/src/lib/api';
@@ -19,7 +19,7 @@ const feedbackDetailSchema = z.object({
   beforeScore: z.number().nullish(),
   afterScore: z.number().nullish(),
   failureReason: z.string().nullish(),
-  createdAt: z.string(),
+  createdAt: z.coerce.date(),
 });
 
 export type ReflectionFeedbackDetailType = z.infer<typeof feedbackDetailSchema>;
@@ -38,6 +38,8 @@ export const useReflectionFeedbackDetailQuery = (
 ) =>
   useQuery({
     queryKey: reflectionFeedbackKeys.detail(reflectionId ?? 0),
-    queryFn: () => getReflectionFeedbackDetail(reflectionId as number),
-    enabled: enabled && reflectionId !== undefined,
+    queryFn:
+      enabled && reflectionId !== undefined
+        ? () => getReflectionFeedbackDetail(reflectionId)
+        : skipToken,
   });
