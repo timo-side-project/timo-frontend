@@ -9,6 +9,7 @@ import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import { goToHome } from '@/src/lib/helpers/navigation';
 
 import { useTodayReflectionQuery } from '../../reflection/queries/useTodayReflectionQuery';
+import { useUserDetailQuery } from '../../users/queries/useUserDetailQuery';
 import CompleteButton from '../CompleteButton/CompleteButton';
 import GeneratingFeedbackCard from '../GeneratingFeedbackCard/GeneratingFeedbackCard';
 import { useReflectionFeedbackDetailQuery } from '../queries/useReflectionFeedbackDetailQuery';
@@ -50,6 +51,8 @@ const FeedbackSection = () => {
 
   const { data: feedbackDetail, isError: isDetailError } =
     useReflectionFeedbackDetailQuery(id, hasCompletedFeedback);
+  const { data: userDetail } = useUserDetailQuery();
+  const streakDays = userDetail?.streakDays ?? 0;
   const isDetailLoading =
     hasCompletedFeedback && !feedbackDetail && !isDetailError;
   const isFeedbackLoading = isGenerating || isDetailLoading;
@@ -115,6 +118,7 @@ const FeedbackSection = () => {
         category={category}
         changedScore={feedbackDetail.changedScore}
         isIncreased={feedbackDetail.isIncreased}
+        streakDays={streakDays}
       />
       <BottomCTA>
         <div className="flex w-full flex-col gap-2.5">

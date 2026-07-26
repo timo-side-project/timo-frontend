@@ -9,7 +9,6 @@ import {
 } from '@/src/lib/constants/character';
 import { cn } from '@/src/lib/helpers/cn';
 
-import { useUserDetailQuery } from '../../users/queries/useUserDetailQuery';
 import { getScoreMessage } from '../utils/getScoreMessage';
 
 interface ResultCardProps {
@@ -17,6 +16,7 @@ interface ResultCardProps {
   category: Category;
   changedScore: number;
   isIncreased: boolean;
+  streakDays: number;
 }
 
 const ResultCard = ({
@@ -24,10 +24,8 @@ const ResultCard = ({
   category,
   changedScore,
   isIncreased,
+  streakDays,
 }: ResultCardProps) => {
-  const { data } = useUserDetailQuery();
-
-  const streakDays = data?.streakDays ?? 0;
   const badgeLabel =
     streakDays <= 1 ? '첫 회고 달성!' : `${streakDays}일 연속 회고 중!`;
   const scoreMessage = getScoreMessage({ category, changedScore, isIncreased });
