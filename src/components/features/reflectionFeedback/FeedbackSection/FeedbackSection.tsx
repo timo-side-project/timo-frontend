@@ -11,6 +11,7 @@ import { goToHome } from '@/src/lib/helpers/navigation';
 import { useTodayReflectionQuery } from '../../reflection/queries/useTodayReflectionQuery';
 import CompleteButton from '../CompleteButton/CompleteButton';
 import GeneratingFeedbackCard from '../GeneratingFeedbackCard/GeneratingFeedbackCard';
+import { useReflectionFeedbackDetailQuery } from '../queries/useReflectionFeedbackDetailQuery';
 import ResultCard from '../ResultCard/ResultCard';
 
 const FEEDBACK_TIMEOUT_MS = 10000;
@@ -34,6 +35,7 @@ const FeedbackSection = () => {
     },
   });
 
+  const id = data?.id;
   const feedback = data?.feedback;
   const category = data?.question?.category;
   const feedbackContent = feedback?.content;
@@ -45,15 +47,22 @@ const FeedbackSection = () => {
         feedback.status === 'PROCESSING'));
   const hasCompletedFeedback =
     feedback?.status === 'COMPLETED' && Boolean(feedbackContent);
+
+  const { data: feedbackDetail, isError: isDetailError } =
+    useReflectionFeedbackDetailQuery(id, hasCompletedFeedback);
+  const isDetailLoading =
+    hasCompletedFeedback && !feedbackDetail && !isDetailError;
+  const isFeedbackLoading = isGenerating || isDetailLoading;
   const hasError =
     isError ||
     isTimedOut ||
+    isDetailError ||
     feedback?.status === 'FAILED' ||
     !hasCompletedFeedback ||
     !category;
 
   useEffect(() => {
-    if (!isGenerating || isTimedOut) {
+    if (!isFeedbackLoading || isTimedOut) {
       return;
     }
 
@@ -64,9 +73,9 @@ const FeedbackSection = () => {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [isGenerating, isTimedOut]);
+  }, [isFeedbackLoading, isTimedOut]);
 
-  if (isGenerating) {
+  if (isFeedbackLoading) {
     return (
       <>
         <GeneratingFeedbackCard />
@@ -88,7 +97,7 @@ const FeedbackSection = () => {
     );
   }
 
-  if (!feedbackContent || !category) {
+  if (!feedbackContent || !category || !feedbackDetail) {
     return (
       <ErrorState
         title="피드백을 불러오지 못했어요"
@@ -101,9 +110,21 @@ const FeedbackSection = () => {
 
   return (
     <section>
-      <ResultCard feedback={feedbackContent} category={category} />
+      <ResultCard
+        feedback={feedbackContent}
+        category={category}
+        changedScore={feedbackDetail.changedScore}
+        isIncreased={feedbackDetail.isIncreased}
+      />
       <BottomCTA>
-        <CompleteButton />
+        <div className="flex w-full flex-col gap-2.5">
+          <CompleteButton />
+          <Button
+            label="변화보기"
+            variant="secondary"
+            onClick={() => router.push('/statistics')}
+          />
+        </div>
       </BottomCTA>
     </section>
   );
