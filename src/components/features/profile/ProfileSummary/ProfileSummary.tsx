@@ -4,7 +4,6 @@ import Image from 'next/image';
 
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import type { Category } from '@/src/lib/constants/character';
-import { cn } from '@/src/lib/helpers/cn';
 import {
   getCharacterAsset,
   isCharacterCategory,
@@ -19,8 +18,6 @@ const CATEGORY_LABEL_MAP: Record<Category, string> = {
   PRESENT_FATALISTIC: '현재운명형',
   FUTURE: '미래지향형',
 };
-
-const DECORATION_OFFSET_CLASSES = ['left-0', 'left-5', 'left-10', 'left-15'];
 
 const ProfileSummary = () => {
   const { data, isPending } = useUserDetailQuery();
@@ -52,13 +49,13 @@ const ProfileSummary = () => {
   const themeItem = equippedCustomizations.find(
     (item) => item.type === 'THEME',
   );
-  const decorationItems = equippedCustomizations.filter(
+  const decorationItem = equippedCustomizations.find(
     (item) => item.type === 'DECORATION',
   );
 
   return (
     <div className="flex flex-col items-center">
-      <div className="-mx-7.5 -mt-14 flex self-stretch justify-center bg-g-600 px-7.5 pt-16 pb-4">
+      <div className="-mx-7.5 -mt-14 flex self-stretch justify-center bg-g-600 px-7.5 pt-16">
         {equippedCustomizations.length === 0 ? (
           <Image
             src={characterAsset.src}
@@ -75,21 +72,16 @@ const ProfileSummary = () => {
               sizes="150px"
               className="object-cover"
             />
-            {decorationItems.map((item, index) => (
+            {decorationItem && (
               <Image
-                key={item.id}
-                src={item.imageWithoutBackground}
-                alt={item.name}
+                key={decorationItem.id}
+                src={decorationItem.imageWithoutBackground}
+                alt={decorationItem.name}
                 width={48}
                 height={48}
-                className={cn(
-                  'absolute bottom-0',
-                  DECORATION_OFFSET_CLASSES[
-                    Math.min(index, DECORATION_OFFSET_CLASSES.length - 1)
-                  ],
-                )}
+                className="absolute bottom-0 left-0"
               />
-            ))}
+            )}
           </div>
         )}
       </div>
