@@ -56,7 +56,9 @@ const attachServerCookieHeader = async (config: InternalAxiosRequestConfig) => {
     headers.set('cookie', cookieHeader);
     config.headers = headers;
     return config;
-  } catch {
+  } catch (error) {
+    const { unstable_rethrow } = await import('next/navigation');
+    unstable_rethrow(error);
     return config;
   }
 };
