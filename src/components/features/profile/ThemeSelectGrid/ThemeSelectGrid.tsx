@@ -3,6 +3,7 @@ import Image from 'next/image';
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { cn } from '@/src/lib/helpers/cn';
+import { getSubjectParticle } from '@/src/lib/helpers/getSubjectParticle';
 
 interface ThemeOption {
   id: number;
@@ -67,7 +68,7 @@ const ThemeSelectGrid = ({
     return (
       <ErrorState
         className="mx-auto pt-16"
-        title={`적용 가능한 ${title}이 없어요`}
+        title={`적용 가능한 ${title}${getSubjectParticle(title)} 없어요`}
       />
     );
   }
