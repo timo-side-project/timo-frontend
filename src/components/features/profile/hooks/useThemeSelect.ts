@@ -92,14 +92,14 @@ export const useThemeSelect = () => {
     },
     themeGrid: {
       items: themeItems,
-      selectedId: selectedThemeId,
+      selectedId: selectedThemeId ?? equippedTheme?.id ?? null,
       onSelect: setSelectedThemeId,
       isPending,
       isError,
     },
     decorationGrid: {
       items: decorationItems,
-      selectedId: selectedDecorationId,
+      selectedId: selectedDecorationId ?? equippedDecoration?.id ?? null,
       onSelect: setSelectedDecorationId,
       isPending,
       isError,
