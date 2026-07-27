@@ -6,10 +6,12 @@ import { useState } from 'react';
 import { useCustomizationsQuery } from '@/src/components/features/customization/queries/useCustomizationsQuery';
 import { useEquipCustomizationMutation } from '@/src/components/features/customization/queries/useEquipCustomizationMutation';
 import { useUserDetailQuery } from '@/src/components/features/users/queries/useUserDetailQuery';
+import { useToast } from '@/src/hooks/useToast';
 import { getCharacterAsset } from '@/src/lib/helpers/getCharacterAsset';
 
 export const useThemeSelect = () => {
   const router = useRouter();
+  const { showToast } = useToast();
   const { data: customizations, isPending, isError } = useCustomizationsQuery();
   const { data: userDetail, isPending: isUserDetailPending } =
     useUserDetailQuery();
@@ -57,9 +59,18 @@ export const useThemeSelect = () => {
     );
     if (idsToEquip.length === 0) return;
 
-    await Promise.all(
+    const results = await Promise.allSettled(
       idsToEquip.map((id) => mutateAsync({ customizationItemId: id })),
     );
+
+    if (results.some((result) => result.status === 'rejected')) {
+      showToast({
+        message: '일부 적용에 실패했어요. 다시 시도해 주세요.',
+        variant: 'alert',
+      });
+      return;
+    }
+
     setIsApplyModalOpen(true);
   };
 
