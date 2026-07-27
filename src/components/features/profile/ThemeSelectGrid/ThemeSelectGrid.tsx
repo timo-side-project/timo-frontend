@@ -10,6 +10,8 @@ interface ThemeOption {
   image: string;
 }
 
+type ThemeSelectGridVariant = 'THEME' | 'DECORATION';
+
 interface ThemeSelectGridProps {
   title: string;
   items: ThemeOption[];
@@ -17,7 +19,13 @@ interface ThemeSelectGridProps {
   onSelect: (id: number | null) => void;
   isPending: boolean;
   isError: boolean;
+  variant: ThemeSelectGridVariant;
 }
+
+const IMAGE_SIZE_CLASS: Record<ThemeSelectGridVariant, string> = {
+  THEME: 'h-40 w-40',
+  DECORATION: 'h-18 w-18',
+};
 
 const ThemeSelectGrid = ({
   title,
@@ -26,6 +34,7 @@ const ThemeSelectGrid = ({
   onSelect,
   isPending,
   isError,
+  variant,
 }: ThemeSelectGridProps) => {
   if (isPending) {
     return (
@@ -80,19 +89,21 @@ const ThemeSelectGrid = ({
             >
               <div
                 className={cn(
-                  'relative h-37.5 w-full overflow-hidden rounded-2xl border-2 shadow-1',
+                  'relative flex h-37.5 w-full items-center justify-center overflow-hidden rounded-2xl border-2 shadow-1',
                   isSelected
                     ? 'border-g-0 bg-g-100'
                     : 'border-transparent bg-g-400',
                 )}
               >
-                <Image
-                  src={theme.image}
-                  alt={theme.name}
-                  fill
-                  sizes="159px"
-                  className="object-cover"
-                />
+                <div className={cn('relative', IMAGE_SIZE_CLASS[variant])}>
+                  <Image
+                    src={theme.image}
+                    alt={theme.name}
+                    fill
+                    sizes="159px"
+                    className="object-contain"
+                  />
+                </div>
               </div>
               <p className="font-body-s text-g-100">{theme.name}</p>
             </button>

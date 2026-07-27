@@ -30,6 +30,7 @@ const ThemeSelectSection = () => {
           onSelect={themeGrid.onSelect}
           isPending={themeGrid.isPending}
           isError={themeGrid.isError}
+          variant="THEME"
         />
         <ThemeSelectGrid
           title="펫"
@@ -38,6 +39,7 @@ const ThemeSelectSection = () => {
           onSelect={decorationGrid.onSelect}
           isPending={decorationGrid.isPending}
           isError={decorationGrid.isError}
+          variant="DECORATION"
         />
       </div>
       <ThemeApplyModal
