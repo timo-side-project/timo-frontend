@@ -36,21 +36,6 @@ const withDecorationsUser: UserDetailResponse = {
       image: CATEGORY_CHARACTER_MAP.PAST_POSITIVE.profileSrc,
       imageWithoutBackground: CATEGORY_CHARACTER_MAP.PAST_POSITIVE.profileSrc,
     },
-    {
-      id: 12,
-      name: '펫 2',
-      type: 'DECORATION',
-      image: CATEGORY_CHARACTER_MAP.PAST_NEGATIVE.profileSrc,
-      imageWithoutBackground: CATEGORY_CHARACTER_MAP.PAST_NEGATIVE.profileSrc,
-    },
-    {
-      id: 13,
-      name: '펫 3',
-      type: 'DECORATION',
-      image: CATEGORY_CHARACTER_MAP.PRESENT_FATALISTIC.profileSrc,
-      imageWithoutBackground:
-        CATEGORY_CHARACTER_MAP.PRESENT_FATALISTIC.profileSrc,
-    },
   ],
 };
 
