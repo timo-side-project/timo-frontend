@@ -28,7 +28,7 @@ export const ThemeSavedWithViewLink: Story = {
   args: {
     title: '00테마 저장 완료',
     description: '00테마 저장이 완료되었습니다',
-    onView: fn(),
+    showViewLink: true,
   },
 };
 

@@ -9,7 +9,7 @@ import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import { goToHome } from '@/src/lib/helpers/navigation';
 
 import { useTodayReflectionQuery } from '../../reflection/queries/useTodayReflectionQuery';
-import CompleteButton from '../CompleteButton/CompleteButton';
+import CompleteAction from '../CompleteAction/CompleteAction';
 import GeneratingFeedbackCard from '../GeneratingFeedbackCard/GeneratingFeedbackCard';
 import ResultCard from '../ResultCard/ResultCard';
 
@@ -103,7 +103,7 @@ const FeedbackSection = () => {
     <section>
       <ResultCard feedback={feedbackContent} category={category} />
       <BottomCTA>
-        <CompleteButton />
+        <CompleteAction />
       </BottomCTA>
     </section>
   );
