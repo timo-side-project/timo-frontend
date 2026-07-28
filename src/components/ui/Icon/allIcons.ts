@@ -27,6 +27,8 @@ const allIcons = {
   starOutline: '/icons/star-outline.svg',
   statisticsActive: '/icons/statistics-active.svg',
   statisticsInactive: '/icons/statistics-inactive.svg',
+  editTheme: '/icons/edit-theme.svg',
+  saveTheme: '/icons/save-theme.svg',
 } as const;
 
 export default allIcons;

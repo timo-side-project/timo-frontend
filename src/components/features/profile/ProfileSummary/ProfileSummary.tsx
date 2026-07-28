@@ -24,12 +24,14 @@ const ProfileSummary = () => {
 
   if (isPending) {
     return (
-      <div className="flex items-center h-20 gap-4">
-        <Skeleton
-          className="h-18 w-18 rounded-full"
-          ariaLabel="프로필 캐릭터 로딩 중"
-        />
-        <div className="flex flex-1 flex-col gap-2">
+      <div className="flex flex-col items-center">
+        <div className="-mx-7.5 -mt-14 flex self-stretch justify-center bg-g-600 px-7.5 pt-16 pb-4">
+          <Skeleton
+            className="h-37.5 w-37.5 rounded-2xl"
+            ariaLabel="프로필 캐릭터 로딩 중"
+          />
+        </div>
+        <div className="flex flex-col items-center gap-2 pt-5">
           <Skeleton className="h-5 w-44" ariaLabel="프로필 문구 로딩 중" />
           <Skeleton className="h-5 w-52" ariaLabel="프로필 문구 로딩 중" />
         </div>
@@ -43,15 +45,47 @@ const ProfileSummary = () => {
     ? CATEGORY_LABEL_MAP[category]
     : '현재쾌락형';
 
+  const equippedCustomizations = data?.equippedCustomizations ?? [];
+  const themeItem = equippedCustomizations.find(
+    (item) => item.type === 'THEME',
+  );
+  const decorationItem = equippedCustomizations.find(
+    (item) => item.type === 'DECORATION',
+  );
+
   return (
-    <div className="flex items-center h-20 gap-4">
-      <Image
-        src={characterAsset.src}
-        alt={characterAsset.alt}
-        width={80}
-        height={80}
-      />
-      <div className="flex flex-col font-body-s">
+    <div className="flex flex-col items-center">
+      <div className="-mx-7.5 -mt-14 flex self-stretch justify-center bg-g-600 px-7.5 pt-16">
+        {equippedCustomizations.length === 0 ? (
+          <Image
+            src={characterAsset.src}
+            alt={characterAsset.alt}
+            width={150}
+            height={150}
+          />
+        ) : (
+          <div className="relative h-37.5 w-37.5">
+            <Image
+              src={themeItem?.image ?? characterAsset.src}
+              alt={themeItem?.name ?? characterAsset.alt}
+              fill
+              sizes="150px"
+              className="object-cover"
+            />
+            {decorationItem && (
+              <Image
+                key={decorationItem.id}
+                src={decorationItem.imageWithoutBackground}
+                alt={decorationItem.name}
+                width={48}
+                height={48}
+                className="absolute bottom-0 left-0"
+              />
+            )}
+          </div>
+        )}
+      </div>
+      <div className="pt-4 text-center font-body-s">
         <p>
           {data?.name ?? '사용자'}님은{' '}
           <span className="font-bold">

@@ -7,6 +7,14 @@ import { CATEGORY } from '@/src/lib/constants/character';
 import { userKeys } from '../constants/queryKeys';
 import { USER_ENDPOINTS } from '../constants/url';
 
+const equippedCustomizationSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  type: z.enum(['THEME', 'DECORATION']),
+  image: z.string(),
+  imageWithoutBackground: z.string(),
+});
+
 const userDetailSchema = z.object({
   id: z.number(),
   email: z.email(),
@@ -16,11 +24,12 @@ const userDetailSchema = z.object({
   streakDays: z.number(),
   isOnboarded: z.boolean(),
   createdAt: z.string(),
+  equippedCustomizations: z.array(equippedCustomizationSchema),
 });
 
 export type UserDetailResponse = z.infer<typeof userDetailSchema>;
 
-const getUserDetail = async (): Promise<UserDetailResponse> => {
+export const getUserDetail = async (): Promise<UserDetailResponse> => {
   return get<UserDetailResponse>(USER_ENDPOINTS.detail, {
     responseSchema: userDetailSchema,
   });

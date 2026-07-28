@@ -51,3 +51,7 @@ storybook-static
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/.playwright-mcp/
+
+# Claude 개인 설정
+.claude/settings.local.json

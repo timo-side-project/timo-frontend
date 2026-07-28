@@ -10,7 +10,7 @@ import { goToHome } from '@/src/lib/helpers/navigation';
 
 import { useTodayReflectionQuery } from '../../reflection/queries/useTodayReflectionQuery';
 import { useUserDetailQuery } from '../../users/queries/useUserDetailQuery';
-import CompleteButton from '../CompleteButton/CompleteButton';
+import CompleteAction from '../CompleteAction/CompleteAction';
 import GeneratingFeedbackCard from '../GeneratingFeedbackCard/GeneratingFeedbackCard';
 import { useReflectionFeedbackDetailQuery } from '../queries/useReflectionFeedbackDetailQuery';
 import ResultCard from '../ResultCard/ResultCard';
@@ -122,7 +122,7 @@ const FeedbackSection = () => {
       />
       <BottomCTA>
         <div className="flex w-full flex-col gap-2.5">
-          <CompleteButton />
+          <CompleteAction />
           <Button
             label="변화보기"
             variant="secondary"
