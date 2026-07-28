@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
+import { useEquipCustomizationMutation } from '@/src/components/features/customization/queries/useEquipCustomizationMutation';
 import { useToast } from '@/src/hooks/useToast';
 
-import { useEquipCustomizationMutation } from '../queries/useEquipCustomizationMutation';
 import type { UnlockedCustomizationItem } from '../queries/useRecentlyUnlockedCustomizationsQuery';
 import RewardAcquireScreen from '../RewardAcquireScreen/RewardAcquireScreen';
 import RewardResultModal from '../RewardResultModal/RewardResultModal';
@@ -44,7 +44,7 @@ const RewardUnlockFlow = ({ items, onComplete }: RewardUnlockFlowProps) => {
     }
 
     try {
-      await equip(current.id);
+      await equip({ customizationItemId: current.id });
       setPhase('applied');
     } catch {
       showToast({ message: '적용에 실패했어요.' });
