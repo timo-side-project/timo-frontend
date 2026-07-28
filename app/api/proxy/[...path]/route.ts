@@ -17,6 +17,7 @@ async function handler(
 
   const headers = new Headers(req.headers);
   headers.set('host', new URL(targetUrl).host);
+  headers.set('ngrok-skip-browser-warning', 'true');
   headers.delete('x-middleware-invoke');
   headers.delete('origin');
   headers.delete('referer');
@@ -43,6 +44,11 @@ async function handler(
             const trimmed = part.trim().toLowerCase();
             return !trimmed.startsWith('domain=') && trimmed !== 'secure';
           })
+          .map((part) =>
+            part.trim().toLowerCase().startsWith('samesite=')
+              ? 'SameSite=Lax'
+              : part,
+          )
           .join('; ');
 
         responseHeaders.append('Set-Cookie', modifiedCookie);

@@ -14,12 +14,14 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10_000,
   withCredentials: true,
+  headers: { 'ngrok-skip-browser-warning': 'true' },
 });
 
 const reissueClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10_000,
   withCredentials: true,
+  headers: { 'ngrok-skip-browser-warning': 'true' },
 });
 
 let reissuePromise: Promise<void> | null = null;
