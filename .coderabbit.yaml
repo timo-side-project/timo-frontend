@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 # CodeRabbit 코드리뷰 설정
 # 기준 문서: docs/conventions.md
 # 설정 레퍼런스: https://docs.coderabbit.ai/reference/configuration
@@ -8,9 +9,18 @@ tone_instructions: '간결하고 실용적으로 리뷰한다. 사소한 스타�
 reviews:
   profile: 'chill'
 
+  # PR 코멘트를 간결하게 유지한다
+  poem: false
+  collapse_walkthrough: true
+  sequence_diagrams: false
+  high_level_summary: true
+
   auto_review:
     enabled: true
     auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - 'main'
     # wip 라벨이 붙은 PR은 자동 리뷰하지 않는다
     labels:
       - '!wip'
@@ -19,32 +29,21 @@ reviews:
   path_filters:
     - '!pnpm-lock.yaml'
     - '!public/**'
-    - '!**/*.svg'
 
+  # ESLint가 이미 잡는 규칙은 넣지 않는다. 봇이 중복으로 지적하면 노이즈만 늘어난다.
+  # 리뷰를 몇 번 받아본 뒤 실제로 놓치는 항목만 여기에 추가한다.
   path_instructions:
     - path: 'src/**/*.{ts,tsx}'
       instructions: |
-        - any 사용 금지. 사용하지 않는 변수는 _ prefix로 명시한다
-        - 타입은 import type 형태를 선호한다
-        - 배럴 파일(index.ts) 임포트 금지. 직접 경로로 임포트한다
-        - import 경로 별칭은 @/src/... 형태만 사용한다
-        - 색상, 타이포, 간격은 src/styles/globals.css의 @theme 토큰만 사용한다. 임의 값 금지
-        - 컴포넌트는 [Name]/[Name].tsx 폴더 구조, default export, 조건부 클래스는 cn() 헬퍼를 쓴다
-        - 커스텀 훅은 use* 네이밍을 따른다
-        - 머지 전 제거되어야 할 console.log가 남아있는지 확인한다
+        ESLint가 이미 잡는 항목(any, console, 미사용 변수)은 중복 지적하지 않는다.
+        - 배럴 파일(index.ts) 임포트 대신 직접 경로를 쓰는지
+        - 색상, 타이포, 간격이 globals.css의 @theme 토큰인지 (임의 값 금지)
 
     - path: 'src/components/features/**'
       instructions: |
-        - feature 간 직접 import 금지. 공통화가 필요하면 components/ui로 승격을 제안한다
-        - HTTP 호출은 src/lib/api의 get/post/patch/del 래퍼만 사용한다. axios 직접 호출 금지
-        - 응답은 Zod responseSchema로 검증하고 타입은 z.infer로 추론한다
-        - 쿼리 키는 constants/queryKeys.ts 팩토리, 엔드포인트는 constants/url.ts 상수로 관리한다
-
-    - path: 'src/components/ui/**'
-      instructions: |
-        - 특정 feature에 종속된 로직이 들어가지 않았는지 확인한다
-        - ComponentProps<'element'>를 확장하는 형태인지 확인한다
+        - feature 간 직접 import가 없는지
+        - HTTP가 src/lib/api 래퍼(get/post/patch/del)를 거치는지, 응답에 Zod responseSchema가 있는지
 
     - path: 'src/lib/**'
       instructions: |
-        - React 컴포넌트나 훅에 의존하지 않아야 한다
+        - React 컴포넌트나 훅에 의존하지 않는지
