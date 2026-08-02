@@ -30,12 +30,8 @@ export const useThemeSelect = () => {
   >(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const equippedTheme = userDetail?.equippedCustomizations.find(
-    (item) => item.type === 'THEME',
-  );
-  const equippedDecoration = userDetail?.equippedCustomizations.find(
-    (item) => item.type === 'DECORATION',
-  );
+  const equippedTheme = themeItems.find((item) => item.isEquipped);
+  const equippedDecoration = decorationItems.find((item) => item.isEquipped);
 
   const selectedTheme =
     selectedThemeId !== null

@@ -9,6 +9,7 @@ interface ThemeOption {
   id: number;
   name: string;
   image: string;
+  isUnlocked: boolean;
 }
 
 type ThemeSelectGridVariant = 'THEME' | 'DECORATION';
@@ -79,14 +80,23 @@ const ThemeSelectGrid = ({
       <div className="grid grid-cols-2 gap-x-3.5 gap-y-5 pt-4">
         {items.map((theme) => {
           const isSelected = theme.id === selectedId;
+          const isLocked = !theme.isUnlocked;
 
           return (
             <button
               key={theme.id}
               type="button"
+              disabled={isLocked}
               aria-pressed={isSelected}
-              onClick={() => onSelect(isSelected ? null : theme.id)}
-              className="flex flex-col items-center gap-3"
+              aria-disabled={isLocked}
+              onClick={() => {
+                if (isLocked) return;
+                onSelect(isSelected ? null : theme.id);
+              }}
+              className={cn(
+                'flex flex-col items-center gap-3',
+                isLocked && 'cursor-not-allowed',
+              )}
             >
               <div
                 className={cn(
@@ -96,7 +106,13 @@ const ThemeSelectGrid = ({
                     : 'border-transparent bg-g-400',
                 )}
               >
-                <div className={cn('relative', IMAGE_SIZE_CLASS[variant])}>
+                <div
+                  className={cn(
+                    'relative',
+                    IMAGE_SIZE_CLASS[variant],
+                    isLocked && 'blur-sm',
+                  )}
+                >
                   <Image
                     src={theme.image}
                     alt={theme.name}
