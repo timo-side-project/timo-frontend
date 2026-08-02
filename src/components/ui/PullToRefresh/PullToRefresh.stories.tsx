@@ -12,10 +12,8 @@ const meta = {
     queryKeys: [['example']],
     children: (
       <div className="flex h-80 flex-col gap-2 p-4">
-        <p className="text-g-500">
-          아래로 당겨서 새로고침 (터치 환경에서 확인)
-        </p>
-        <div className="rounded-2xl bg-g-20 p-4">콘텐츠 영역</div>
+        <p className="text-g-40">아래로 당겨서 새로고침 (터치 환경에서 확인)</p>
+        <div className="rounded-2xl bg-g-20 p-4 text-g-500">콘텐츠 영역</div>
       </div>
     ),
   },
