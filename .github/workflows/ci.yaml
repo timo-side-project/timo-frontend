@@ -34,6 +34,10 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
+      # vitest browser mode가 실제 chromium을 띄우므로 브라우저를 미리 설치한다
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
       - name: Test
         run: pnpm test
 

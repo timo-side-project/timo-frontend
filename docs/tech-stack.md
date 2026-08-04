@@ -12,7 +12,7 @@
 | 서버 상태 | **TanStack Query v5** | 캐싱·중복 제거, staleTime 기본 1분 |
 | 전역 상태 | **Zustand v5** | 가벼운 전역 스토어, 필요한 값만 셀렉터 구독 |
 | HTTP | **Axios + Zod** | 인터셉터(SSR 쿠키/토큰 재발급) + 런타임 응답 검증 |
-| 테스트 | **Storybook + Vitest 애드온** | 컴포넌트 단위 검증 (별도 `pnpm test` 없음) |
+| 테스트 | **Storybook + Vitest 애드온** | 컴포넌트 단위 검증 (`pnpm test`, CI에서 실행) |
 | 푸시 | **Firebase FCM** | 알림 |
 
 상세 아키텍처는 [architecture.md](./architecture.md), 코드 컨벤션은 [conventions.md](./conventions.md) 참고.

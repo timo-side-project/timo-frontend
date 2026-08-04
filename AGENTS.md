@@ -28,7 +28,7 @@
 
 - 개발: `pnpm dev` / `pnpm build` / `pnpm start` / `pnpm storybook`(port 6006)
 - 품질: `pnpm lint` / `pnpm typecheck`
-- 테스트: `pnpm test`는 no-op. 컴포넌트 테스트는 Storybook + Vitest 애드온
+- 테스트: `pnpm test`(컴포넌트 — Storybook + Vitest 애드온) / `pnpm test:e2e`(Playwright)
 
 ## 스킬 사용 규칙
 

@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "test": "echo \"No tests\"",
-    "test:ct": "vitest run --project storybook",
+    "test": "vitest run --project storybook",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "start": "next start",
