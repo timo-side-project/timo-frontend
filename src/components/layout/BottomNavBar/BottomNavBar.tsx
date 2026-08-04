@@ -49,7 +49,9 @@ const bottomTabs: BottomTabItem[] = [
 const BottomNavBar = () => {
   const pathname = usePathname();
   const activeMenu: TabKey =
-    bottomTabs.find((tab) => tab.href === pathname)?.key ?? 'home';
+    bottomTabs.find((tab) =>
+      tab.href === '/' ? pathname === '/' : pathname.startsWith(tab.href),
+    )?.key ?? 'home';
 
   return (
     <div className="fixed bottom-6 left-1/2 z-10 w-full max-w-110 -translate-x-1/2 px-5">
