@@ -14,6 +14,7 @@ import { cn } from '@/src/lib/helpers/cn';
 const PULL_THRESHOLD = 70;
 const MAX_PULL_DISTANCE = 100;
 const PULL_DAMPING = 0.5;
+const REFRESH_MIN_DURATION = 600;
 
 interface PullToRefreshProps extends ComponentProps<'div'> {
   queryKeys: readonly (readonly unknown[])[];
@@ -81,11 +82,16 @@ const PullToRefresh = ({
       updatePullDistance(PULL_THRESHOLD);
       setIsRefreshing(true);
 
-      Promise.all(
-        queryKeysRef.current.map((queryKey) =>
+      const minDuration = new Promise((resolve) => {
+        setTimeout(resolve, REFRESH_MIN_DURATION);
+      });
+
+      Promise.all([
+        ...queryKeysRef.current.map((queryKey) =>
           queryClient.invalidateQueries({ queryKey }),
         ),
-      ).finally(() => {
+        minDuration,
+      ]).finally(() => {
         setIsRefreshing(false);
         updatePullDistance(0);
       });
