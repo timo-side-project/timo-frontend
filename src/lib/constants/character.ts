@@ -19,8 +19,8 @@ export const DEFAULT_CHARACTER: CharacterAsset = {
 };
 
 export const CATEGORY = [
-  'PAST_POSITIVE',
   'PAST_NEGATIVE',
+  'PAST_POSITIVE',
   'PRESENT_HEDONISTIC',
   'PRESENT_FATALISTIC',
   'FUTURE',
