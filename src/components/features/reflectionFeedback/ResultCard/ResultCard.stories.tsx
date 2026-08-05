@@ -62,6 +62,18 @@ export const Decreased: Story = {
   },
 };
 
+export const MinimalChange: Story = {
+  args: {
+    changedScore: 0.03,
+  },
+};
+
+export const NoChange: Story = {
+  args: {
+    changedScore: 0,
+  },
+};
+
 export const LongFeedback: Story = {
   args: {
     feedback: SAMPLE_FEEDBACK.repeat(4),
