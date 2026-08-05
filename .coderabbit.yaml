@@ -1,0 +1,49 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit 코드리뷰 설정
+# 기준 문서: docs/conventions.md
+# 설정 레퍼런스: https://docs.coderabbit.ai/reference/configuration
+
+language: 'ko-KR'
+tone_instructions: '간결하고 실용적으로 리뷰한다. 사소한 스타일 지적보다 버그, 컨벤션 위반, 성능 문제에 집중한다.'
+
+reviews:
+  profile: 'chill'
+
+  # PR 코멘트를 간결하게 유지한다
+  poem: false
+  collapse_walkthrough: true
+  sequence_diagrams: false
+  high_level_summary: true
+
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+    base_branches:
+      - 'main'
+    # wip 라벨이 붙은 PR은 자동 리뷰하지 않는다
+    labels:
+      - '!wip'
+
+  # 리뷰해도 얻을 게 없는 경로는 제외한다
+  path_filters:
+    - '!pnpm-lock.yaml'
+    - '!public/**'
+
+  # ESLint가 이미 잡는 규칙은 넣지 않는다. 봇이 중복으로 지적하면 노이즈만 늘어난다.
+  # 리뷰를 몇 번 받아본 뒤 실제로 놓치는 항목만 여기에 추가한다.
+  path_instructions:
+    - path: 'src/**/*.{ts,tsx}'
+      instructions: |
+        ESLint가 이미 잡는 항목(any, console, 미사용 변수)은 중복 지적하지 않는다.
+        - 배럴 파일(index.ts) 임포트 대신 직접 경로를 쓰는지
+        - 색상, 타이포, 간격이 globals.css의 @theme 토큰인지 (임의 값 금지)
+
+    - path: 'src/components/features/**'
+      instructions: |
+        - feature 간 직접 import가 없는지
+        - HTTP가 src/lib/api 래퍼(get/post/patch/del)를 거치는지, 응답에 Zod responseSchema가 있는지
+
+    - path: 'src/lib/**'
+      instructions: |
+        - React 컴포넌트나 훅에 의존하지 않는지
