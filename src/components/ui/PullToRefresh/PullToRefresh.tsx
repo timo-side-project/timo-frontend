@@ -34,6 +34,7 @@ const PullToRefresh = ({
   const startYRef = useRef(0);
   const pullDistanceRef = useRef(0);
   const isPullingRef = useRef(false);
+  const isRefreshingRef = useRef(false);
 
   const [pullDistance, setPullDistance] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -52,7 +53,7 @@ const PullToRefresh = ({
     };
 
     const handleTouchStart = (event: TouchEvent) => {
-      if (window.scrollY > 0) return;
+      if (isRefreshingRef.current || window.scrollY > 0) return;
       startYRef.current = event.touches[0].clientY;
       isPullingRef.current = true;
     };
@@ -80,6 +81,7 @@ const PullToRefresh = ({
       }
 
       updatePullDistance(PULL_THRESHOLD);
+      isRefreshingRef.current = true;
       setIsRefreshing(true);
 
       const minDuration = new Promise((resolve) => {
@@ -92,6 +94,7 @@ const PullToRefresh = ({
         ),
         minDuration,
       ]).finally(() => {
+        isRefreshingRef.current = false;
         setIsRefreshing(false);
         updatePullDistance(0);
       });
