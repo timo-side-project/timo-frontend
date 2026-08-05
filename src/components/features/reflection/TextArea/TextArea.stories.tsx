@@ -5,9 +5,6 @@ import TextArea from './TextArea';
 const meta = {
   title: 'Features/Reflection/TextArea',
   component: TextArea,
-  args: {
-    placeholder: '어떤 일이 있었나요?',
-  },
 } satisfies Meta<typeof TextArea>;
 
 export default meta;
