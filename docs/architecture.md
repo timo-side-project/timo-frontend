@@ -31,14 +31,14 @@ src/
                   #   reward, statistics, test, testAuth, testResult, serviceFeedback,
                   #   users, pwa)
                   #   각 feature: 컴포넌트 폴더 + queries/ + constants/ + hooks/
-  hooks/          # 공용 커스텀 훅 (useToast)
+  hooks/          # 공용 커스텀 훅 (useDialIndicator, useSortSelect, useToast)
   lib/
     api/          # HTTP 클라이언트 — instance.ts, http.ts, schema.ts, error.ts, index.ts
     config/env.ts # API base URL 결정 (SSR/dev proxy 분기)
     constants/    # 상수 (character.ts)
     firebase/     # FCM 푸시 (client.ts, messaging.ts)
     helpers/      # 유틸 (cn, getQueryClient, navigation, calculateProgress,
-                  #   formatTwoDigitNumber, getCharacterAsset)
+                  #   formatTwoDigitNumber, getCharacterAsset, sortByCategory)
   styles/         # globals.css (@theme 디자인 토큰), typography.css
 ```
 

@@ -59,7 +59,7 @@ const GraphSection = ({ character, category }: GraphSectionProps) => {
           <p className="font-heading-h4 text-g-60">
             회고를 통해서{' '}
             <span className="text-primary">{Math.round(approachRate)}%</span>{' '}
-            이상치에 가까워졌어요!
+            이상치에 {data.isCloserToIdeal ? '가까워졌어요!' : '멀어졌어요.'}
           </p>
         )}
       </article>

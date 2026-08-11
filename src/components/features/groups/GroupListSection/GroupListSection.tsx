@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import GroupList from '@/src/components/features/groups/GroupList/GroupList';
 import { useSuspenseGroupListQuery } from '@/src/components/features/groups/queries/useGroupListQuery';
+import { sortByCategory } from '@/src/lib/helpers/sortByCategory';
 
 import type { GroupType } from '../constants/groupType';
 
@@ -19,12 +20,16 @@ const GroupListSection = ({
   const { data: groups } = useSuspenseGroupListQuery();
 
   const filteredGroups = groups.filter((g) => g.type === activeTab);
+
+  const orderedGroups =
+    activeTab === 'CHARACTER' ? sortByCategory(filteredGroups) : filteredGroups;
+
   const [selectedId, setSelectedId] = useState<number | null>(
-    filteredGroups[0]?.id ?? null,
+    orderedGroups[0]?.id ?? null,
   );
 
   useEffect(() => {
-    onGroupSelect(filteredGroups[0]?.id ?? null);
+    onGroupSelect(orderedGroups[0]?.id ?? null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -33,7 +38,7 @@ const GroupListSection = ({
     onGroupSelect(id);
   };
 
-  if (filteredGroups.length === 0) {
+  if (orderedGroups.length === 0) {
     return (
       <section className="flex h-28 flex-col items-center justify-center gap-1">
         <p className="font-body-s text-g-0">아직 참여 중인 그룹이 없어요</p>
@@ -47,7 +52,7 @@ const GroupListSection = ({
   return (
     <section>
       <GroupList
-        groups={filteredGroups}
+        groups={orderedGroups}
         selectedId={selectedId ?? undefined}
         onSelect={handleSelect}
       />

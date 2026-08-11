@@ -1,9 +1,9 @@
 'use client';
 
 import AvatarButton from '@/src/components/ui/AvatarButton/AvatarButton';
+import { useDialIndicator } from '@/src/hooks/useDialIndicator';
 
 import type { GroupType } from '../constants/groupType';
-import { useGroupDialIndicator } from '../hooks/useGroupDialIndicator';
 
 interface GroupItem {
   id: number;
@@ -20,13 +20,17 @@ interface GroupListProps {
 
 const GroupList = ({ groups, selectedId, onSelect }: GroupListProps) => {
   const { scrollRef, indicatorRef, registerItemRef, handleSelect } =
-    useGroupDialIndicator({ groups, selectedId, onSelect });
+    useDialIndicator({
+      itemIds: groups.map((group) => group.id),
+      selectedId,
+      onSelect,
+    });
 
   return (
     <div className="relative">
       <div
         ref={scrollRef}
-        className="flex h-32 items-start pt-4 gap-4 overflow-x-auto overflow-y-hidden scrollbar-hidden snap-x snap-mandatory"
+        className="flex h-32 items-start pt-4 gap-2 overflow-x-auto overflow-y-hidden scrollbar-hidden snap-x snap-mandatory"
       >
         {groups.map((item, idx) => (
           <div

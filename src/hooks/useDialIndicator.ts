@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
-interface GroupDialItem {
-  id: number;
-}
+type DialItemId = string | number;
 
-interface UseGroupDialIndicatorParams<T extends GroupDialItem> {
-  groups: T[];
-  selectedId?: number;
-  onSelect?: (id: number) => void;
+interface UseDialIndicatorParams<ID extends DialItemId> {
+  itemIds: ID[];
+  selectedId?: ID;
+  onSelect?: (id: ID) => void;
 }
 
 const INDICATOR_HALF_WIDTH = 13;
@@ -17,23 +15,25 @@ const getScreenCenter = (el: HTMLDivElement, scrollLeft: number) =>
   el.offsetLeft + el.offsetWidth / 2 - scrollLeft;
 
 /**
- * 그룹 아바타 리스트를 다이얼처럼 스크롤할 때, 화면상 고정된 바늘(세모 인디케이터)
- * 아래로 지나가는 그룹을 자동으로 포커스한다.
- * - 리스트는 snap-mandatory로 한 그룹씩 딱딱 걸리며 스크롤된다.
+ * 아바타 리스트를 다이얼처럼 스크롤할 때, 화면상 고정된 바늘(세모 인디케이터)
+ * 아래로 지나가는 항목을 자동으로 포커스한다.
+ * - 리스트는 snap-mandatory로 한 항목씩 딱딱 걸리며 스크롤된다.
  * - 리스트 끝부분처럼 스크롤이 바늘 위치까지 닿지 못하면, 바늘을 실제로 멈춘
- *   그룹 쪽으로 옮긴다.
+ *   항목 쪽으로 옮긴다.
  */
-export const useGroupDialIndicator = <T extends GroupDialItem>({
-  groups,
+export const useDialIndicator = <ID extends DialItemId>({
+  itemIds,
   selectedId,
   onSelect,
-}: UseGroupDialIndicatorParams<T>) => {
+}: UseDialIndicatorParams<ID>) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef(new Map<number, HTMLDivElement>());
+  const itemRefs = useRef(new Map<ID, HTMLDivElement>());
   const selectedIdRef = useRef(selectedId);
   const pointerXRef = useRef<number | null>(null);
   const suppressSettleRef = useRef(false);
+
+  const firstItemId = itemIds[0];
 
   useEffect(() => {
     selectedIdRef.current = selectedId;
@@ -48,7 +48,7 @@ export const useGroupDialIndicator = <T extends GroupDialItem>({
     const pointerX = pointerXRef.current;
     if (pointerX === null) return null;
 
-    let closestId: number | null = null;
+    let closestId: ID | null = null;
     let closestEl: HTMLDivElement | null = null;
     let minDistance = Infinity;
 
@@ -68,11 +68,11 @@ export const useGroupDialIndicator = <T extends GroupDialItem>({
       : null;
   }, []);
 
-  // 첫 그룹의 중심을 바늘의 화면상 고정 위치로 삼는다.
+  // 첫 항목의 중심을 바늘의 화면상 고정 위치로 삼는다.
   useLayoutEffect(() => {
     if (pointerXRef.current !== null) return;
-    const first = groups[0];
-    const target = first ? itemRefs.current.get(first.id) : undefined;
+    const target =
+      firstItemId !== undefined ? itemRefs.current.get(firstItemId) : undefined;
     const container = scrollRef.current;
     if (!target || !container) return;
 
@@ -82,7 +82,7 @@ export const useGroupDialIndicator = <T extends GroupDialItem>({
 
     moveIndicatorTo(pointerX);
     if (indicatorRef.current) indicatorRef.current.style.visibility = 'visible';
-  }, [groups, moveIndicatorTo]);
+  }, [firstItemId, moveIndicatorTo]);
 
   const settleFocus = useCallback(() => {
     // 클릭으로 인한 스크롤은 handleSelect에서 이미 확정 처리했으므로
@@ -132,7 +132,7 @@ export const useGroupDialIndicator = <T extends GroupDialItem>({
   }, [settleFocus]);
 
   const registerItemRef = useCallback(
-    (id: number) => (el: HTMLDivElement | null) => {
+    (id: ID) => (el: HTMLDivElement | null) => {
       if (el) itemRefs.current.set(id, el);
       else itemRefs.current.delete(id);
     },
@@ -140,7 +140,7 @@ export const useGroupDialIndicator = <T extends GroupDialItem>({
   );
 
   const handleSelect = useCallback(
-    (id: number) => {
+    (id: ID) => {
       onSelect?.(id);
 
       const container = scrollRef.current;
