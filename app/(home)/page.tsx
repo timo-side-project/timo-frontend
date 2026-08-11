@@ -3,7 +3,9 @@ import { redirect } from 'next/navigation';
 
 import HomeClientSections from '@/src/components/features/home/HomeClientSections/HomeClientSections';
 import HomeHeader from '@/src/components/features/home/HomeHeader/HomeHeader';
+import { reflectionKeys } from '@/src/components/features/reflection/constants/queryKeys';
 import BottomNavBar from '@/src/components/layout/BottomNavBar/BottomNavBar';
+import PullToRefresh from '@/src/components/ui/PullToRefresh/PullToRefresh';
 import { API_BASE_URL } from '@/src/lib/config/env';
 
 const Home = async () => {
@@ -30,9 +32,12 @@ const Home = async () => {
     <div className="flex min-h-dvh flex-col overflow-hidden">
       <HomeHeader />
 
-      <div className="flex flex-1 flex-col pb-32 pt-8">
+      <PullToRefresh
+        queryKeys={[reflectionKeys.all]}
+        className="flex flex-1 flex-col pb-32 pt-8"
+      >
         <HomeClientSections />
-      </div>
+      </PullToRefresh>
 
       <BottomNavBar />
     </div>

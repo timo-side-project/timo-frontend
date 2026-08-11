@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Suspense, useState } from 'react';
 
 import type { GroupType } from '@/src/components/features/groups/constants/groupType';
+import { groupKeys } from '@/src/components/features/groups/constants/queryKey';
 import FriendReflectionPanel from '@/src/components/features/groups/FriendReflectionPanel/FriendReflectionPanel';
 import GroupActionMenu from '@/src/components/features/groups/GroupActionMenu/GroupActionMenu';
 import CharacterGroupJoin from '@/src/components/features/groups/GroupJoin/CharacterGroupJoin/CharacterGroupJoin';
@@ -14,6 +15,7 @@ import GroupTab from '@/src/components/features/groups/GroupTab/GroupTab';
 import type { GroupFriendItem } from '@/src/components/features/groups/queries/useGroupFriendListQuery';
 import RankingSection from '@/src/components/features/groups/Ranking/RankingSection/RankingSection';
 import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
+import PullToRefresh from '@/src/components/ui/PullToRefresh/PullToRefresh';
 
 interface GroupsPageClientProps {
   joinParam: string | null;
@@ -59,28 +61,33 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
         ) : null}
       </div>
       <div className="pt-14 flex flex-col flex-1 min-h-0">
-        <GroupTab activeTab={activeTab} onTabChange={handleTabChange} />
-        <Suspense fallback={<GroupListSkeleton />}>
-          <GroupListSection
-            key={activeTab}
-            activeTab={activeTab}
-            onGroupSelect={setSelectedGroupId}
-          />
-        </Suspense>
-        {selectedGroupId !== null ? (
-          <div className="bg-g-500 -mx-7.5 px-7.5 py-6 mt-2 flex-1 min-h-0">
-            <RankingSection
-              groupId={selectedGroupId}
+        <PullToRefresh
+          queryKeys={[groupKeys.all()]}
+          className="flex flex-1 flex-col min-h-0"
+        >
+          <GroupTab activeTab={activeTab} onTabChange={handleTabChange} />
+          <Suspense fallback={<GroupListSkeleton />}>
+            <GroupListSection
+              key={activeTab}
               activeTab={activeTab}
-              onSelect={setSelectedFriend}
+              onGroupSelect={setSelectedGroupId}
             />
-          </div>
-        ) : null}
+          </Suspense>
+          {selectedGroupId !== null ? (
+            <div className="bg-g-500 -mx-7.5 px-7.5 py-6 mt-2 flex-1 min-h-0">
+              <RankingSection
+                groupId={selectedGroupId}
+                activeTab={activeTab}
+                onSelect={setSelectedFriend}
+              />
+            </div>
+          ) : null}
 
-        <FriendReflectionPanel
-          friend={selectedFriend}
-          onClose={() => setSelectedFriend(null)}
-        />
+          <FriendReflectionPanel
+            friend={selectedFriend}
+            onClose={() => setSelectedFriend(null)}
+          />
+        </PullToRefresh>
       </div>
 
       {joinParam === 'character' && <CharacterGroupJoin />}

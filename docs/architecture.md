@@ -23,7 +23,8 @@ proxy.ts                              # 미들웨어 (Next 16 미들웨어 파�
 src/
   components/
     ui/           # 범용 UI 컴포넌트 (Badge, Button, Card, ErrorState, Icon,
-                  #   Modal, ProgressBar, Radio, Skeleton, TimeWheelPicker, Toast, ToggleSwitch)
+                  #   Modal, ProgressBar, PullToRefresh, Radio, Skeleton, TimeWheelPicker,
+                  #   Toast, ToggleSwitch)
     layout/       # 페이지 레이아웃 (BottomNavBar, PageHeader, BottomCTA)
     features/     # 기능별 묶음 (home, reflection, reflectionDetail, reflectionFeedback,
                   #   calendar, groups, characters, notification, onboarding, profile,
