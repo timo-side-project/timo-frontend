@@ -3,11 +3,29 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import type { CustomizationsResponse } from '@/src/components/features/customization/queries/useCustomizationsQuery';
 import { useCustomizationsQuery } from '@/src/components/features/customization/queries/useCustomizationsQuery';
 import { useEquipCustomizationMutation } from '@/src/components/features/customization/queries/useEquipCustomizationMutation';
 import { useUserDetailQuery } from '@/src/components/features/users/queries/useUserDetailQuery';
 import { useToast } from '@/src/hooks/useToast';
 import { getCharacterAsset } from '@/src/lib/helpers/getCharacterAsset';
+
+type CustomizationItem = CustomizationsResponse[number];
+
+const pickPreviewItem = (
+  items: CustomizationItem[],
+  selectedId: number | null,
+) => {
+  const equipped = items.find((item) => item.isEquipped);
+  const selected =
+    selectedId !== null
+      ? items.find((item) => item.id === selectedId)
+      : undefined;
+  return { equipped, selected, preview: selected ?? equipped };
+};
+
+const getAssetImageUrl = (item: CustomizationItem | undefined) =>
+  item?.imageWithoutBackground ?? item?.image;
 
 export const useThemeSelect = () => {
   const router = useRouter();
@@ -30,20 +48,14 @@ export const useThemeSelect = () => {
   >(null);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
 
-  const equippedTheme = themeItems.find((item) => item.isEquipped);
-  const equippedDecoration = decorationItems.find((item) => item.isEquipped);
+  const {
+    equipped: equippedTheme,
+    selected: selectedTheme,
+    preview: previewTheme,
+  } = pickPreviewItem(themeItems, selectedThemeId);
+  const { equipped: equippedDecoration, preview: previewDecoration } =
+    pickPreviewItem(decorationItems, selectedDecorationId);
 
-  const selectedTheme =
-    selectedThemeId !== null
-      ? themeItems.find((item) => item.id === selectedThemeId)
-      : undefined;
-  const selectedDecoration =
-    selectedDecorationId !== null
-      ? decorationItems.find((item) => item.id === selectedDecorationId)
-      : undefined;
-
-  const previewTheme = selectedTheme ?? equippedTheme;
-  const previewDecoration = selectedDecoration ?? equippedDecoration;
   const isPreviewPending = selectedTheme
     ? false
     : isUserDetailPending || isPending;
@@ -78,15 +90,10 @@ export const useThemeSelect = () => {
   };
 
   const previewImageUrl =
-    previewTheme?.imageWithoutBackground ??
-    previewTheme?.image ??
-    defaultCharacter.src;
+    getAssetImageUrl(previewTheme) ?? defaultCharacter.src;
   const previewName = previewTheme?.name ?? defaultCharacter.alt;
 
-  const previewDecorationImageUrl =
-    previewDecoration?.imageWithoutBackground ??
-    previewDecoration?.image ??
-    null;
+  const previewDecorationImageUrl = getAssetImageUrl(previewDecoration) ?? null;
   const previewDecorationName = previewDecoration?.name ?? '';
 
   return {
