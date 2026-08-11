@@ -40,7 +40,7 @@ export const getScoreMessage = ({
     };
   }
 
-  const verb = isIncreased ? '올랐어요' : '내렸어요';
+  const verb = isIncreased ? '올랐어요' : '내려갔어요';
   const rate = Math.max(absoluteScore, MIN_DISPLAY_RATE).toFixed(1);
 
   return {

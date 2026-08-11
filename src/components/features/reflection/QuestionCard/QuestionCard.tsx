@@ -20,11 +20,8 @@ const QuestionCard = ({
         )}
 
         {isReady && !isLoading && (
-          <div className="flex h-full flex-col justify-start gap-2">
+          <div className="flex h-full flex-col justify-start">
             <p className="font-heading-h4 text-g-0">{questionContent}</p>
-            <p className="font-caption-n text-g-30 opacity-50">
-              지금 떠오르는 감정이나 생각을 부담없이 작성해보세요!
-            </p>
           </div>
         )}
       </Card>
