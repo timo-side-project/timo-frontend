@@ -29,6 +29,7 @@ const allIcons = {
   statisticsInactive: '/icons/statistics-inactive.svg',
   editTheme: '/icons/edit-theme.svg',
   saveTheme: '/icons/save-theme.svg',
+  lock: '/icons/lock.svg',
 } as const;
 
 export default allIcons;

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
+import Icon from '@/src/components/ui/Icon/Icon';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { cn } from '@/src/lib/helpers/cn';
 import { getSubjectParticle } from '@/src/lib/helpers/getSubjectParticle';
@@ -9,6 +10,7 @@ interface ThemeOption {
   id: number;
   name: string;
   image: string;
+  isUnlocked: boolean;
 }
 
 type ThemeSelectGridVariant = 'THEME' | 'DECORATION';
@@ -27,6 +29,8 @@ const IMAGE_SIZE_CLASS: Record<ThemeSelectGridVariant, string> = {
   THEME: 'h-40 w-40',
   DECORATION: 'h-18 w-18',
 };
+
+const LOCK_ICON_SIZE = 44;
 
 const ThemeSelectGrid = ({
   title,
@@ -79,14 +83,23 @@ const ThemeSelectGrid = ({
       <div className="grid grid-cols-2 gap-x-3.5 gap-y-5 pt-4">
         {items.map((theme) => {
           const isSelected = theme.id === selectedId;
+          const isLocked = !theme.isUnlocked;
 
           return (
             <button
               key={theme.id}
               type="button"
+              disabled={isLocked}
               aria-pressed={isSelected}
-              onClick={() => onSelect(isSelected ? null : theme.id)}
-              className="flex flex-col items-center gap-3"
+              aria-disabled={isLocked}
+              onClick={() => {
+                if (isLocked) return;
+                onSelect(isSelected ? null : theme.id);
+              }}
+              className={cn(
+                'flex flex-col items-center gap-3',
+                isLocked && 'cursor-not-allowed',
+              )}
             >
               <div
                 className={cn(
@@ -96,7 +109,13 @@ const ThemeSelectGrid = ({
                     : 'border-transparent bg-g-400',
                 )}
               >
-                <div className={cn('relative', IMAGE_SIZE_CLASS[variant])}>
+                <div
+                  className={cn(
+                    'relative',
+                    IMAGE_SIZE_CLASS[variant],
+                    isLocked && 'blur-sm',
+                  )}
+                >
                   <Image
                     src={theme.image}
                     alt={theme.name}
@@ -105,6 +124,14 @@ const ThemeSelectGrid = ({
                     className="object-contain"
                   />
                 </div>
+                {isLocked && (
+                  <Icon
+                    name="lock"
+                    size={LOCK_ICON_SIZE}
+                    decorative
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  />
+                )}
               </div>
               <p className="font-body-s text-g-100">{theme.name}</p>
             </button>
