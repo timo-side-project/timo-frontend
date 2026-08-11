@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
+import Icon from '@/src/components/ui/Icon/Icon';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { cn } from '@/src/lib/helpers/cn';
 import { getSubjectParticle } from '@/src/lib/helpers/getSubjectParticle';
@@ -28,6 +29,8 @@ const IMAGE_SIZE_CLASS: Record<ThemeSelectGridVariant, string> = {
   THEME: 'h-40 w-40',
   DECORATION: 'h-18 w-18',
 };
+
+const LOCK_ICON_SIZE = 44;
 
 const ThemeSelectGrid = ({
   title,
@@ -121,6 +124,14 @@ const ThemeSelectGrid = ({
                     className="object-contain"
                   />
                 </div>
+                {isLocked && (
+                  <Icon
+                    name="lock"
+                    size={LOCK_ICON_SIZE}
+                    decorative
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                  />
+                )}
               </div>
               <p className="font-body-s text-g-100">{theme.name}</p>
             </button>
