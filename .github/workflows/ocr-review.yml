@@ -1,0 +1,41 @@
+# OpenCodeReview - PR 자동 코드 리뷰
+#
+# 필요한 secrets/variables (Settings -> Secrets and variables -> Actions):
+#   secret    OCR_LLM_URL            https://generativelanguage.googleapis.com/v1beta/openai/chat/completions
+#   secret    OCR_LLM_AUTH_TOKEN     Gemini API 키
+#   variable  OCR_LLM_MODEL          예: gemini-2.5-flash
+#   variable  OCR_LLM_USE_ANTHROPIC  'false'
+#
+# 자세한 입력값/보안 가이드는 action.yml 참고: https://github.com/alibaba/open-code-review
+
+name: OpenCodeReview PR Review
+
+concurrency:
+  group: ocr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+on:
+  # secrets가 fork PR에서도 동작하도록 pull_request 대신 pull_request_target 사용.
+  # 이 액션은 diff를 읽기만 하고 PR 코드를 실행하지 않으므로 안전함.
+  pull_request_target:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Run OpenCodeReview
+        uses: alibaba/open-code-review@main
+        with:
+          llm_url: ${{ secrets.OCR_LLM_URL }}
+          llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
+          llm_model: ${{ vars.OCR_LLM_MODEL }}
+          llm_use_anthropic: ${{ vars.OCR_LLM_USE_ANTHROPIC }}
+          language: Korean
+          sticky_summary: 'true'
+          incremental: 'true'
