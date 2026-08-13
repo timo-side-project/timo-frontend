@@ -3,6 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { getObjectParticle } from '@/src/lib/helpers/getObjectParticle';
+
 import GroupActionModal from '../GroupActionModal/GroupActionModal';
 import GroupItemActionMenu from '../GroupItemActionMenu/GroupItemActionMenu';
 import { useDeleteGroupMutation } from '../queries/useDeleteGroupMutation';
@@ -42,7 +44,9 @@ const GroupItemActions = ({
       <GroupActionModal
         isOpen
         title={isOwner ? '그룹 삭제하기' : '그룹 나가기'}
-        description={`[${groupName}]을 ${isOwner ? '삭제' : '나가'}시겠습니까?`}
+        description={`${groupName}${getObjectParticle(groupName)} ${
+          isOwner ? '삭제하' : '나가'
+        }시겠습니까?`}
         confirmLabel={isOwner ? '삭제하기' : '나가기'}
         cancelLabel="취소하기"
         onConfirm={handleConfirm}
