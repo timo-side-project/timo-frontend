@@ -62,7 +62,11 @@ const GroupListSection = ({
         groups={orderedGroups}
         selectedId={selectedId ?? undefined}
         onSelect={handleSelect}
-        onLongPress={(id, anchorRect) => setMenuTarget({ id, anchorRect })}
+        onLongPress={
+          activeTab === 'FRIEND'
+            ? (id, anchorRect) => setMenuTarget({ id, anchorRect })
+            : undefined
+        }
       />
 
       {menuTarget && menuGroup ? (

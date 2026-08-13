@@ -10,7 +10,8 @@ interface GroupListItemProps {
   isSelected: boolean;
   preload?: boolean;
   onSelect: (id: number) => void;
-  onLongPress: (id: number, anchorRect: DOMRect) => void;
+  /** 넘기지 않으면 길게 누르기를 받지 않는다 */
+  onLongPress?: (id: number, anchorRect: DOMRect) => void;
 }
 
 const GroupListItem = ({
@@ -23,7 +24,7 @@ const GroupListItem = ({
   onLongPress,
 }: GroupListItemProps) => {
   const longPressHandlers = useLongPress({
-    onLongPress: (target) => onLongPress(id, target.getBoundingClientRect()),
+    onLongPress: (target) => onLongPress?.(id, target.getBoundingClientRect()),
   });
 
   return (
@@ -35,7 +36,7 @@ const GroupListItem = ({
       preload={preload}
       // 길게 누를 때 텍스트 선택과 iOS 이미지 미리보기가 뜨지 않도록 막는다
       className="select-none [-webkit-touch-callout:none]"
-      {...longPressHandlers}
+      {...(onLongPress ? longPressHandlers : {})}
     />
   );
 };
