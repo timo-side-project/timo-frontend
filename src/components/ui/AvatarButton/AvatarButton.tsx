@@ -1,12 +1,12 @@
 import Image from 'next/image';
+import type { ComponentProps } from 'react';
 
 import { cn } from '@/src/lib/helpers/cn';
 
-interface AvatarButtonProps {
+interface AvatarButtonProps extends ComponentProps<'button'> {
   src: string;
   label: string;
   isSelected?: boolean;
-  onClick?: () => void;
   preload?: boolean;
   sizes?: string;
 }
@@ -18,13 +18,19 @@ const AvatarButton = ({
   onClick,
   preload = false,
   sizes = '55px',
+  className,
+  ...props
 }: AvatarButtonProps) => {
   return (
     <button
       type="button"
-      className="flex flex-col items-center gap-2 w-17.5 shrink-0 cursor-pointer"
+      className={cn(
+        'flex flex-col items-center gap-2 w-17.5 shrink-0 cursor-pointer',
+        className,
+      )}
       aria-pressed={isSelected}
       onClick={onClick}
+      {...props}
     >
       <div className="relative w-13.75 h-13.75 rounded-[10px] overflow-hidden shrink-0">
         <Image
