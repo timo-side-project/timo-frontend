@@ -1,9 +1,9 @@
 'use client';
 
-import AvatarButton from '@/src/components/ui/AvatarButton/AvatarButton';
 import { useDialIndicator } from '@/src/hooks/useDialIndicator';
 
 import type { GroupType } from '../constants/groupType';
+import GroupListItem from '../GroupListItem/GroupListItem';
 
 interface GroupItem {
   id: number;
@@ -16,9 +16,15 @@ interface GroupListProps {
   groups: GroupItem[];
   selectedId?: number;
   onSelect?: (id: number) => void;
+  onLongPress?: (id: number) => void;
 }
 
-const GroupList = ({ groups, selectedId, onSelect }: GroupListProps) => {
+const GroupList = ({
+  groups,
+  selectedId,
+  onSelect,
+  onLongPress,
+}: GroupListProps) => {
   const { scrollRef, indicatorRef, registerItemRef, handleSelect } =
     useDialIndicator({
       itemIds: groups.map((group) => group.id),
@@ -38,17 +44,18 @@ const GroupList = ({ groups, selectedId, onSelect }: GroupListProps) => {
             ref={registerItemRef(item.id)}
             className="shrink-0 snap-start snap-always"
           >
-            <AvatarButton
-              src={item.image || '/images/default-group.svg'}
-              label={item.name}
+            <GroupListItem
+              id={item.id}
+              name={item.name}
+              image={item.image}
               isSelected={selectedId === item.id}
-              onClick={() => handleSelect(item.id)}
               preload={idx < 5}
+              onSelect={handleSelect}
+              onLongPress={(id) => onLongPress?.(id)}
             />
           </div>
         ))}
       </div>
-
       <div
         ref={indicatorRef}
         aria-hidden
