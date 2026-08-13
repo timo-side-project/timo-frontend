@@ -27,7 +27,7 @@ const GroupActionModal = ({
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-3 text-center">
-          <h3 className="font-heading-h3 text-primary">{title}</h3>
+          <h3 className="font-button-l text-primary">{title}</h3>
           <p className="font-body-s text-g-80">{description}</p>
         </div>
 
@@ -35,6 +35,7 @@ const GroupActionModal = ({
           <Button
             label={confirmLabel}
             variant="primary"
+            size="s"
             onClick={onConfirm}
             disabled={isPending}
             className="h-11"
@@ -44,9 +45,10 @@ const GroupActionModal = ({
             <Button
               label={cancelLabel}
               variant="secondary"
+              size="s"
               onClick={onClose}
               disabled={isPending}
-              className="h-11"
+              className="h-11 bg-g-400"
             />
           ) : null}
         </div>
