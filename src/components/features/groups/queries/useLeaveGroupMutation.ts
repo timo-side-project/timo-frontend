@@ -15,7 +15,6 @@ export const useLeaveGroupMutation = (groupId: number) => {
     mutationKey: groupKeys.leave(groupId),
     mutationFn: () => leaveGroup(groupId),
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: groupKeys.detail(groupId) });
       queryClient.invalidateQueries({ queryKey: groupKeys.list() });
     },
   });

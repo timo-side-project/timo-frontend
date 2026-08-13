@@ -15,7 +15,6 @@ export const useDeleteGroupMutation = (groupId: number) => {
     mutationKey: groupKeys.delete(groupId),
     mutationFn: () => deleteGroup(groupId),
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: groupKeys.detail(groupId) });
       queryClient.invalidateQueries({ queryKey: groupKeys.list() });
     },
   });

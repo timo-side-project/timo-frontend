@@ -1,16 +1,22 @@
 'use client';
 
+import { notFound } from 'next/navigation';
+
 import GroupActionModal from '../GroupActionModal/GroupActionModal';
 import GroupForm from '../GroupForm/GroupForm';
 import { useGroupEdit } from '../hooks/useGroupEdit';
-import { useSuspenseGroupDetailQuery } from '../queries/useGroupDetailQuery';
+import { useSuspenseGroupListQuery } from '../queries/useGroupListQuery';
 
 interface GroupEditFormProps {
   groupId: number;
 }
 
 const GroupEditForm = ({ groupId }: GroupEditFormProps) => {
-  const { data: group } = useSuspenseGroupDetailQuery(groupId);
+  // 목록은 그룹 화면에서 이미 받아둔 캐시라 대개 요청 없이 채워진다
+  const { data: groups } = useSuspenseGroupListQuery();
+  const group = groups.find((item) => item.id === groupId);
+
+  if (!group) notFound();
   const {
     name,
     setName,

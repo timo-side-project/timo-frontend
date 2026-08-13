@@ -26,7 +26,6 @@ export const useUpdateGroupMutation = (groupId: number) => {
     mutationFn: (request: UpdateGroupRequest) => updateGroup(groupId, request),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: groupKeys.list() });
-      queryClient.invalidateQueries({ queryKey: groupKeys.detail(groupId) });
     },
   });
 };
