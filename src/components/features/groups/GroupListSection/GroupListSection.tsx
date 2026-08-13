@@ -7,6 +7,7 @@ import { useSuspenseGroupListQuery } from '@/src/components/features/groups/quer
 import { sortByCategory } from '@/src/lib/helpers/sortByCategory';
 
 import type { GroupType } from '../constants/groupType';
+import GroupItemActions from '../GroupItemActions/GroupItemActions';
 
 interface GroupListSectionProps {
   activeTab: GroupType;
@@ -27,6 +28,12 @@ const GroupListSection = ({
   const [selectedId, setSelectedId] = useState<number | null>(
     orderedGroups[0]?.id ?? null,
   );
+  const [menuTarget, setMenuTarget] = useState<{
+    id: number;
+    anchorRect: DOMRect;
+  } | null>(null);
+
+  const menuGroup = orderedGroups.find((group) => group.id === menuTarget?.id);
 
   useEffect(() => {
     onGroupSelect(orderedGroups[0]?.id ?? null);
@@ -55,7 +62,18 @@ const GroupListSection = ({
         groups={orderedGroups}
         selectedId={selectedId ?? undefined}
         onSelect={handleSelect}
+        onLongPress={(id, anchorRect) => setMenuTarget({ id, anchorRect })}
       />
+
+      {menuTarget && menuGroup ? (
+        <GroupItemActions
+          groupId={menuGroup.id}
+          groupName={menuGroup.name}
+          isOwner={menuGroup.myRole === 'OWNER'}
+          anchorRect={menuTarget.anchorRect}
+          onClose={() => setMenuTarget(null)}
+        />
+      ) : null}
     </section>
   );
 };
