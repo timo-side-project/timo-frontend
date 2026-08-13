@@ -6,7 +6,8 @@ const DEFAULT_DELAY = 500;
 const MOVE_THRESHOLD = 10;
 
 interface UseLongPressOptions {
-  onLongPress: () => void;
+  /** 눌린 요소를 함께 넘겨 메뉴 위치 계산 등에 쓸 수 있게 한다 */
+  onLongPress: (target: HTMLElement) => void;
   delay?: number;
 }
 
@@ -34,14 +35,16 @@ export const useLongPress = ({
   // 누르고 있는 도중 언마운트되면 타이머가 남으므로 정리한다
   useEffect(() => clearTimer, [clearTimer]);
 
-  const handlePointerDown = (e: PointerEvent) => {
+  const handlePointerDown = (e: PointerEvent<HTMLElement>) => {
     isTriggeredRef.current = false;
     startPointRef.current = { x: e.clientX, y: e.clientY };
+    // currentTarget은 이벤트 처리가 끝나면 비므로 지금 붙잡아 둔다
+    const target = e.currentTarget;
 
     clearTimer();
     timerRef.current = setTimeout(() => {
       isTriggeredRef.current = true;
-      onLongPress();
+      onLongPress(target);
     }, delay);
   };
 

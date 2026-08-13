@@ -10,7 +10,7 @@ interface GroupListItemProps {
   isSelected: boolean;
   preload?: boolean;
   onSelect: (id: number) => void;
-  onLongPress: (id: number) => void;
+  onLongPress: (id: number, anchorRect: DOMRect) => void;
 }
 
 const GroupListItem = ({
@@ -23,7 +23,7 @@ const GroupListItem = ({
   onLongPress,
 }: GroupListItemProps) => {
   const longPressHandlers = useLongPress({
-    onLongPress: () => onLongPress(id),
+    onLongPress: (target) => onLongPress(id, target.getBoundingClientRect()),
   });
 
   return (

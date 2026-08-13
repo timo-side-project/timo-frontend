@@ -16,7 +16,7 @@ interface GroupListProps {
   groups: GroupItem[];
   selectedId?: number;
   onSelect?: (id: number) => void;
-  onLongPress?: (id: number) => void;
+  onLongPress?: (id: number, anchorRect: DOMRect) => void;
 }
 
 const GroupList = ({
@@ -51,7 +51,7 @@ const GroupList = ({
               isSelected={selectedId === item.id}
               preload={idx < 5}
               onSelect={handleSelect}
-              onLongPress={(id) => onLongPress?.(id)}
+              onLongPress={(id, anchorRect) => onLongPress?.(id, anchorRect)}
             />
           </div>
         ))}
