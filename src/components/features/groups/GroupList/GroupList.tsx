@@ -51,7 +51,7 @@ const GroupList = ({
               isSelected={selectedId === item.id}
               preload={idx < 5}
               onSelect={handleSelect}
-              onLongPress={(id, anchorRect) => onLongPress?.(id, anchorRect)}
+              onLongPress={onLongPress}
             />
           </div>
         ))}
