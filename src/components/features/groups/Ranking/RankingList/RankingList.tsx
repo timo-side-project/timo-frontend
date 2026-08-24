@@ -6,6 +6,7 @@ import type { SortValue } from '../../constants/groupSort';
 import type { GroupType } from '../../constants/groupType';
 import type { GroupFriendItem } from '../../queries/useGroupFriendListQuery';
 import { useGroupFriendListQuery } from '../../queries/useGroupFriendListQuery';
+import RankingEmptyState from '../RankingEmptyState/RankingEmptyState';
 import RankingItem from '../RankingItem/RankingItem';
 
 interface RankingListProps {
@@ -57,6 +58,10 @@ const RankingList = ({
         <Skeleton className="h-15" />
       </div>
     );
+  }
+
+  if (data.length === 0) {
+    return <RankingEmptyState activeTab={activeTab} />;
   }
 
   return (
