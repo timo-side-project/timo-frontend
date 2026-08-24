@@ -17,8 +17,8 @@ function subtractMonths(date: Date, months: number): Date {
   return result;
 }
 
-export function filterByPeriod(
-  dataPoints: Array<{ score: number; createdAt: Date }>,
+export function filterByPeriod<T extends { score: number; createdAt: Date }>(
+  dataPoints: T[],
   period: GraphPeriod,
 ) {
   const now = new Date();
