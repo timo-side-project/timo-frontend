@@ -43,6 +43,7 @@ const GroupForm = ({
             <input
               id="group-name"
               value={name}
+              disabled={isPending}
               onChange={(e) => onNameChange(e.target.value)}
               placeholder="그룹 이름을 입력해주세요"
               className="mt-2 h-12 w-full rounded-xl border border-g-500 bg-g-700 px-2 font-body-s text-g-0 placeholder:text-g-400 focus:outline-none"
@@ -84,6 +85,7 @@ const GroupForm = ({
               id="group-image"
               type="file"
               accept="image/*"
+              disabled={isPending}
               className="sr-only"
               onChange={onImageChange}
             />
