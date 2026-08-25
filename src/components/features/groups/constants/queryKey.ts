@@ -7,4 +7,7 @@ export const groupKeys = {
     [...groupKeys.all(), 'friendList', groupId, sort] as const,
   create: () => [...groupKeys.all(), 'create'] as const,
   joinGroup: () => [...groupKeys.all(), 'joinGroup'] as const,
+  update: (groupId: number) => [...groupKeys.all(), 'update', groupId] as const,
+  delete: (groupId: number) => [...groupKeys.all(), 'delete', groupId] as const,
+  leave: (groupId: number) => [...groupKeys.all(), 'leave', groupId] as const,
 };
