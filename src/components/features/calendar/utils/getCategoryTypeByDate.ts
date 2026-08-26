@@ -1,4 +1,7 @@
-import type { CalendarDayCategoryType } from '@/src/types/calendar';
+import type {
+  CalendarDayCategoryType,
+  CalendarDayRecordByDateItem,
+} from '@/src/types/calendar';
 
 import type { ReflectionCategoryItem } from './mapReflectionItems';
 
@@ -9,11 +12,6 @@ const CATEGORY_TO_CELL_TYPE: Record<string, CalendarDayCategoryType> = {
   PRESENT_FATALISTIC: 'present-fatalistic',
   FUTURE: 'future-oriented',
 };
-
-export interface CalendarDayRecordByDateItem {
-  categoryType: CalendarDayCategoryType;
-  reflectionId: number;
-}
 
 /**
  * 회고 목록을 날짜별 카테고리 타입 맵으로 변환

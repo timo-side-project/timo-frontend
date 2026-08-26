@@ -1,9 +1,10 @@
 import { format, isAfter, isSameDay, isSameMonth, startOfDay } from 'date-fns';
 
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
-import type { CalendarDayCategoryType } from '@/src/types/calendar';
-
-import type { CalendarDayRecordByDateItem } from './getCategoryTypeByDate';
+import type {
+  CalendarDayCategoryType,
+  CalendarDayRecordByDateItem,
+} from '@/src/types/calendar';
 
 interface GetCalendarDayCellsParams {
   days: Date[];
