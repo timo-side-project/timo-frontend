@@ -1,11 +1,10 @@
 'use client';
 
+import CalendarHeader from '@/src/components/ui/Calendar/CalendarHeader/CalendarHeader';
+import CalendarWeekdays from '@/src/components/ui/Calendar/CalendarWeekdays/CalendarWeekdays';
 import Card from '@/src/components/ui/Card/Card';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { CALENDAR_GRID_CELL_COUNT } from '@/src/lib/constants/calendar';
-
-import CalendarMonthHeader from '../CalendarMonth/CalendarMonthHeader/CalendarMonthHeader';
-import CalendarMonthWeekdays from '../CalendarMonth/CalendarMonthWeekdays/CalendarMonthWeekdays';
 
 interface CalendarPageFallbackProps {
   currentMonthLabel?: string;
@@ -26,12 +25,12 @@ const CalendarPageFallback = ({
       </Card>
 
       <div className="space-y-3">
-        <CalendarMonthHeader
+        <CalendarHeader
           currentMonthLabel={currentMonthLabel ?? ''}
-          goPrevMonth={noop}
-          goNextMonth={noop}
+          onPrevMonth={noop}
+          onNextMonth={noop}
         />
-        <CalendarMonthWeekdays />
+        <CalendarWeekdays />
         <div className="grid grid-cols-7 gap-2">
           {Array.from({ length: CALENDAR_GRID_CELL_COUNT }).map((_, index) => (
             <Skeleton
