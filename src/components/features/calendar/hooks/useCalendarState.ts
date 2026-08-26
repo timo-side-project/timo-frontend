@@ -13,7 +13,7 @@ import {
   CALENDAR_DATE_FORMAT,
   CALENDAR_GRID_CELL_COUNT,
   CALENDAR_WEEK_STARTS_ON,
-} from '../constants/calendar';
+} from '@/src/lib/constants/calendar';
 
 export interface UseCalendarStateResult {
   today: Date;

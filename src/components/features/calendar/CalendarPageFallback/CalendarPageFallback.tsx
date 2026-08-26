@@ -2,10 +2,10 @@
 
 import Card from '@/src/components/ui/Card/Card';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
+import { CALENDAR_GRID_CELL_COUNT } from '@/src/lib/constants/calendar';
 
 import CalendarMonthHeader from '../CalendarMonth/CalendarMonthHeader/CalendarMonthHeader';
 import CalendarMonthWeekdays from '../CalendarMonth/CalendarMonthWeekdays/CalendarMonthWeekdays';
-import { CALENDAR_GRID_CELL_COUNT } from '../constants/calendar';
 
 interface CalendarPageFallbackProps {
   currentMonthLabel?: string;
