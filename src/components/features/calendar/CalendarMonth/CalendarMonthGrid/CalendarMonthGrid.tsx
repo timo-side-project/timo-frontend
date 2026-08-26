@@ -3,8 +3,9 @@
 import {
   type CalendarDayCellType,
   getCalendarDayCells,
-} from '../../utils/getCalendarDayCells';
-import type { CalendarDayRecordByDateItem } from '../../utils/getCategoryTypeByDate';
+} from '@/src/lib/helpers/getCalendarDayCells';
+import type { CalendarDayRecordByDateItem } from '@/src/types/calendar';
+
 import CalendarDayCell from '../CalendarDayCell/CalendarDayCell';
 
 interface CalendarMonthGridProps {
