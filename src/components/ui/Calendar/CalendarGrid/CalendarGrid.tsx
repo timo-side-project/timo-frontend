@@ -1,44 +1,36 @@
 'use client';
 
+import CalendarDayCell from '@/src/components/ui/Calendar/CalendarDayCell/CalendarDayCell';
 import {
   type CalendarDayCellType,
   getCalendarDayCells,
 } from '@/src/lib/helpers/getCalendarDayCells';
 import type { CalendarDayRecordByDateItem } from '@/src/types/calendar';
 
-import CalendarDayCell from '../CalendarDayCell/CalendarDayCell';
-
-interface CalendarMonthGridProps {
+interface CalendarGridProps {
   days: Date[];
   currentMonth: Date;
   selectedDate: Date | null;
   today: Date;
-  categoryTypeByDate: Map<string, CalendarDayRecordByDateItem>;
-  selectDate: (date: Date) => void;
-  onSelectSummary: (date: Date) => void;
+  marksByDate: Map<string, CalendarDayRecordByDateItem>;
+  onSelectDate: (date: Date) => void;
 }
 
-const CalendarMonthGrid = ({
+const CalendarGrid = ({
   days,
   currentMonth,
   selectedDate,
   today,
-  categoryTypeByDate,
-  selectDate,
-  onSelectSummary,
-}: CalendarMonthGridProps) => {
+  marksByDate,
+  onSelectDate,
+}: CalendarGridProps) => {
   const dayCells: CalendarDayCellType[] = getCalendarDayCells({
     days,
     currentMonth,
     selectedDate,
     today,
-    categoryTypeByDate,
+    categoryTypeByDate: marksByDate,
   });
-
-  const handleDateSelect = (date: Date) => {
-    selectDate(date);
-    onSelectSummary(date);
-  };
 
   return (
     <ul className="grid grid-cols-7 gap-y-2">
@@ -52,7 +44,7 @@ const CalendarMonthGrid = ({
                 isFuture={dayCell.isFuture}
                 hasRecord={dayCell.cellProps.hasRecord}
                 isOutlined={dayCell.cellProps.isOutlined}
-                onClick={() => handleDateSelect(dayCell.date)}
+                onClick={() => onSelectDate(dayCell.date)}
               />
             ) : (
               <span aria-hidden className="h-10 w-10" />
@@ -64,4 +56,4 @@ const CalendarMonthGrid = ({
   );
 };
 
-export default CalendarMonthGrid;
+export default CalendarGrid;
