@@ -3,7 +3,10 @@
 import CalendarGrid from '@/src/components/ui/Calendar/CalendarGrid/CalendarGrid';
 import CalendarHeader from '@/src/components/ui/Calendar/CalendarHeader/CalendarHeader';
 import CalendarWeekdays from '@/src/components/ui/Calendar/CalendarWeekdays/CalendarWeekdays';
-import type { CalendarDayMark } from '@/src/types/calendar';
+import type {
+  CalendarDayMark,
+  CalendarEmptyDayVariant,
+} from '@/src/types/calendar';
 
 interface CalendarProps {
   currentMonthLabel: string;
@@ -13,6 +16,8 @@ interface CalendarProps {
   selectedDate: Date | null;
   /** 'yyyy-MM-dd' 키로 조회하는 날짜별 표시 정보 */
   marksByDate: Map<string, CalendarDayMark>;
+  /** 마크 없는 날짜 표시 방식 (기본: 회색 배경) */
+  emptyVariant?: CalendarEmptyDayVariant;
   onPrevMonth: () => void;
   onNextMonth: () => void;
   onSelectDate: (date: Date) => void;
@@ -25,6 +30,7 @@ const Calendar = ({
   today,
   selectedDate,
   marksByDate,
+  emptyVariant,
   onPrevMonth,
   onNextMonth,
   onSelectDate,
@@ -44,6 +50,7 @@ const Calendar = ({
         selectedDate={selectedDate}
         today={today}
         marksByDate={marksByDate}
+        emptyVariant={emptyVariant}
         onSelectDate={onSelectDate}
       />
     </div>

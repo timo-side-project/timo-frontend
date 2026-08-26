@@ -26,6 +26,7 @@ export interface CalendarDayCellType {
   date: Date;
   isFuture: boolean;
   categoryType: CalendarDayCategoryType | undefined;
+  isDisabled: boolean;
   cellProps: CalendarDayCellProps;
 }
 
@@ -52,6 +53,7 @@ export const getCalendarDayCells = ({
     const dayMark = marksByDate.get(dayKey);
     const categoryType = dayMark?.categoryType;
     const hasRecord = Boolean(categoryType);
+    const isDisabled = Boolean(dayMark?.isDisabled);
 
     return {
       key: day.toISOString(),
@@ -59,6 +61,7 @@ export const getCalendarDayCells = ({
       date: day,
       isFuture,
       categoryType,
+      isDisabled,
       cellProps: {
         day: day.getDate(),
         hasRecord,

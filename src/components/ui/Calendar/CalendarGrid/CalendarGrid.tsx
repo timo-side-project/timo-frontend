@@ -5,7 +5,10 @@ import {
   type CalendarDayCellType,
   getCalendarDayCells,
 } from '@/src/lib/helpers/getCalendarDayCells';
-import type { CalendarDayMark } from '@/src/types/calendar';
+import type {
+  CalendarDayMark,
+  CalendarEmptyDayVariant,
+} from '@/src/types/calendar';
 
 interface CalendarGridProps {
   days: Date[];
@@ -13,6 +16,7 @@ interface CalendarGridProps {
   selectedDate: Date | null;
   today: Date;
   marksByDate: Map<string, CalendarDayMark>;
+  emptyVariant?: CalendarEmptyDayVariant;
   onSelectDate: (date: Date) => void;
 }
 
@@ -22,6 +26,7 @@ const CalendarGrid = ({
   selectedDate,
   today,
   marksByDate,
+  emptyVariant,
   onSelectDate,
 }: CalendarGridProps) => {
   const dayCells: CalendarDayCellType[] = getCalendarDayCells({
@@ -44,6 +49,8 @@ const CalendarGrid = ({
                 isFuture={dayCell.isFuture}
                 hasRecord={dayCell.cellProps.hasRecord}
                 isOutlined={dayCell.cellProps.isOutlined}
+                isDisabled={dayCell.isDisabled}
+                emptyVariant={emptyVariant}
                 onClick={() => onSelectDate(dayCell.date)}
               />
             ) : (
