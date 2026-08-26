@@ -1,8 +1,10 @@
 'use client';
 
-import { type ReactNode, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useBodyScrollLock } from '@/src/hooks/useBodyScrollLock';
+import { useEscapeKey } from '@/src/hooks/useEscapeKey';
 import { cn } from '@/src/lib/helpers/cn';
 
 interface ModalProps {
@@ -22,36 +24,8 @@ const Modal = ({
   contentClassName,
   overlayClassName,
 }: ModalProps) => {
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleEscape);
-
-    return () => {
-      window.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
-
-  useEffect(() => {
-    if (!isOpen || typeof window === 'undefined') {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isOpen]);
+  useEscapeKey(isOpen, onClose);
+  useBodyScrollLock(isOpen);
 
   if (!isOpen || typeof window === 'undefined') {
     return null;
