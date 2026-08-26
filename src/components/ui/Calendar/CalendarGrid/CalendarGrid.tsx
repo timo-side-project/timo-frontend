@@ -5,14 +5,14 @@ import {
   type CalendarDayCellType,
   getCalendarDayCells,
 } from '@/src/lib/helpers/getCalendarDayCells';
-import type { CalendarDayRecordByDateItem } from '@/src/types/calendar';
+import type { CalendarDayMark } from '@/src/types/calendar';
 
 interface CalendarGridProps {
   days: Date[];
   currentMonth: Date;
   selectedDate: Date | null;
   today: Date;
-  marksByDate: Map<string, CalendarDayRecordByDateItem>;
+  marksByDate: Map<string, CalendarDayMark>;
   onSelectDate: (date: Date) => void;
 }
 
@@ -29,7 +29,7 @@ const CalendarGrid = ({
     currentMonth,
     selectedDate,
     today,
-    categoryTypeByDate: marksByDate,
+    marksByDate,
   });
 
   return (

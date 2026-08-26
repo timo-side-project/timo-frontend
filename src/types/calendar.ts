@@ -8,7 +8,6 @@ export type CalendarDayCategoryType =
   | 'slate';
 
 /** 날짜별 캘린더 표시 정보 ('yyyy-MM-dd' 키로 조회) */
-export interface CalendarDayRecordByDateItem {
+export interface CalendarDayMark {
   categoryType: CalendarDayCategoryType;
-  reflectionId: number;
 }

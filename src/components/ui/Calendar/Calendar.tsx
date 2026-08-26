@@ -3,7 +3,7 @@
 import CalendarGrid from '@/src/components/ui/Calendar/CalendarGrid/CalendarGrid';
 import CalendarHeader from '@/src/components/ui/Calendar/CalendarHeader/CalendarHeader';
 import CalendarWeekdays from '@/src/components/ui/Calendar/CalendarWeekdays/CalendarWeekdays';
-import type { CalendarDayRecordByDateItem } from '@/src/types/calendar';
+import type { CalendarDayMark } from '@/src/types/calendar';
 
 interface CalendarProps {
   currentMonthLabel: string;
@@ -12,7 +12,7 @@ interface CalendarProps {
   today: Date;
   selectedDate: Date | null;
   /** 'yyyy-MM-dd' 키로 조회하는 날짜별 표시 정보 */
-  marksByDate: Map<string, CalendarDayRecordByDateItem>;
+  marksByDate: Map<string, CalendarDayMark>;
   onPrevMonth: () => void;
   onNextMonth: () => void;
   onSelectDate: (date: Date) => void;
