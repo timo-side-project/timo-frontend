@@ -1,4 +1,5 @@
-import type { CalendarDayCategoryType } from '../CalendarMonth/CalendarDayCell/CalendarDayCell';
+import type { CalendarDayCategoryType } from '@/src/types/calendar';
+
 import type { ReflectionCategoryItem } from './mapReflectionItems';
 
 const CATEGORY_TO_CELL_TYPE: Record<string, CalendarDayCategoryType> = {
