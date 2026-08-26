@@ -3,14 +3,7 @@
 import Icon from '@/src/components/ui/Icon/Icon';
 import type { IconNameType } from '@/src/components/ui/Icon/Icon.types';
 import { cn } from '@/src/lib/helpers/cn';
-
-export type CalendarDayCategoryType =
-  | 'past-negative'
-  | 'past-positive'
-  | 'present-hedonistic'
-  | 'present-fatalistic'
-  | 'future-oriented'
-  | 'slate';
+import type { CalendarDayCategoryType } from '@/src/types/calendar';
 
 interface CalendarDayCellProps {
   day: number;
