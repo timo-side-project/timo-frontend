@@ -1,6 +1,6 @@
 import type {
   CalendarDayCategoryType,
-  CalendarDayRecordByDateItem,
+  CalendarDayMark,
 } from '@/src/types/calendar';
 
 import type { ReflectionCategoryItem } from './mapReflectionItems';
@@ -19,18 +19,15 @@ const CATEGORY_TO_CELL_TYPE: Record<string, CalendarDayCategoryType> = {
  */
 export const getCategoryTypeByDate = (
   data: ReflectionCategoryItem[],
-): Map<string, CalendarDayRecordByDateItem> => {
-  const categoryTypeByDate = new Map<string, CalendarDayRecordByDateItem>();
+): Map<string, CalendarDayMark> => {
+  const categoryTypeByDate = new Map<string, CalendarDayMark>();
 
-  for (const { id, category, reflectedAt } of data) {
+  for (const { category, reflectedAt } of data) {
     const type = CATEGORY_TO_CELL_TYPE[category];
     if (!type) continue;
 
     const dateKey = reflectedAt.slice(0, 10);
-    categoryTypeByDate.set(dateKey, {
-      categoryType: type,
-      reflectionId: id,
-    });
+    categoryTypeByDate.set(dateKey, { categoryType: type });
   }
 
   return categoryTypeByDate;
