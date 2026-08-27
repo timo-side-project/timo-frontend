@@ -126,7 +126,7 @@ const CommentItem = ({
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
               rows={1}
-              className="w-full resize-none overflow-hidden bg-transparent font-caption-n text-g-60 focus:outline-none"
+              className="w-full resize-none overflow-hidden rounded-lg border border-g-40 bg-g-600 p-4 font-caption-n text-g-60 focus:outline-none"
             />
           ) : (
             <p className="truncate font-caption-n text-g-60">
