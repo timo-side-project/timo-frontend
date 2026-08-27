@@ -5,7 +5,8 @@ export type CalendarDayCategoryType =
   | 'present-hedonistic'
   | 'present-fatalistic'
   | 'future-oriented'
-  | 'slate';
+  | 'slate'
+  | 'private';
 
 /** 날짜별 캘린더 표시 정보 ('yyyy-MM-dd' 키로 조회) */
 export interface CalendarDayMark {

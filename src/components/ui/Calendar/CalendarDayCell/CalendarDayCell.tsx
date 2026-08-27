@@ -26,6 +26,7 @@ const iconNameMap: Record<CalendarDayCategoryType, IconNameType> = {
   'present-fatalistic': 'calendarDayPresentF',
   'future-oriented': 'calendarDayFuture',
   slate: 'calendarDaySlate',
+  private: 'calendarDayPrivate',
 };
 
 const CalendarDayCell = ({
