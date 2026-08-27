@@ -29,13 +29,15 @@ export const reflectionDetailSchema = z.object({
 });
 export type ReflectionDetail = z.infer<typeof reflectionDetailSchema>;
 
+interface ReflectionDetailParams {
+  groupId: number;
+  reflectionId: number;
+}
+
 export const getReflectionDetail = ({
   groupId,
   reflectionId,
-}: {
-  groupId: number;
-  reflectionId: number;
-}) =>
+}: ReflectionDetailParams) =>
   get<ReflectionDetail>(
     GROUP_ENDPOINT.reflectionDetail(groupId, reflectionId),
     {
@@ -46,18 +48,10 @@ export const getReflectionDetail = ({
 export const useReflectionDetailQuery = ({
   groupId,
   reflectionId,
-}: {
-  groupId: number | null;
-  reflectionId: number | null;
-}) => {
+}: ReflectionDetailParams) => {
   return useQuery({
-    queryKey: groupKeys.reflectionDetail(groupId ?? -1, reflectionId ?? -1),
-    queryFn: () =>
-      getReflectionDetail({
-        groupId: groupId as number,
-        reflectionId: reflectionId as number,
-      }),
-    enabled: groupId !== null && reflectionId !== null,
+    queryKey: groupKeys.reflectionDetail(groupId, reflectionId),
+    queryFn: () => getReflectionDetail({ groupId, reflectionId }),
     staleTime: 60 * 1000,
   });
 };
