@@ -55,7 +55,7 @@ const FriendCalendarSheet = ({
               categoryType:
                 CATEGORY_TO_CALENDAR_DAY_TYPE[reflection.question.category],
             }
-          : { categoryType: 'slate', isDisabled: true },
+          : { categoryType: 'private', isDisabled: true },
       );
     }
 
