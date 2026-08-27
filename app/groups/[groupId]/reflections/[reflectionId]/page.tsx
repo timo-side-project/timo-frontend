@@ -1,5 +1,5 @@
-import FriendReflectionDetail from '@/src/components/features/groups/FriendReflectionDetail/FriendReflectionDetail';
-import FriendReflectionHeader from '@/src/components/features/groups/FriendReflectionHeader/FriendReflectionHeader';
+import FriendReflectionDetail from '@/src/components/features/groups/FriendReflection/FriendReflectionDetail/FriendReflectionDetail';
+import FriendReflectionHeader from '@/src/components/features/groups/FriendReflection/FriendReflectionHeader/FriendReflectionHeader';
 import BottomNavBar from '@/src/components/layout/BottomNavBar/BottomNavBar';
 
 interface PageProps {

@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReflectionDetail } from '@/src/components/features/groups/queries/useReflectionDetailQuery';
 import ToastProvider from '@/src/components/ui/Toast/ToastProvider';
 
-import { groupKeys } from '../constants/queryKey';
+import { groupKeys } from '../../constants/queryKey';
 import FriendReflectionDetail from './FriendReflectionDetail';
 
 const GROUP_ID = 1;

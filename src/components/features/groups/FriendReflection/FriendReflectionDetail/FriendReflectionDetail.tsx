@@ -6,9 +6,9 @@ import Detail from '@/src/components/features/reflectionDetail/Detail/Detail';
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 
-import { useReflectionDetailQuery } from '../queries/useReflectionDetailQuery';
-import CommentBottomSheet from '../ReflectionEngagement/CommentBottomSheet/CommentBottomSheet';
-import ReflectionEngagementActions from '../ReflectionEngagement/ReflectionEngagementActions/ReflectionEngagementActions';
+import { useReflectionDetailQuery } from '../../queries/useReflectionDetailQuery';
+import CommentBottomSheet from '../../ReflectionEngagement/CommentBottomSheet/CommentBottomSheet';
+import ReflectionEngagementActions from '../../ReflectionEngagement/ReflectionEngagementActions/ReflectionEngagementActions';
 
 interface FriendReflectionDetailProps {
   groupId: number;
