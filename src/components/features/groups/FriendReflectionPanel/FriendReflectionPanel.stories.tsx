@@ -13,6 +13,7 @@ const meta = {
   },
   tags: ['autodocs'],
   args: {
+    groupId: 1,
     onClose: () => {},
   },
 } satisfies Meta<typeof FriendReflectionPanel>;

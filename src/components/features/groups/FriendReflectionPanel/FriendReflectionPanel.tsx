@@ -2,19 +2,21 @@
 
 import { useState } from 'react';
 
-import Detail from '@/src/components/features/reflectionDetail/Detail/Detail';
 import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
 import Icon from '@/src/components/ui/Icon/Icon';
 import { cn } from '@/src/lib/helpers/cn';
 
+import FriendReflectionContent from '../FriendReflectionContent/FriendReflectionContent';
 import type { GroupFriendItem } from '../queries/useGroupFriendListQuery';
 
 interface FriendReflectionPanelProps {
+  groupId: number | null;
   friend: GroupFriendItem | null;
   onClose: () => void;
 }
 
 const FriendReflectionPanel = ({
+  groupId,
   friend,
   onClose,
 }: FriendReflectionPanelProps) => {
@@ -28,18 +30,6 @@ const FriendReflectionPanel = ({
     setPrevFriend(friend);
     if (friend !== null) setDisplayFriend(friend);
   }
-
-  const reflectionDetail =
-    displayFriend?.questionCategory &&
-    displayFriend.questionContent &&
-    displayFriend.answerText
-      ? {
-          questionCategory: displayFriend.questionCategory,
-          questionContent: displayFriend.questionContent,
-          answerText: displayFriend.answerText,
-          nickname: displayFriend.nickname,
-        }
-      : null;
 
   return (
     <div
@@ -57,12 +47,11 @@ const FriendReflectionPanel = ({
             className="-mx-7.5 px-5"
           />
 
-          {reflectionDetail && (
-            <Detail
-              questionCategory={reflectionDetail.questionCategory}
-              questionContent={reflectionDetail.questionContent}
-              answerContent={reflectionDetail.answerText}
-              friendNickname={reflectionDetail.nickname}
+          {groupId !== null && displayFriend !== null && (
+            <FriendReflectionContent
+              key={displayFriend.userId}
+              groupId={groupId}
+              friend={displayFriend}
             />
           )}
         </div>
