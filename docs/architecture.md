@@ -15,6 +15,7 @@ app/                                  # 라우트 (App Router) — URL·레이�
   ztpi-test/(complete) ztpi/[ztpiTestId]/
   reflection/[reflectionId]/feedback/
   groups/create/  groups/[groupId]/edit/
+  groups/[groupId]/reflections/[reflectionId]/
   profile/nickname/  profile/theme/
   test-auth/                          # 개발용 로그인 화면
   api/proxy/[...path]/route.ts        # 개발용 API 프록시 (route handler)
@@ -70,22 +71,22 @@ Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['
 
 ## 라우트
 
-| 경로 | 설명 |
-|------|------|
-| `/` | 홈 (route group `(home)`, 미들웨어 `proxy.ts`가 토큰 가드) |
-| `/login` | 로그인 |
-| `/onboarding` | 온보딩 |
-| `/ztpi-test`, `/ztpi-test/complete`, `/ztpi/[ztpiTestId]` | ZTPI 성격 테스트 |
-| `/calendar` | 캘린더 |
-| `/statistics` | 통계 (미들웨어 `proxy.ts`가 토큰 가드) |
-| `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback` | 회고 (목록·상세·피드백) |
-| `/groups`, `/groups/create`, `/groups/[groupId]/edit` | 그룹 회고 (목록·생성·수정) |
-| `/characters` | 캐릭터 선택 |
-| `/reward` | 보상(커스터마이징) 획득 화면 — 회고 피드백 완료 시 해금분 있으면 진입 |
-| `/notification` | 알림 |
-| `/profile`, `/profile/nickname`, `/profile/theme` | 프로필 (프로필·닉네임 변경·테마 선택) |
-| `/test-auth` | 개발용 로그인 |
-| `/api/proxy/[...path]` | 개발용 API 프록시 (route handler) |
+| 경로                                                                                                  | 설명                                                                  |
+| ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `/`                                                                                                   | 홈 (route group `(home)`, 미들웨어 `proxy.ts`가 토큰 가드)            |
+| `/login`                                                                                              | 로그인                                                                |
+| `/onboarding`                                                                                         | 온보딩                                                                |
+| `/ztpi-test`, `/ztpi-test/complete`, `/ztpi/[ztpiTestId]`                                             | ZTPI 성격 테스트                                                      |
+| `/calendar`                                                                                           | 캘린더                                                                |
+| `/statistics`                                                                                         | 통계 (미들웨어 `proxy.ts`가 토큰 가드)                                |
+| `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback`                    | 회고 (목록·상세·피드백)                                               |
+| `/groups`, `/groups/create`, `/groups/[groupId]/edit`, `/groups/[groupId]/reflections/[reflectionId]` | 그룹 회고 (목록·생성·수정·친구 회고 상세)                             |
+| `/characters`                                                                                         | 캐릭터 선택                                                           |
+| `/reward`                                                                                             | 보상(커스터마이징) 획득 화면 — 회고 피드백 완료 시 해금분 있으면 진입 |
+| `/notification`                                                                                       | 알림                                                                  |
+| `/profile`, `/profile/nickname`, `/profile/theme`                                                     | 프로필 (프로필·닉네임 변경·테마 선택)                                 |
+| `/test-auth`                                                                                          | 개발용 로그인                                                         |
+| `/api/proxy/[...path]`                                                                                | 개발용 API 프록시 (route handler)                                     |
 
 ## 상태 관리
 
