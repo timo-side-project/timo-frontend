@@ -61,7 +61,7 @@ const BottomSheet = ({
           if (!isOpen) setIsRendered(false);
         }}
         className={cn(
-          'relative z-10 w-full max-w-110 rounded-t-3xl bg-g-400 px-7.5 pb-10 pt-6',
+          'relative z-10 w-full max-w-110 rounded-t-3xl bg-g-600 px-7.5 pb-10 pt-10',
           isOpen ? 'animate-slide-up-in' : 'animate-slide-down-out',
           contentClassName,
         )}
