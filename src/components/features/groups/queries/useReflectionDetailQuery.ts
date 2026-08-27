@@ -23,8 +23,7 @@ export const reflectionDetailSchema = z.object({
   reflectedAt: z.string(),
   likes: z.number(),
   comments: z.number(),
-  // 백엔드 응답에 아직 없음 — 좋아요 여부 판단용, 추가되는 대로 활성화
-  isLiked: z.boolean().optional(),
+  isLiked: z.boolean(),
   nickname: z.string(),
 });
 export type ReflectionDetail = z.infer<typeof reflectionDetailSchema>;
