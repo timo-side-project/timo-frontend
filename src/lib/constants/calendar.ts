@@ -5,4 +5,5 @@ export const CALENDAR_DATE_FORMAT = {
   monthRequest: 'yyyy-MM',
   monthLabel: 'yyyy.MM',
   dayKey: 'yyyy-MM-dd',
+  dayLabel: 'yyyy.MM.dd',
 } as const;
