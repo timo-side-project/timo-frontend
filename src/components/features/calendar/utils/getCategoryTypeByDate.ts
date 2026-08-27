@@ -1,17 +1,8 @@
-import type {
-  CalendarDayCategoryType,
-  CalendarDayMark,
-} from '@/src/types/calendar';
+import { CATEGORY_TO_CALENDAR_DAY_TYPE } from '@/src/lib/constants/calendar';
+import type { Category } from '@/src/lib/constants/character';
+import type { CalendarDayMark } from '@/src/types/calendar';
 
 import type { ReflectionCategoryItem } from './mapReflectionItems';
-
-const CATEGORY_TO_CELL_TYPE: Record<string, CalendarDayCategoryType> = {
-  PAST_NEGATIVE: 'past-negative',
-  PAST_POSITIVE: 'past-positive',
-  PRESENT_HEDONISTIC: 'present-hedonistic',
-  PRESENT_FATALISTIC: 'present-fatalistic',
-  FUTURE: 'future-oriented',
-};
 
 /**
  * 회고 목록을 날짜별 카테고리 타입 맵으로 변환
@@ -23,7 +14,7 @@ export const getCategoryTypeByDate = (
   const categoryTypeByDate = new Map<string, CalendarDayMark>();
 
   for (const { category, reflectedAt } of data) {
-    const type = CATEGORY_TO_CELL_TYPE[category];
+    const type = CATEGORY_TO_CALENDAR_DAY_TYPE[category as Category];
     if (!type) continue;
 
     const dateKey = reflectedAt.slice(0, 10);
