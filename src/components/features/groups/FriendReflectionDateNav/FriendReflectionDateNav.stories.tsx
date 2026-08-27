@@ -11,6 +11,7 @@ const meta = {
   args: {
     onPrevDate: () => {},
     onNextDate: () => {},
+    onOpenCalendar: () => {},
   },
 } satisfies Meta<typeof FriendReflectionDateNav>;
 
