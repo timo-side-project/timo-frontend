@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 
-import { patch } from '@/src/lib/api';
+import { put } from '@/src/lib/api';
 
 import { groupKeys } from '../constants/queryKey';
 import { GROUP_ENDPOINT } from '../constants/url';
@@ -24,7 +24,7 @@ const updateReflectionComment = ({
   commentId,
   content,
 }: UpdateCommentParams) =>
-  patch<UpdateCommentRequest, void>(
+  put<UpdateCommentRequest, void>(
     GROUP_ENDPOINT.reflectionComment(groupId, reflectionId, commentId),
     { content },
     { dataSchema: updateCommentRequestSchema },

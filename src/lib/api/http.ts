@@ -52,6 +52,20 @@ export const patch = async <TRequest, TResponse>(
   return parseWithSchema(responseSchema, response.data);
 };
 
+export const put = async <TRequest, TResponse>(
+  url: string,
+  data?: TRequest,
+  config?: ApiRequestConfig<TRequest, never, TResponse>,
+): Promise<TResponse> => {
+  const { axiosConfig, parsedData, responseSchema } = parseDataConfig(
+    data,
+    config,
+  );
+  const response = await api.put<TResponse>(url, parsedData, axiosConfig);
+
+  return parseWithSchema(responseSchema, response.data);
+};
+
 export const del = async <TRequest, TResponse>(
   url: string,
   data?: TRequest,
