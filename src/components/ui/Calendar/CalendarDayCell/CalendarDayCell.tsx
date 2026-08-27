@@ -47,6 +47,9 @@ const CalendarDayCell = ({
         : (categoryType ?? 'slate')
       : categoryType;
 
+  // 아웃라인은 배경 아이콘 뒤에 깔리는 흰 덩어리라, 배경이 없으면 그리지 않는다
+  const showOutline = isOutlined && resolvedType !== undefined;
+
   return (
     <button
       type="button"
@@ -54,7 +57,7 @@ const CalendarDayCell = ({
       disabled={isDisabled}
       className="relative h-8 w-8"
     >
-      {isOutlined ? (
+      {showOutline ? (
         <Icon
           name="calendarDayOutline"
           decorative
