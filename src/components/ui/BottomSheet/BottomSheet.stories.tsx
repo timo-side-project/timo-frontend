@@ -14,15 +14,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    isOpen: true,
-    onClose: () => {},
-    ariaLabel: '예시 시트',
-    children: <p className="font-body-s text-g-0">시트 내용이 들어갑니다.</p>,
-  },
-};
-
-export const Toggle: Story = {
-  args: {
     isOpen: false,
     onClose: () => {},
     ariaLabel: '예시 시트',
