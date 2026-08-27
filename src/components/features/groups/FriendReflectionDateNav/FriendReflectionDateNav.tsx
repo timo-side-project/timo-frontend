@@ -12,6 +12,7 @@ interface FriendReflectionDateNavProps extends ComponentProps<'div'> {
   isNextDisabled: boolean;
   onPrevDate: () => void;
   onNextDate: () => void;
+  onOpenCalendar: () => void;
 }
 
 const FriendReflectionDateNav = ({
@@ -19,6 +20,7 @@ const FriendReflectionDateNav = ({
   isNextDisabled,
   onPrevDate,
   onNextDate,
+  onOpenCalendar,
   className,
   ...props
 }: FriendReflectionDateNavProps) => {
@@ -36,9 +38,13 @@ const FriendReflectionDateNav = ({
         <Icon name="chevronLeft" decorative size={20} />
       </button>
 
-      <p className="font-label-n text-g-0">
+      <button
+        type="button"
+        onClick={onOpenCalendar}
+        className="font-label-n text-g-0 underline underline-offset-4"
+      >
         {format(selectedDate, CALENDAR_DATE_FORMAT.dayLabel)}
-      </p>
+      </button>
 
       <button
         type="button"

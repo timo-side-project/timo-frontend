@@ -8,6 +8,7 @@ import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
+import FriendCalendarSheet from '../FriendCalendarSheet/FriendCalendarSheet';
 import FriendReflectionDateNav from '../FriendReflectionDateNav/FriendReflectionDateNav';
 import type { GroupFriendItem } from '../queries/useGroupFriendListQuery';
 import { useGroupMemberCalendarQuery } from '../queries/useGroupMemberCalendarQuery';
@@ -23,6 +24,7 @@ const FriendReflectionContent = ({
 }: FriendReflectionContentProps) => {
   const today = useMemo(() => startOfDay(new Date()), []);
   const [selectedDate, setSelectedDate] = useState(today);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const { data, isPending, isError } = useGroupMemberCalendarQuery({
     groupId,
@@ -93,9 +95,19 @@ const FriendReflectionContent = ({
         isNextDisabled={isSameDay(selectedDate, today)}
         onPrevDate={goPrevDate}
         onNextDate={goNextDate}
+        onOpenCalendar={() => setIsCalendarOpen(true)}
       />
 
       {renderReflection()}
+
+      <FriendCalendarSheet
+        isOpen={isCalendarOpen}
+        groupId={groupId}
+        userId={friend.userId}
+        selectedDate={selectedDate}
+        onClose={() => setIsCalendarOpen(false)}
+        onSelectDate={setSelectedDate}
+      />
     </div>
   );
 };
