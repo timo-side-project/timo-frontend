@@ -19,7 +19,7 @@ app/                                  # 라우트 (App Router) — URL·레이�
   test-auth/                          # 개발용 로그인 화면
   api/proxy/[...path]/route.ts        # 개발용 API 프록시 (route handler)
 
-proxy.ts                              # 미들웨어 (Next 16 미들웨어 파일), matcher '/'
+proxy.ts                              # 미들웨어 (Next 16 미들웨어 파일), api/_next/favicon/login/onboarding 제외 전체 라우트
 
 src/
   components/
@@ -36,12 +36,14 @@ src/
                   #   useSortSelect, useToast)
   lib/
     api/          # HTTP 클라이언트 — instance.ts, http.ts, schema.ts, error.ts, index.ts
+    auth/         # 인증 유틸 (미들웨어용) — isTokenExpired.ts, reissueSession.ts
     config/env.ts # API base URL 결정 (SSR/dev proxy 분기)
     constants/    # 상수 (character.ts)
     firebase/     # FCM 푸시 (client.ts, messaging.ts)
     helpers/      # 유틸 (cn, getQueryClient, navigation, calculateProgress,
                   #   formatTwoDigitNumber, getCharacterAsset, sortByCategory,
                   #   getSubjectParticle, getObjectParticle)
+    proxy/        # 프록시 공용 유틸 — sanitizeProxyHeaders.ts, stripDevCookieAttributes.ts
   styles/         # globals.css (@theme 디자인 토큰), typography.css
 ```
 
@@ -54,12 +56,14 @@ src/
 
 ### 1. 미들웨어 — `proxy.ts`
 
-Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['/', '/statistics']` 라서 **홈 `/`과 `/statistics` 진입 시에만** 실행된다.
+Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher`가 `api`, `_next` 정적 자산, `favicon.ico`, `login`, `onboarding`을 제외한 **전체 라우트**에 적용된다.
 
 - `access_token` 쿠키가 유효하면 → 통과 (`NextResponse.next()`)
-- 만료됐고 `refresh_token`이 있으면 → 백엔드 `reissue` 엔드포인트로 토큰 재발급 → 응답의 `set-cookie`를 실어 원 URL로 재요청 (dev 환경에선 `domain=`·`secure` 속성 제거)
+- 만료됐고 `refresh_token`이 있으면 → 백엔드 `reissue` 엔드포인트로 토큰 재발급(`src/lib/auth/reissueSession.ts`) → 응답의 `set-cookie`를 실어 원 URL로 재요청 (dev 환경에선 `src/lib/proxy/stripDevCookieAttributes.ts`로 `domain=`·`secure` 속성 제거)
 - `refresh_token`이 없으면 → `/onboarding`으로 리다이렉트
 - 재발급 실패 시 → `refresh_token` 삭제 후 `/login`으로 리다이렉트
+
+토큰 만료 판단(`src/lib/auth/isTokenExpired.ts`)과 프록시 요청 헤더 정리(`src/lib/proxy/sanitizeProxyHeaders.ts`)는 별도 유닛으로 분리돼 `app/api/proxy/[...path]/route.ts`(개발용 API 프록시)와 로직을 공유한다.
 
 ### 2. 페이지 서버 컴포넌트
 
@@ -70,14 +74,16 @@ Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher: ['
 
 ## 라우트
 
+"미들웨어 제외" 표시가 없는 라우트는 `proxy.ts`가 토큰 가드를 적용한다.
+
 | 경로 | 설명 |
 |------|------|
-| `/` | 홈 (route group `(home)`, 미들웨어 `proxy.ts`가 토큰 가드) |
-| `/login` | 로그인 |
-| `/onboarding` | 온보딩 |
+| `/` | 홈 (route group `(home)`) |
+| `/login` | 로그인 (미들웨어 제외) |
+| `/onboarding` | 온보딩 (미들웨어 제외) |
 | `/ztpi-test`, `/ztpi-test/complete`, `/ztpi/[ztpiTestId]` | ZTPI 성격 테스트 |
 | `/calendar` | 캘린더 |
-| `/statistics` | 통계 (미들웨어 `proxy.ts`가 토큰 가드) |
+| `/statistics` | 통계 |
 | `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback` | 회고 (목록·상세·피드백) |
 | `/groups`, `/groups/create`, `/groups/[groupId]/edit` | 그룹 회고 (목록·생성·수정) |
 | `/characters` | 캐릭터 선택 |
