@@ -69,7 +69,6 @@ const FriendReflectionContent = ({
       );
     }
 
-    // 캘린더는 비공개 날짜를 막지만 날짜 이동으로는 닿을 수 있어, 본문에서도 가린다
     if (!selectedReflection || !selectedReflection.isPublic) {
       return (
         <section className="flex h-40 flex-col items-center justify-center gap-1">
