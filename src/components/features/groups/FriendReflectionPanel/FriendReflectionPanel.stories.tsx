@@ -1,8 +1,53 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { Decorator, Meta, StoryObj } from '@storybook/nextjs-vite';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { format } from 'date-fns';
 
 import type { GroupFriendItem } from '@/src/components/features/groups/queries/useGroupFriendListQuery';
+import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
+import { groupKeys } from '../constants/queryKey';
 import FriendReflectionPanel from './FriendReflectionPanel';
+
+const GROUP_ID = 1;
+const today = new Date();
+
+/** 스토리의 친구 정보를 오늘 회고 한 건으로 만들어 캐시에 심는다 */
+const withSeededCalendar: Decorator = (Story, context) => {
+  const friend = context.args.friend as GroupFriendItem | null;
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false, staleTime: Infinity, gcTime: Infinity },
+    },
+  });
+
+  if (friend?.questionCategory && friend.questionContent && friend.answerText) {
+    queryClient.setQueryData(
+      groupKeys.memberCalendar(
+        GROUP_ID,
+        friend.userId,
+        format(today, CALENDAR_DATE_FORMAT.monthRequest),
+      ),
+      [
+        {
+          id: 1,
+          question: {
+            category: friend.questionCategory,
+            content: friend.questionContent,
+          },
+          content: friend.answerText,
+          isPublic: true,
+          reflectedAt: format(today, CALENDAR_DATE_FORMAT.dayKey),
+        },
+      ],
+    );
+  }
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Story />
+    </QueryClientProvider>
+  );
+};
 
 const meta = {
   title: 'Features/Groups/FriendReflectionPanel',
@@ -12,7 +57,9 @@ const meta = {
     viewport: { defaultViewport: 'mobile1' },
   },
   tags: ['autodocs'],
+  decorators: [withSeededCalendar],
   args: {
+    groupId: GROUP_ID,
     onClose: () => {},
   },
 } satisfies Meta<typeof FriendReflectionPanel>;

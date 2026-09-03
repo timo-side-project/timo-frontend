@@ -23,26 +23,27 @@ proxy.ts                              # 미들웨어 (Next 16 미들웨어 파�
 
 src/
   components/
-    ui/           # 범용 UI 컴포넌트 (AvatarButton, Badge, Button, Card, ErrorState, Icon,
-                  #   Modal, ProgressBar, PullToRefresh, Radio, Skeleton, SortSelect,
-                  #   TimeWheelPicker, Toast, ToggleSwitch)
+    ui/           # 범용 UI 컴포넌트 (AvatarButton, Badge, BottomSheet, Button, Calendar,
+                  #   Card, ErrorState, Icon, Modal, ProgressBar, PullToRefresh, Radio,
+                  #   Skeleton, SortSelect, TimeWheelPicker, Toast, ToggleSwitch)
     layout/       # 페이지 레이아웃 (BottomNavBar, PageHeader, BottomCTA)
     features/     # 기능별 묶음 (home, reflection, reflectionDetail, reflectionFeedback,
                   #   calendar, groups, characters, customization, notification, onboarding,
                   #   profile, reward, statistics, test, testAuth, testResult,
                   #   serviceFeedback, users, pwa)
                   #   각 feature: 컴포넌트 폴더 + queries/ + constants/ + hooks/
-  hooks/          # 공용 커스텀 훅 (useDialIndicator, useImagePicker, useLongPress,
-                  #   useSortSelect, useToast)
+  hooks/          # 공용 커스텀 훅 (useBodyScrollLock, useCalendarState, useDialIndicator,
+                  #   useEscapeKey, useImagePicker, useLongPress, useSortSelect, useToast)
   lib/
     api/          # HTTP 클라이언트 — instance.ts, http.ts, schema.ts, error.ts, index.ts
     config/env.ts # API base URL 결정 (SSR/dev proxy 분기)
-    constants/    # 상수 (character.ts)
+    constants/    # 상수 (character.ts, calendar.ts)
     firebase/     # FCM 푸시 (client.ts, messaging.ts)
     helpers/      # 유틸 (cn, getQueryClient, navigation, calculateProgress,
-                  #   formatTwoDigitNumber, getCharacterAsset, sortByCategory,
-                  #   getSubjectParticle, getObjectParticle)
-  styles/         # globals.css (@theme 디자인 토큰), typography.css
+                  #   formatTwoDigitNumber, getCalendarDayCells, getCharacterAsset,
+                  #   sortByCategory, getSubjectParticle, getObjectParticle)
+  types/          # 전역 공유 타입 (calendar.ts)
+  styles/         # globals.css (@theme 디자인 토큰·애니메이션), typography.css
 ```
 
 폴더 역할·import 방향 규칙은 [conventions.md](./conventions.md)(폴더 역할 / import·파일 배치)를 단일 기준으로 한다.

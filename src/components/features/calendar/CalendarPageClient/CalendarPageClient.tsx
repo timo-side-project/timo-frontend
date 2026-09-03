@@ -4,7 +4,6 @@ import { Suspense, useState } from 'react';
 
 import CalendarMonth from '@/src/components/features/calendar/CalendarMonth/CalendarMonth';
 import CalendarPageFallback from '@/src/components/features/calendar/CalendarPageFallback/CalendarPageFallback';
-import { useCalendarState } from '@/src/components/features/calendar/hooks/useCalendarState';
 import StreakBanner from '@/src/components/features/calendar/StreakBanner/StreakBanner';
 import SummaryCard from '@/src/components/features/calendar/SummaryCard/SummaryCard';
 import { reflectionKeys } from '@/src/components/features/reflection/constants/queryKeys';
@@ -12,6 +11,7 @@ import { userKeys } from '@/src/components/features/users/constants/queryKeys';
 import BottomNavBar from '@/src/components/layout/BottomNavBar/BottomNavBar';
 import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
 import PullToRefresh from '@/src/components/ui/PullToRefresh/PullToRefresh';
+import { useCalendarState } from '@/src/hooks/useCalendarState';
 
 export interface SelectedSummaryCardData {
   questionText: string;
