@@ -1,6 +1,9 @@
 'use client';
 
+import { format } from 'date-fns';
+
 import CalendarDayCell from '@/src/components/ui/Calendar/CalendarDayCell/CalendarDayCell';
+import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 import {
   type CalendarDayCellType,
   getCalendarDayCells,
@@ -45,6 +48,10 @@ const CalendarGrid = ({
             {dayCell.isCurrentMonth ? (
               <CalendarDayCell
                 day={dayCell.cellProps.day}
+                dateLabel={format(
+                  dayCell.date,
+                  CALENDAR_DATE_FORMAT.dayAriaLabel,
+                )}
                 categoryType={dayCell.categoryType}
                 isFuture={dayCell.isFuture}
                 hasRecord={dayCell.cellProps.hasRecord}

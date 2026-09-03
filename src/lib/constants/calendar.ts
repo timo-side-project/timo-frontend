@@ -9,6 +9,7 @@ export const CALENDAR_DATE_FORMAT = {
   monthLabel: 'yyyy.MM',
   dayKey: 'yyyy-MM-dd',
   dayLabel: 'yyyy.MM.dd',
+  dayAriaLabel: 'M월 d일',
 } as const;
 
 /** 회고 카테고리를 캘린더 셀 표시 타입으로 매핑 */
