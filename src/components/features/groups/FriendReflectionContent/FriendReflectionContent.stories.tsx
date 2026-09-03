@@ -41,6 +41,12 @@ const pastReflection: MemberCalendarItem = {
   reflectedAt: format(subDays(today, 3), CALENDAR_DATE_FORMAT.dayKey),
 };
 
+const privateReflection: MemberCalendarItem = {
+  ...todayReflection,
+  id: 3,
+  isPublic: false,
+};
+
 const createQueryClient = (reflections: MemberCalendarItem[]) => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -85,6 +91,14 @@ export const WithTodayReflection: Story = {
 export const EmptyDate: Story = {
   render: (args) => (
     <QueryClientProvider client={createQueryClient([pastReflection])}>
+      <FriendReflectionContent {...args} />
+    </QueryClientProvider>
+  ),
+};
+
+export const PrivateReflection: Story = {
+  render: (args) => (
+    <QueryClientProvider client={createQueryClient([privateReflection])}>
       <FriendReflectionContent {...args} />
     </QueryClientProvider>
   ),
