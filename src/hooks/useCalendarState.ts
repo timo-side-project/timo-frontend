@@ -47,6 +47,15 @@ export const useCalendarState = ({
     initialDate ?? null,
   );
 
+  // 바깥에서 날짜가 바뀌면(예: 친구 회고 날짜 이동) 기준 월과 선택 날짜를 다시 맞춘다
+  const [prevInitialDate, setPrevInitialDate] = useState(initialDate);
+
+  if (prevInitialDate?.getTime() !== initialDate?.getTime()) {
+    setPrevInitialDate(initialDate);
+    setCurrentMonth(startOfMonth(initialDate ?? today));
+    setSelectedDate(initialDate ?? null);
+  }
+
   // 헤더에 표시할 월 라벨
   const currentMonthLabel = useMemo(
     () => format(currentMonth, CALENDAR_DATE_FORMAT.monthLabel),
