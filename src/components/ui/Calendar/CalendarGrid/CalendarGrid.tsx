@@ -49,7 +49,7 @@ const CalendarGrid = ({
                 isFuture={dayCell.isFuture}
                 hasRecord={dayCell.cellProps.hasRecord}
                 isOutlined={dayCell.cellProps.isOutlined}
-                isDisabled={dayCell.isDisabled}
+                isDisabled={dayCell.isDisabled || dayCell.isFuture}
                 emptyVariant={emptyVariant}
                 onClick={() => onSelectDate(dayCell.date)}
               />
