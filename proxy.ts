@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { type NextRequest, NextResponse } from 'next/server';
 
 import { isTokenExpired } from '@/src/lib/auth/isTokenExpired';
@@ -28,7 +29,9 @@ export async function proxy(request: NextRequest) {
     });
 
     return redirectResponse;
-  } catch {
+  } catch (error) {
+    Sentry.captureException(error);
+
     const response = NextResponse.redirect(new URL('/login', request.url));
     response.cookies.delete('refresh_token');
     return response;
