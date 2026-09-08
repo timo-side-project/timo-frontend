@@ -129,9 +129,7 @@ const CommentItem = ({
               className="w-full resize-none overflow-hidden rounded-lg border border-g-40 bg-g-600 p-4 font-caption-n text-g-60 focus:outline-none"
             />
           ) : (
-            <p className="truncate font-caption-n text-g-60">
-              {comment.content}
-            </p>
+            <p className="font-caption-n text-g-60">{comment.content}</p>
           )}
         </div>
       </div>
