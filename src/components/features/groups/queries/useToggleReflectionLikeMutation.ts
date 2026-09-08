@@ -26,9 +26,12 @@ export const useToggleReflectionLikeMutation = () => {
   return useMutation({
     mutationKey: groupKeys.toggleLike(),
     mutationFn: toggleReflectionLike,
-    onSuccess: (_data, { groupId }) => {
+    onSuccess: (_data, { groupId, reflectionId }) => {
       queryClient.invalidateQueries({
         queryKey: groupKeys.friendListByGroup(groupId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: groupKeys.reflectionDetail(groupId, reflectionId),
       });
     },
   });
