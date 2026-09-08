@@ -16,6 +16,7 @@ const allIcons = {
   calendarDayPresentF: '/icons/calendar-day-present-f.svg',
   calendarDayFuture: '/icons/calendar-day-future.svg',
   calendarDaySlate: '/icons/calendar-day-slate.svg',
+  calendarDayPrivate: '/icons/calendar-day-private.svg',
   calendarDayOutline: '/icons/calendar-day-outline.svg',
   close: '/icons/close.svg',
   alert: '/icons/alert-fill.svg',

@@ -107,6 +107,48 @@
   --shadow-3: 0 8px 15px 0 rgba(0, 0, 0, 0.05);
   --shadow: var(--shadow-3);
 
+  /* ===== Animation ===== */
+
+  --animate-slide-up-in: slide-up-in 300ms ease-out;
+  --animate-slide-down-out: slide-down-out 300ms ease-in forwards;
+  --animate-fade-in: fade-in 300ms ease-out;
+  --animate-fade-out: fade-out 300ms ease-in forwards;
+
+  @keyframes slide-up-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-down-out {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 }
 
 .scrollbar-transparent-track {

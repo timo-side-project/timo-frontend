@@ -1,18 +1,8 @@
-import type { CalendarDayCategoryType } from '../CalendarMonth/CalendarDayCell/CalendarDayCell';
+import { CATEGORY_TO_CALENDAR_DAY_TYPE } from '@/src/lib/constants/calendar';
+import type { Category } from '@/src/lib/constants/character';
+import type { CalendarDayMark } from '@/src/types/calendar';
+
 import type { ReflectionCategoryItem } from './mapReflectionItems';
-
-const CATEGORY_TO_CELL_TYPE: Record<string, CalendarDayCategoryType> = {
-  PAST_NEGATIVE: 'past-negative',
-  PAST_POSITIVE: 'past-positive',
-  PRESENT_HEDONISTIC: 'present-hedonistic',
-  PRESENT_FATALISTIC: 'present-fatalistic',
-  FUTURE: 'future-oriented',
-};
-
-export interface CalendarDayRecordByDateItem {
-  categoryType: CalendarDayCategoryType;
-  reflectionId: number;
-}
 
 /**
  * 회고 목록을 날짜별 카테고리 타입 맵으로 변환
@@ -20,18 +10,15 @@ export interface CalendarDayRecordByDateItem {
  */
 export const getCategoryTypeByDate = (
   data: ReflectionCategoryItem[],
-): Map<string, CalendarDayRecordByDateItem> => {
-  const categoryTypeByDate = new Map<string, CalendarDayRecordByDateItem>();
+): Map<string, CalendarDayMark> => {
+  const categoryTypeByDate = new Map<string, CalendarDayMark>();
 
-  for (const { id, category, reflectedAt } of data) {
-    const type = CATEGORY_TO_CELL_TYPE[category];
+  for (const { category, reflectedAt } of data) {
+    const type = CATEGORY_TO_CALENDAR_DAY_TYPE[category as Category];
     if (!type) continue;
 
     const dateKey = reflectedAt.slice(0, 10);
-    categoryTypeByDate.set(dateKey, {
-      categoryType: type,
-      reflectionId: id,
-    });
+    categoryTypeByDate.set(dateKey, { categoryType: type });
   }
 
   return categoryTypeByDate;

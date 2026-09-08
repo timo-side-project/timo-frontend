@@ -84,6 +84,7 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
           ) : null}
 
           <FriendReflectionPanel
+            groupId={selectedGroupId}
             friend={selectedFriend}
             onClose={() => setSelectedFriend(null)}
           />
