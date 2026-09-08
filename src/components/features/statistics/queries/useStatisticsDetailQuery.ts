@@ -11,6 +11,8 @@ import { STATISTICS_ENDPOINTS } from '../constants/url';
 const DetailDataPointSchema = BaseDataPointSchema.extend({
   changedScore: z.number().nullable(),
   isIncreased: z.boolean().nullable(),
+  proximityRate: z.number().nullable(),
+  isCloserToIdeal: z.boolean().nullable(),
 });
 
 const ResponseSchema = StatisticsItemSchema.extend({
