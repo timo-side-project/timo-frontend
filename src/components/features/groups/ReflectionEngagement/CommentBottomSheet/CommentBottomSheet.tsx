@@ -49,6 +49,8 @@ const CommentBottomSheet = ({
 
   return createPortal(
     <div
+      inert={!isOpen}
+      aria-hidden={!isOpen}
       className={cn(
         'fixed inset-0 z-50 transition-opacity duration-300',
         isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
@@ -63,7 +65,7 @@ const CommentBottomSheet = ({
 
       <div
         role="dialog"
-        aria-modal="true"
+        aria-modal={isOpen}
         className={cn(
           'absolute inset-x-0 bottom-0 mx-auto flex w-full max-w-110 flex-col items-center gap-6.25 rounded-t-2xl bg-g-600 px-6.25 pb-8.5 pt-8.5 transition-transform duration-300',
           isOpen ? 'translate-y-0' : 'translate-y-full',
