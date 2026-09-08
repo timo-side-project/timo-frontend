@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { isApiError } from '@/src/lib/api/error';
 import { isTokenExpired } from '@/src/lib/auth/isTokenExpired';
 import { reissueSession } from '@/src/lib/auth/reissueSession';
 import { stripDevCookieAttributes } from '@/src/lib/proxy/stripDevCookieAttributes';
@@ -30,7 +31,11 @@ export async function proxy(request: NextRequest) {
 
     return redirectResponse;
   } catch (error) {
-    Sentry.captureException(error);
+    const isExpiredRefreshToken = isApiError(error) && error.status === 401;
+
+    if (!isExpiredRefreshToken) {
+      Sentry.captureException(error);
+    }
 
     const response = NextResponse.redirect(new URL('/login', request.url));
     response.cookies.delete('refresh_token');

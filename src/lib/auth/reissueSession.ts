@@ -1,6 +1,7 @@
 import type { NextRequest } from 'next/server';
 
 import { USER_ENDPOINTS } from '@/src/components/features/users/constants/url';
+import type { ApiError } from '@/src/lib/api/error';
 import { sanitizeProxyHeaders } from '@/src/lib/proxy/sanitizeProxyHeaders';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -17,7 +18,11 @@ export const reissueSession = async (request: NextRequest) => {
   });
 
   if (!res.ok) {
-    throw new Error('reissue failed');
+    throw {
+      status: res.status,
+      code: null,
+      message: 'reissue failed',
+    } satisfies ApiError;
   }
 
   return res.headers.getSetCookie();
