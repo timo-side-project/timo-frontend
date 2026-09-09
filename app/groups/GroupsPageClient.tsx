@@ -1,18 +1,17 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
 
 import type { GroupType } from '@/src/components/features/groups/constants/groupType';
 import { groupKeys } from '@/src/components/features/groups/constants/queryKey';
-import FriendReflectionPanel from '@/src/components/features/groups/FriendReflectionPanel/FriendReflectionPanel';
 import GroupActionMenu from '@/src/components/features/groups/GroupActionMenu/GroupActionMenu';
 import CharacterGroupJoin from '@/src/components/features/groups/GroupJoin/CharacterGroupJoin/CharacterGroupJoin';
 import FriendGroupJoin from '@/src/components/features/groups/GroupJoin/FriendGroupJoin/FriendGroupJoin';
 import GroupListSection from '@/src/components/features/groups/GroupListSection/GroupListSection';
 import GroupListSkeleton from '@/src/components/features/groups/GroupListSection/GroupListSkeleton';
 import GroupTab from '@/src/components/features/groups/GroupTab/GroupTab';
-import type { GroupFriendItem } from '@/src/components/features/groups/queries/useGroupFriendListQuery';
 import RankingSection from '@/src/components/features/groups/Ranking/RankingSection/RankingSection';
 import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
 import PullToRefresh from '@/src/components/ui/PullToRefresh/PullToRefresh';
@@ -23,18 +22,15 @@ interface GroupsPageClientProps {
 }
 
 const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<GroupType>('FRIEND');
   const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
-  const [selectedFriend, setSelectedFriend] = useState<GroupFriendItem | null>(
-    null,
-  );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleTabChange = (tab: GroupType) => {
     if (activeTab === tab) return;
     setActiveTab(tab);
     setSelectedGroupId(null);
-    setSelectedFriend(null);
   };
 
   return (
@@ -78,15 +74,15 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
               <RankingSection
                 groupId={selectedGroupId}
                 activeTab={activeTab}
-                onSelect={setSelectedFriend}
+                onSelect={(item) => {
+                  if (item.reflectionId == null) return;
+                  router.push(
+                    `/groups/${selectedGroupId}/reflections/${item.reflectionId}`,
+                  );
+                }}
               />
             </div>
           ) : null}
-
-          <FriendReflectionPanel
-            friend={selectedFriend}
-            onClose={() => setSelectedFriend(null)}
-          />
         </PullToRefresh>
       </div>
 

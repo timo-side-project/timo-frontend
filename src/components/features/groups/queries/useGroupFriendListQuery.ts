@@ -17,6 +17,8 @@ export const GroupFriendListSchema = z.object({
   streakDays: z.number(),
   totalDays: z.number(),
   userCategory: z.enum(CATEGORY),
+  reflectionId: z.number().nullable(),
+  isPublic: z.boolean(),
 });
 const ResponseSchema = z.array(GroupFriendListSchema);
 export type GroupFriendItem = z.infer<typeof GroupFriendListSchema>;

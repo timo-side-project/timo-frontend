@@ -57,7 +57,7 @@ src/components/features/[feature]/
 
 ## API / 데이터 페칭
 
-- HTTP는 `src/lib/api`의 `get / post / patch / del` 래퍼만 사용 — `axios` 직접 호출 금지
+- HTTP는 `src/lib/api`의 `get / post / put / patch / del` 래퍼만 사용 — `axios` 직접 호출 금지
 - 응답은 Zod 스키마로 검증(`responseSchema` 옵션), 타입은 `z.infer`로 추론
 - 쿼리 키는 `constants/queryKeys.ts` 팩토리, 엔드포인트는 `constants/url.ts` 상수로 관리
 

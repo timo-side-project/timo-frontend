@@ -30,6 +30,11 @@ const allIcons = {
   editTheme: '/icons/edit-theme.svg',
   saveTheme: '/icons/save-theme.svg',
   lock: '/icons/lock.svg',
+  heartFill: '/icons/heart-fill.svg',
+  heartEmpty: '/icons/heart-empty.svg',
+  commentFill: '/icons/comment-fill.svg',
+  commentEmpty: '/icons/comment-empty.svg',
+  send: '/icons/send-fill.svg',
 } as const;
 
 export default allIcons;
