@@ -1,5 +1,8 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { sanitizeProxyHeaders } from '@/src/lib/proxy/sanitizeProxyHeaders';
+import { stripDevCookieAttributes } from '@/src/lib/proxy/stripDevCookieAttributes';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 async function handler(
@@ -15,11 +18,7 @@ async function handler(
 
   const targetUrl = `${API_BASE_URL}/${path}${req.nextUrl.search}`;
 
-  const headers = new Headers(req.headers);
-  headers.set('host', new URL(targetUrl).host);
-  headers.delete('x-middleware-invoke');
-  headers.delete('origin');
-  headers.delete('referer');
+  const headers = sanitizeProxyHeaders(req.headers, targetUrl);
 
   try {
     const apiResponse = await fetch(targetUrl, {
@@ -35,26 +34,15 @@ async function handler(
     responseHeaders.delete('Set-Cookie');
 
     const setCookieHeaders = apiResponse.headers.getSetCookie();
-    if (setCookieHeaders.length > 0) {
-      setCookieHeaders.forEach((cookie) => {
-        const modifiedCookie = cookie
-          .split(';')
-          .filter((part) => {
-            const trimmed = part.trim().toLowerCase();
-            return !trimmed.startsWith('domain=') && trimmed !== 'secure';
-          })
-          .join('; ');
-
-        responseHeaders.append('Set-Cookie', modifiedCookie);
-      });
-    }
+    setCookieHeaders.forEach((cookie) => {
+      responseHeaders.append('Set-Cookie', stripDevCookieAttributes(cookie));
+    });
     return new NextResponse(apiResponse.body, {
       status: apiResponse.status,
       statusText: apiResponse.statusText,
       headers: responseHeaders,
     });
-  } catch (error) {
-    console.error('[API Proxy Error]', error);
+  } catch {
     return NextResponse.json(
       { error: 'Proxy request failed.' },
       { status: 500 },
