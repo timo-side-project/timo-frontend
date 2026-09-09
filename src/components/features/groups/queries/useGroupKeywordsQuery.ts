@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { skipToken, useQuery } from '@tanstack/react-query';
 import { z } from 'zod';
 
 import { get } from '@/src/lib/api';
@@ -22,9 +22,9 @@ const getGroupKeywords = async (groupId: number) =>
     responseSchema: groupKeywordsSchema,
   });
 
-export const useGroupKeywordsQuery = (groupId: number) =>
+export const useGroupKeywordsQuery = (groupId: number | null) =>
   useQuery({
     queryKey: groupKeys.keywords(groupId),
-    queryFn: () => getGroupKeywords(groupId),
+    queryFn: groupId === null ? skipToken : () => getGroupKeywords(groupId),
     staleTime: 60 * 1000 * 5,
   });
