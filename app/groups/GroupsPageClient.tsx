@@ -12,8 +12,8 @@ import FriendGroupJoin from '@/src/components/features/groups/GroupJoin/FriendGr
 import GroupListSection from '@/src/components/features/groups/GroupListSection/GroupListSection';
 import GroupListSkeleton from '@/src/components/features/groups/GroupListSection/GroupListSkeleton';
 import GroupTab from '@/src/components/features/groups/GroupTab/GroupTab';
-import { useGroupKeywordsQuery } from '@/src/components/features/groups/queries/useGroupKeywordsQuery';
 import RankingSection from '@/src/components/features/groups/Ranking/RankingSection/RankingSection';
+import WordRankingSection from '@/src/components/features/groups/WordRanking/WordRankingSection/WordRankingSection';
 import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
 import PullToRefresh from '@/src/components/ui/PullToRefresh/PullToRefresh';
 
@@ -30,8 +30,6 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
     name: string;
   } | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useGroupKeywordsQuery(selectedGroup?.id ?? null);
 
   const handleTabChange = (tab: GroupType) => {
     if (activeTab === tab) return;
@@ -76,17 +74,24 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
             />
           </Suspense>
           {selectedGroup !== null ? (
-            <div className="bg-g-500 -mx-7.5 px-7.5 py-6 mt-2 flex-1 min-h-0">
-              <RankingSection
+            <div className="bg-g-500 -mx-7.5 px-7.5 py-6 mt-2 flex flex-col gap-6 flex-1 min-h-0">
+              <WordRankingSection
                 groupId={selectedGroup.id}
-                activeTab={activeTab}
-                onSelect={(item) => {
-                  if (item.reflectionId == null) return;
-                  router.push(
-                    `/groups/${selectedGroup.id}/reflections/${item.reflectionId}`,
-                  );
-                }}
+                groupName={selectedGroup.name}
               />
+
+              <div className="flex-1 min-h-0">
+                <RankingSection
+                  groupId={selectedGroup.id}
+                  activeTab={activeTab}
+                  onSelect={(item) => {
+                    if (item.reflectionId == null) return;
+                    router.push(
+                      `/groups/${selectedGroup.id}/reflections/${item.reflectionId}`,
+                    );
+                  }}
+                />
+              </div>
             </div>
           ) : null}
         </PullToRefresh>
