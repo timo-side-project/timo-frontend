@@ -20,9 +20,7 @@ const WordRankingSection = ({
 }: WordRankingSectionProps) => {
   const { data, isPending } = useGroupKeywordsQuery(groupId);
 
-  const keywords = [...(data?.keywords ?? [])].sort(
-    (a, b) => b.count - a.count,
-  );
+  const keywords = data?.keywords ?? [];
 
   if (!isPending && keywords.length === 0) {
     return null;
