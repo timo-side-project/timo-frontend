@@ -25,7 +25,8 @@ export const reflectionDetailSchema = z.object({
   comments: z.number(),
   isLiked: z.boolean(),
   nickname: z.string(),
-  isPrivate: z.boolean().optional(),
+  isMine: z.boolean(),
+  isPublic: z.boolean(),
 });
 export type ReflectionDetail = z.infer<typeof reflectionDetailSchema>;
 

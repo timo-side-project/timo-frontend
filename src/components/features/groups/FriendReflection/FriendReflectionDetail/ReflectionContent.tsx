@@ -1,7 +1,6 @@
 'use client';
 
 import Detail from '@/src/components/features/reflectionDetail/Detail/Detail';
-import { useUserDetailQuery } from '@/src/components/features/users/queries/useUserDetailQuery';
 
 import { useReflectionPrivateState } from '../../hooks/useReflectionPrivateState';
 import type { ReflectionDetail } from '../../queries/useReflectionDetailQuery';
@@ -26,8 +25,7 @@ const ReflectionContent = ({
   onCommentClick,
   onCommentSheetClose,
 }: ReflectionContentProps) => {
-  const { data: user } = useUserDetailQuery();
-  const isMine = user?.name === data.nickname;
+  const { isMine } = data;
 
   const {
     isPrivate,
@@ -36,7 +34,7 @@ const ReflectionContent = ({
   } = useReflectionPrivateState({
     groupId,
     reflectionId,
-    initialIsPrivate: data.isPrivate,
+    initialIsPrivate: !data.isPublic,
   });
 
   return (
