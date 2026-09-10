@@ -17,10 +17,7 @@ const WordRankingCard = ({
 }: WordRankingCardProps) => {
   return (
     <li
-      className={cn(
-        'bg-g-80 w-27.25 shrink-0 rounded-10 px-4.25 py-2.5',
-        className,
-      )}
+      className={cn('bg-g-80 rounded-10 px-4.25 py-2.5', className)}
       {...props}
     >
       <p className="font-heading-h3 text-g-60">{rank}</p>

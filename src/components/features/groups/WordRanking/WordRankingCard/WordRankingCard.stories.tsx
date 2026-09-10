@@ -10,10 +10,15 @@ const meta = {
     viewport: { defaultViewport: 'mobile1' },
   },
   tags: ['autodocs'],
+  args: {
+    className: 'min-w-0 flex-1',
+  },
   decorators: [
     (Story) => (
-      <ul className="bg-g-500 flex gap-3 p-4">
+      <ul className="bg-g-500 flex w-83.25 gap-3 p-4">
         <Story />
+        <li className="flex-1" aria-hidden />
+        <li className="flex-1" aria-hidden />
       </ul>
     ),
   ],
