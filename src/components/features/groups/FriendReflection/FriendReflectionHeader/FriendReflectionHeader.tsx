@@ -7,7 +7,7 @@ import Icon from '@/src/components/ui/Icon/Icon';
 import { goBackOrHome } from '@/src/lib/helpers/navigation';
 
 interface PrivacyToggle {
-  isPrivate: boolean;
+  isPublic: boolean;
   onToggle: () => void;
   isToggling: boolean;
 }
@@ -29,9 +29,9 @@ export default function FriendReflectionHeader({
       rightIcon={
         privacyToggle ? (
           <Icon
-            name={privacyToggle.isPrivate ? 'lock' : 'unlock'}
+            name={privacyToggle.isPublic ? 'unlock' : 'lock'}
             size={25}
-            alt={privacyToggle.isPrivate ? '비공개' : '공개'}
+            alt={privacyToggle.isPublic ? '공개' : '비공개'}
           />
         ) : undefined
       }

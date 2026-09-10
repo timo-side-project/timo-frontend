@@ -5,33 +5,33 @@ import { useToggleReflectionPrivateMutation } from '../queries/useToggleReflecti
 interface UseReflectionPrivateStateParams {
   groupId: number;
   reflectionId: number;
-  initialIsPrivate?: boolean;
+  initialIsPublic: boolean;
 }
 
 export const useReflectionPrivateState = ({
   groupId,
   reflectionId,
-  initialIsPrivate,
+  initialIsPublic,
 }: UseReflectionPrivateStateParams) => {
-  const [isPrivate, setIsPrivate] = useState(initialIsPrivate ?? false);
+  const [isPublic, setIsPublic] = useState(initialIsPublic);
 
   const { mutate, isPending } = useToggleReflectionPrivateMutation();
 
   const toggle = () => {
-    const previous = isPrivate;
-    const nextIsPrivate = !isPrivate;
+    const previous = isPublic;
+    const nextIsPublic = !isPublic;
 
-    setIsPrivate(nextIsPrivate);
+    setIsPublic(nextIsPublic);
 
     mutate(
-      { groupId, reflectionId, isPrivate },
+      { groupId, reflectionId, isPublic },
       {
         onError: () => {
-          setIsPrivate(previous);
+          setIsPublic(previous);
         },
       },
     );
   };
 
-  return { isPrivate, toggle, isToggling: isPending };
+  return { isPublic, toggle, isToggling: isPending };
 };

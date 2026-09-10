@@ -8,19 +8,17 @@ import { GROUP_ENDPOINT } from '../constants/url';
 interface TogglePrivateParams {
   groupId: number;
   reflectionId: number;
-  isPrivate: boolean;
+  isPublic: boolean;
 }
 
 const toggleReflectionPrivate = ({
   groupId,
   reflectionId,
-  isPrivate,
+  isPublic,
 }: TogglePrivateParams) =>
-  isPrivate
-    ? del<never, void>(GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId))
-    : post<never, void>(
-        GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId),
-      );
+  isPublic
+    ? post<never, void>(GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId))
+    : del<never, void>(GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId));
 
 export const useToggleReflectionPrivateMutation = () => {
   const queryClient = useQueryClient();

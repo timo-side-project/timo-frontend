@@ -28,13 +28,13 @@ const ReflectionContent = ({
   const { isMine } = data;
 
   const {
-    isPrivate,
-    toggle: togglePrivate,
-    isToggling: isTogglingPrivate,
+    isPublic,
+    toggle: togglePublic,
+    isToggling: isTogglingPublic,
   } = useReflectionPrivateState({
     groupId,
     reflectionId,
-    initialIsPrivate: !data.isPublic,
+    initialIsPublic: data.isPublic,
   });
 
   return (
@@ -43,9 +43,9 @@ const ReflectionContent = ({
         privacyToggle={
           isMine
             ? {
-                isPrivate,
-                onToggle: togglePrivate,
-                isToggling: isTogglingPrivate,
+                isPublic,
+                onToggle: togglePublic,
+                isToggling: isTogglingPublic,
               }
             : undefined
         }
