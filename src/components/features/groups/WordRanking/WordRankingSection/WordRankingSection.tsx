@@ -36,10 +36,10 @@ const WordRankingSection = ({
         많이 사용한 단어
       </h2>
 
-      <ul className="flex gap-3">
+      <ul className="grid grid-cols-3 gap-3">
         {isPending
           ? Array.from({ length: KEYWORD_COUNT }).map((_, index) => (
-              <li key={index} className="flex-1">
+              <li key={index}>
                 <Skeleton
                   className="h-24 rounded-10"
                   ariaLabel="단어 순위 로딩"
@@ -49,7 +49,7 @@ const WordRankingSection = ({
           : keywords.map((keyword, index) => (
               <WordRankingCard
                 key={keyword.word}
-                className="min-w-0 flex-1"
+                className="min-w-0"
                 rank={index + 1}
                 word={keyword.word}
                 count={keyword.count}
