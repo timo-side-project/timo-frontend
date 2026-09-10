@@ -23,7 +23,7 @@ export default function FriendReflectionHeader({
 
   return (
     <PageHeader
-      title="친구 회고"
+      title={privacyToggle ? '나의 회고' : '친구 회고'}
       leftIcon={<Icon name="chevronLeft" size={25} />}
       onLeftClick={() => goBackOrHome(router)}
       rightIcon={
