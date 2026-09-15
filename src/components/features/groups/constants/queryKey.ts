@@ -17,6 +17,7 @@ export const groupKeys = {
   comments: (groupId: number, reflectionId: number) =>
     [...groupKeys.all(), 'comments', groupId, reflectionId] as const,
   toggleLike: () => [...groupKeys.all(), 'like', 'toggle'] as const,
+  togglePrivate: () => [...groupKeys.all(), 'private', 'toggle'] as const,
   createComment: () => [...groupKeys.all(), 'comments', 'create'] as const,
   updateComment: () => [...groupKeys.all(), 'comments', 'update'] as const,
   deleteComment: () => [...groupKeys.all(), 'comments', 'delete'] as const,

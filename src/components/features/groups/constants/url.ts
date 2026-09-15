@@ -8,6 +8,8 @@ export const GROUP_ENDPOINT = {
     `/groups/${groupId}/reflections/${reflectionId}`,
   reflectionLike: (groupId: number, reflectionId: number) =>
     `/groups/${groupId}/reflections/${reflectionId}/like`,
+  reflectionPrivate: (groupId: number, reflectionId: number) =>
+    `/groups/${groupId}/reflections/${reflectionId}/private`,
   reflectionComments: (groupId: number, reflectionId: number) =>
     `/groups/${groupId}/reflections/${reflectionId}/comments`,
   reflectionComment: (
