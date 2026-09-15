@@ -2,6 +2,7 @@ export const GROUP_ENDPOINT = {
   groups: '/groups',
   group: (groupId: number) => `/groups/${groupId}`,
   friendList: (groupId: number) => `/groups/${groupId}/reflections/today`,
+  keywords: (groupId: number) => `/groups/${groupId}/reflections/keywords`,
   joinGroup: '/groups/members',
   leaveGroup: (groupId: number) => `/groups/${groupId}/members`,
   reflectionDetail: (groupId: number, reflectionId: number) =>

@@ -13,6 +13,7 @@ import GroupListSection from '@/src/components/features/groups/GroupListSection/
 import GroupListSkeleton from '@/src/components/features/groups/GroupListSection/GroupListSkeleton';
 import GroupTab from '@/src/components/features/groups/GroupTab/GroupTab';
 import RankingSection from '@/src/components/features/groups/Ranking/RankingSection/RankingSection';
+import WordRankingSection from '@/src/components/features/groups/WordRanking/WordRankingSection/WordRankingSection';
 import PageHeader from '@/src/components/layout/PageHeader/PageHeader';
 import PullToRefresh from '@/src/components/ui/PullToRefresh/PullToRefresh';
 
@@ -24,13 +25,16 @@ interface GroupsPageClientProps {
 const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<GroupType>('FRIEND');
-  const [selectedGroupId, setSelectedGroupId] = useState<number | null>(null);
+  const [selectedGroup, setSelectedGroup] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleTabChange = (tab: GroupType) => {
     if (activeTab === tab) return;
     setActiveTab(tab);
-    setSelectedGroupId(null);
+    setSelectedGroup(null);
   };
 
   return (
@@ -66,21 +70,28 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
             <GroupListSection
               key={activeTab}
               activeTab={activeTab}
-              onGroupSelect={setSelectedGroupId}
+              onGroupSelect={setSelectedGroup}
             />
           </Suspense>
-          {selectedGroupId !== null ? (
-            <div className="bg-g-500 -mx-7.5 px-7.5 py-6 mt-2 flex-1 min-h-0">
-              <RankingSection
-                groupId={selectedGroupId}
-                activeTab={activeTab}
-                onSelect={(item) => {
-                  if (item.reflectionId == null) return;
-                  router.push(
-                    `/groups/${selectedGroupId}/reflections/${item.reflectionId}`,
-                  );
-                }}
+          {selectedGroup !== null ? (
+            <div className="bg-g-500 -mx-7.5 px-7.5 py-6 mt-2 flex flex-col gap-6 flex-1 min-h-0">
+              <WordRankingSection
+                groupId={selectedGroup.id}
+                groupName={selectedGroup.name}
               />
+
+              <div className="flex-1 min-h-0">
+                <RankingSection
+                  groupId={selectedGroup.id}
+                  activeTab={activeTab}
+                  onSelect={(item) => {
+                    if (item.reflectionId == null) return;
+                    router.push(
+                      `/groups/${selectedGroup.id}/reflections/${item.reflectionId}`,
+                    );
+                  }}
+                />
+              </div>
             </div>
           ) : null}
         </PullToRefresh>
