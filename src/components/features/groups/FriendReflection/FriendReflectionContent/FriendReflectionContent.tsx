@@ -8,10 +8,10 @@ import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
+import type { GroupFriendItem } from '../../queries/useGroupFriendListQuery';
+import { useGroupMemberCalendarQuery } from '../../queries/useGroupMemberCalendarQuery';
 import FriendCalendarSheet from '../FriendCalendarSheet/FriendCalendarSheet';
 import FriendReflectionDateNav from '../FriendReflectionDateNav/FriendReflectionDateNav';
-import type { GroupFriendItem } from '../queries/useGroupFriendListQuery';
-import { useGroupMemberCalendarQuery } from '../queries/useGroupMemberCalendarQuery';
 
 interface FriendReflectionContentProps {
   groupId: number;

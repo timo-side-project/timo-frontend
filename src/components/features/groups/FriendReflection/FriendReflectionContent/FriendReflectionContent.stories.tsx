@@ -4,9 +4,9 @@ import { format, subDays } from 'date-fns';
 
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
-import { groupKeys } from '../constants/queryKey';
-import type { GroupFriendItem } from '../queries/useGroupFriendListQuery';
-import type { MemberCalendarItem } from '../queries/useGroupMemberCalendarQuery';
+import { groupKeys } from '../../constants/queryKey';
+import type { GroupFriendItem } from '../../queries/useGroupFriendListQuery';
+import type { MemberCalendarItem } from '../../queries/useGroupMemberCalendarQuery';
 import FriendReflectionContent from './FriendReflectionContent';
 
 const GROUP_ID = 1;

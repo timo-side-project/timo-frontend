@@ -5,8 +5,8 @@ import { useState } from 'react';
 
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
-import { groupKeys } from '../constants/queryKey';
-import type { MemberCalendarItem } from '../queries/useGroupMemberCalendarQuery';
+import { groupKeys } from '../../constants/queryKey';
+import type { MemberCalendarItem } from '../../queries/useGroupMemberCalendarQuery';
 import FriendCalendarSheet from './FriendCalendarSheet';
 
 const GROUP_ID = 1;

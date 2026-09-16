@@ -12,7 +12,7 @@ import {
 } from '@/src/lib/constants/calendar';
 import type { CalendarDayMark } from '@/src/types/calendar';
 
-import { useGroupMemberCalendarQuery } from '../queries/useGroupMemberCalendarQuery';
+import { useGroupMemberCalendarQuery } from '../../queries/useGroupMemberCalendarQuery';
 
 interface FriendCalendarSheetProps {
   isOpen: boolean;
