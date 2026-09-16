@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, useState } from 'react';
+import { type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useBodyScrollLock } from '@/src/hooks/useBodyScrollLock';
@@ -24,45 +24,37 @@ const BottomSheet = ({
   contentClassName,
   overlayClassName,
 }: BottomSheetProps) => {
-  // 내려가는 애니메이션이 끝날 때까지 DOM에 남겨둔다
-  const [isRendered, setIsRendered] = useState(isOpen);
-  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
-
-  if (prevIsOpen !== isOpen) {
-    setPrevIsOpen(isOpen);
-    if (isOpen) setIsRendered(true);
-  }
-
   useEscapeKey(isOpen, onClose);
   useBodyScrollLock(isOpen);
 
-  if (!isRendered || typeof window === 'undefined') {
+  if (typeof window === 'undefined') {
     return null;
   }
 
+  // 닫혀 있어도 DOM에 남겨 내려가는 전환을 보여주고, 상호작용은 inert로 막는다
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <div
+      inert={!isOpen}
+      aria-hidden={!isOpen}
+      className={cn(
+        'fixed inset-0 z-50 transition-opacity duration-300',
+        isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
+      )}
+    >
       <button
         type="button"
         aria-label="닫기"
         onClick={onClose}
-        className={cn(
-          'absolute inset-0 bg-g-900/80',
-          isOpen ? 'animate-fade-in' : 'animate-fade-out',
-          overlayClassName,
-        )}
+        className={cn('absolute inset-0 bg-g-900/80', overlayClassName)}
       />
 
       <div
         role="dialog"
-        aria-modal="true"
+        aria-modal={isOpen}
         aria-label={ariaLabel}
-        onAnimationEnd={() => {
-          if (!isOpen) setIsRendered(false);
-        }}
         className={cn(
-          'relative z-10 w-full max-w-110 rounded-t-3xl bg-g-600 px-7.5 pb-10 pt-10',
-          isOpen ? 'animate-slide-up-in' : 'animate-slide-down-out',
+          'absolute inset-x-0 bottom-0 mx-auto w-full max-w-110 rounded-t-3xl bg-g-600 px-7.5 pb-10 pt-10 transition-transform duration-300',
+          isOpen ? 'translate-y-0' : 'translate-y-full',
           contentClassName,
         )}
       >
