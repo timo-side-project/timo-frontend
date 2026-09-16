@@ -15,6 +15,7 @@
 | 규칙 · 코드 컨벤션 (확장자·타입·import·토큰·커밋 등) | `docs/conventions.md` |
 | 아키텍처 · 라우트 · 인증 | `docs/architecture.md` |
 | 제품/도메인 지식 (기능 목적·용어) | `docs/product.md` |
+| 기능별 상세 스펙 (규칙·예외·확인 필요) | `docs/product/` |
 | 기술 스택과 선택 이유 | `docs/tech-stack.md` |
 | React/Next 성능 규칙 | `.agents/skills/vercel-react-best-practices/` |
 | 작업 코드 템플릿 | `.claude/skills/` (`create-api-hook`, `create-component`, `create-test`, `create-e2e`, `create-pr`, `code-review`, `refactor`, `sync-docs`) |

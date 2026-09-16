@@ -88,4 +88,17 @@ FCM 기반 푸시 알림 목록 (`src/lib/firebase/`).
 
 ## 기능 상세가 더 필요할 때
 
-이 문서는 개요·목차용으로만 유지한다. 기능별 상세 명세는 `docs/product/[feature].md`에 작성한다 (예정, 아직 미작성).
+이 문서는 개요·목차용으로만 유지한다. 기능별 상세 명세(규칙·예외·확인 필요)는 `docs/product/[feature].md`에 있다.
+
+| 문서 | 범위 |
+| --- | --- |
+| [auth-onboarding.md](./product/auth-onboarding.md) | 인증 가드, 온보딩, 로그인, 하단 탭바, 앱 설치 안내 |
+| [ztpi.md](./product/ztpi.md) | ZTPI 테스트, 결과, 캐릭터 소개 |
+| [reflection.md](./product/reflection.md) | 홈, 회고 작성·상세, AI 피드백, 서비스 피드백 |
+| [groups.md](./product/groups.md) | 그룹 목록·생성·참여·관리, 친구 회고, 좋아요·댓글 |
+| [calendar.md](./product/calendar.md) | 캘린더, 연속 기록 배너 |
+| [statistics.md](./product/statistics.md) | 시간관 변화 통계 |
+| [reward.md](./product/reward.md) | 보상 획득, 테마·펫 선택 |
+| [profile.md](./product/profile.md) | 마이페이지, 닉네임, 알림 설정, 로그아웃·탈퇴, 알림 목록 |
+
+각 문서 상단 frontmatter의 `sources`(소스 경로 glob)·`routes`는 코드 변경과 문서를 연결하는 기준이다. 해당 경로의 동작을 바꾸면 문서도 함께 갱신한다.
