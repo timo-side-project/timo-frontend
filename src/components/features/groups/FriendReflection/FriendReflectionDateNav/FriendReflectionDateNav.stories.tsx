@@ -18,16 +18,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+const referenceDate = new Date(2026, 7, 27);
+
 export const Today: Story = {
   args: {
-    selectedDate: new Date(),
+    selectedDate: referenceDate,
     isNextDisabled: true,
   },
 };
 
 export const PastDate: Story = {
   args: {
-    selectedDate: subDays(new Date(), 14),
+    selectedDate: subDays(referenceDate, 14),
     isNextDisabled: false,
   },
 };
