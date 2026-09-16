@@ -15,7 +15,7 @@ app/                                  # 라우트 (App Router) — URL·레이�
   ztpi-test/(complete) ztpi/[ztpiTestId]/
   reflection/[reflectionId]/feedback/
   groups/create/  groups/[groupId]/edit/
-  groups/[groupId]/reflections/[reflectionId]/
+  groups/[groupId]/members/[userId]/
   profile/nickname/  profile/theme/
   test-auth/                          # 개발용 로그인 화면
   api/proxy/[...path]/route.ts        # 개발용 API 프록시 (route handler)
@@ -50,7 +50,7 @@ src/
                   #   sendDiscordNotification, processor, types)
     proxy/        # 프록시 공용 유틸 — sanitizeProxyHeaders.ts, stripDevCookieAttributes.ts
   types/          # 전역 공유 타입 (calendar.ts)
-  styles/         # globals.css (@theme 디자인 토큰·애니메이션), typography.css
+  styles/         # globals.css (@theme 디자인 토큰), typography.css
 ```
 
 폴더 역할·import 방향 규칙은 [conventions.md](./conventions.md)(폴더 역할 / import·파일 배치)를 단일 기준으로 한다.
@@ -92,7 +92,7 @@ Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher`가
 | `/statistics`                                                                      | 통계                                                                  |
 | `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback` | 회고 (목록·상세·피드백)                                               |
 | `/groups`, `/groups/create`, `/groups/[groupId]/edit`                              | 그룹 회고 (목록·생성·수정)                                            |
-| `/groups/[groupId]/reflections/[reflectionId]`                                     | 친구 회고 상세                                                        |
+| `/groups/[groupId]/members/[userId]`                                               | 친구 회고 (날짜 이동·캘린더)                                          |
 | `/characters`                                                                      | 캐릭터 선택                                                           |
 | `/reward`                                                                          | 보상(커스터마이징) 획득 화면 — 회고 피드백 완료 시 해금분 있으면 진입 |
 | `/notification`                                                                    | 알림                                                                  |
