@@ -3,24 +3,23 @@
 import { addDays, format, isSameDay, startOfDay } from 'date-fns';
 import { useMemo, useState } from 'react';
 
-import Detail from '@/src/components/features/reflectionDetail/Detail/Detail';
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
-import type { GroupFriendItem } from '../../queries/useGroupFriendListQuery';
 import { useGroupMemberCalendarQuery } from '../../queries/useGroupMemberCalendarQuery';
 import FriendCalendarSheet from '../FriendCalendarSheet/FriendCalendarSheet';
 import FriendReflectionDateNav from '../FriendReflectionDateNav/FriendReflectionDateNav';
+import FriendReflectionDetail from '../FriendReflectionDetail/FriendReflectionDetail';
 
 interface FriendReflectionContentProps {
   groupId: number;
-  friend: GroupFriendItem;
+  userId: number;
 }
 
 const FriendReflectionContent = ({
   groupId,
-  friend,
+  userId,
 }: FriendReflectionContentProps) => {
   const today = useMemo(() => startOfDay(new Date()), []);
   const [selectedDate, setSelectedDate] = useState(today);
@@ -28,7 +27,7 @@ const FriendReflectionContent = ({
 
   const { data, isPending, isError } = useGroupMemberCalendarQuery({
     groupId,
-    userId: friend.userId,
+    userId,
     month: format(selectedDate, CALENDAR_DATE_FORMAT.monthRequest),
   });
 
@@ -81,11 +80,9 @@ const FriendReflectionContent = ({
     }
 
     return (
-      <Detail
-        questionCategory={selectedReflection.question.category}
-        questionContent={selectedReflection.question.content}
-        answerContent={selectedReflection.content}
-        friendNickname={friend.nickname}
+      <FriendReflectionDetail
+        groupId={groupId}
+        reflectionId={selectedReflection.id}
       />
     );
   };
@@ -105,7 +102,7 @@ const FriendReflectionContent = ({
       <FriendCalendarSheet
         isOpen={isCalendarOpen}
         groupId={groupId}
-        userId={friend.userId}
+        userId={userId}
         selectedDate={selectedDate}
         onClose={() => setIsCalendarOpen(false)}
         onSelectDate={setSelectedDate}

@@ -2,26 +2,17 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { format, subDays } from 'date-fns';
 
+import ToastProvider from '@/src/components/ui/Toast/ToastProvider';
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
 import { groupKeys } from '../../constants/queryKey';
-import type { GroupFriendItem } from '../../queries/useGroupFriendListQuery';
 import type { MemberCalendarItem } from '../../queries/useGroupMemberCalendarQuery';
+import type { ReflectionDetail } from '../../queries/useReflectionDetailQuery';
 import FriendReflectionContent from './FriendReflectionContent';
 
 const GROUP_ID = 1;
+const USER_ID = 7;
 const today = new Date();
-
-const mockFriend: GroupFriendItem = {
-  userId: 7,
-  nickname: 'Leon',
-  questionContent: null,
-  questionCategory: null,
-  answerText: null,
-  streakDays: 12,
-  totalDays: 202,
-  userCategory: 'PAST_NEGATIVE',
-};
 
 const todayReflection: MemberCalendarItem = {
   id: 1,
@@ -47,6 +38,26 @@ const privateReflection: MemberCalendarItem = {
   isPublic: false,
 };
 
+const toReflectionDetail = (
+  reflection: MemberCalendarItem,
+): ReflectionDetail => ({
+  id: reflection.id,
+  question: {
+    id: 1,
+    sequence: 1,
+    category: reflection.question.category,
+    content: reflection.question.content,
+    createdBy: 'system',
+    createdAt: today.toISOString(),
+  },
+  content: reflection.content,
+  reflectedAt: reflection.reflectedAt,
+  likes: 13,
+  comments: 2,
+  isLiked: false,
+  nickname: 'Leon',
+});
+
 const createQueryClient = (reflections: MemberCalendarItem[]) => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -57,11 +68,18 @@ const createQueryClient = (reflections: MemberCalendarItem[]) => {
   queryClient.setQueryData(
     groupKeys.memberCalendar(
       GROUP_ID,
-      mockFriend.userId,
+      USER_ID,
       format(today, CALENDAR_DATE_FORMAT.monthRequest),
     ),
     reflections,
   );
+
+  for (const reflection of reflections) {
+    queryClient.setQueryData(
+      groupKeys.reflectionDetail(GROUP_ID, reflection.id),
+      toReflectionDetail(reflection),
+    );
+  }
 
   return queryClient;
 };
@@ -72,34 +90,34 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
     viewport: { defaultViewport: 'mobile1' },
+    nextjs: { appDirectory: true },
   },
   tags: ['autodocs'],
-  args: { groupId: GROUP_ID, friend: mockFriend },
+  args: { groupId: GROUP_ID, userId: USER_ID },
 } satisfies Meta<typeof FriendReflectionContent>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WithTodayReflection: Story = {
-  render: (args) => (
-    <QueryClientProvider client={createQueryClient([todayReflection])}>
+const withProviders = (
+  reflections: MemberCalendarItem[],
+  args: React.ComponentProps<typeof FriendReflectionContent>,
+) => (
+  <QueryClientProvider client={createQueryClient(reflections)}>
+    <ToastProvider>
       <FriendReflectionContent {...args} />
-    </QueryClientProvider>
-  ),
+    </ToastProvider>
+  </QueryClientProvider>
+);
+
+export const WithTodayReflection: Story = {
+  render: (args) => withProviders([todayReflection], args),
 };
 
 export const EmptyDate: Story = {
-  render: (args) => (
-    <QueryClientProvider client={createQueryClient([pastReflection])}>
-      <FriendReflectionContent {...args} />
-    </QueryClientProvider>
-  ),
+  render: (args) => withProviders([pastReflection], args),
 };
 
 export const PrivateReflection: Story = {
-  render: (args) => (
-    <QueryClientProvider client={createQueryClient([privateReflection])}>
-      <FriendReflectionContent {...args} />
-    </QueryClientProvider>
-  ),
+  render: (args) => withProviders([privateReflection], args),
 };
