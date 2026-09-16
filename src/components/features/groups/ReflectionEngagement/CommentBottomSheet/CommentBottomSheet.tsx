@@ -1,12 +1,10 @@
 'use client';
 
 import { useCallback } from 'react';
-import { createPortal } from 'react-dom';
 
-import { cn } from '@/src/lib/helpers/cn';
+import BottomSheet from '@/src/components/ui/BottomSheet/BottomSheet';
 
 import { useCommentThread } from '../../hooks/useCommentThread';
-import { useModalDismiss } from '../../hooks/useModalDismiss';
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';
 
@@ -43,58 +41,35 @@ const CommentBottomSheet = ({
     onClose();
   }, [onClose, reset]);
 
-  useModalDismiss({ isOpen, onClose: handleClose });
-
-  if (typeof window === 'undefined') return null;
-
-  return createPortal(
-    <div
-      inert={!isOpen}
-      aria-hidden={!isOpen}
-      className={cn(
-        'fixed inset-0 z-50 transition-opacity duration-300',
-        isOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
-      )}
+  return (
+    <BottomSheet
+      isOpen={isOpen}
+      onClose={handleClose}
+      ariaLabel="댓글"
+      contentClassName="flex flex-col items-center gap-6.25 rounded-t-2xl px-6.25 pb-8.5 pt-8.5"
     >
-      <button
-        type="button"
-        aria-label="댓글창 닫기"
-        onClick={handleClose}
-        className="absolute inset-0 bg-g-900/80"
-      />
+      <p className="font-heading-h3 text-g-0">댓글</p>
 
-      <div
-        role="dialog"
-        aria-modal={isOpen}
-        className={cn(
-          'absolute inset-x-0 bottom-0 mx-auto flex w-full max-w-110 flex-col items-center gap-6.25 rounded-t-2xl bg-g-600 px-6.25 pb-8.5 pt-8.5 transition-transform duration-300',
-          isOpen ? 'translate-y-0' : 'translate-y-full',
-        )}
-      >
-        <p className="font-heading-h3 text-g-0">댓글</p>
+      <div className="flex w-full flex-col gap-7.5">
+        <CommentList
+          comments={comments}
+          currentUserId={currentUserId}
+          editingCommentId={editingCommentId}
+          onEditStart={handleEditStart}
+          onEditSubmit={handleEditSubmit}
+          onEditCancel={handleEditCancel}
+          onDelete={handleDelete}
+        />
 
-        <div className="flex w-full flex-col gap-7.5">
-          <CommentList
-            comments={comments}
-            currentUserId={currentUserId}
-            editingCommentId={editingCommentId}
-            onEditStart={handleEditStart}
-            onEditSubmit={handleEditSubmit}
-            onEditCancel={handleEditCancel}
-            onDelete={handleDelete}
-          />
-
-          <CommentInput
-            value={inputValue}
-            onChange={setInputValue}
-            onSubmit={handleSubmit}
-            disabled={isCreating}
-            placeholder="댓글을 입력해주세요"
-          />
-        </div>
+        <CommentInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={handleSubmit}
+          disabled={isCreating}
+          placeholder="댓글을 입력해주세요"
+        />
       </div>
-    </div>,
-    document.body,
+    </BottomSheet>
   );
 };
 
