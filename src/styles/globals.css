@@ -106,7 +106,6 @@
 
   --shadow-3: 0 8px 15px 0 rgba(0, 0, 0, 0.05);
   --shadow: var(--shadow-3);
-
 }
 
 .scrollbar-transparent-track {

@@ -1,43 +1,44 @@
 'use client';
 
+import { format } from 'date-fns';
+
+import CalendarDayCell from '@/src/components/ui/Calendar/CalendarDayCell/CalendarDayCell';
+import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 import {
   type CalendarDayCellType,
   getCalendarDayCells,
-} from '../../utils/getCalendarDayCells';
-import type { CalendarDayRecordByDateItem } from '../../utils/getCategoryTypeByDate';
-import CalendarDayCell from '../CalendarDayCell/CalendarDayCell';
+} from '@/src/lib/helpers/getCalendarDayCells';
+import type {
+  CalendarDayMark,
+  CalendarEmptyDayVariant,
+} from '@/src/types/calendar';
 
-interface CalendarMonthGridProps {
+interface CalendarGridProps {
   days: Date[];
   currentMonth: Date;
   selectedDate: Date | null;
   today: Date;
-  categoryTypeByDate: Map<string, CalendarDayRecordByDateItem>;
-  selectDate: (date: Date) => void;
-  onSelectSummary: (date: Date) => void;
+  marksByDate: Map<string, CalendarDayMark>;
+  emptyVariant?: CalendarEmptyDayVariant;
+  onSelectDate: (date: Date) => void;
 }
 
-const CalendarMonthGrid = ({
+const CalendarGrid = ({
   days,
   currentMonth,
   selectedDate,
   today,
-  categoryTypeByDate,
-  selectDate,
-  onSelectSummary,
-}: CalendarMonthGridProps) => {
+  marksByDate,
+  emptyVariant,
+  onSelectDate,
+}: CalendarGridProps) => {
   const dayCells: CalendarDayCellType[] = getCalendarDayCells({
     days,
     currentMonth,
     selectedDate,
     today,
-    categoryTypeByDate,
+    marksByDate,
   });
-
-  const handleDateSelect = (date: Date) => {
-    selectDate(date);
-    onSelectSummary(date);
-  };
 
   return (
     <ul className="grid grid-cols-7 gap-y-2">
@@ -47,11 +48,17 @@ const CalendarMonthGrid = ({
             {dayCell.isCurrentMonth ? (
               <CalendarDayCell
                 day={dayCell.cellProps.day}
+                dateLabel={format(
+                  dayCell.date,
+                  CALENDAR_DATE_FORMAT.dayAriaLabel,
+                )}
                 categoryType={dayCell.categoryType}
                 isFuture={dayCell.isFuture}
                 hasRecord={dayCell.cellProps.hasRecord}
                 isOutlined={dayCell.cellProps.isOutlined}
-                onClick={() => handleDateSelect(dayCell.date)}
+                isDisabled={dayCell.isDisabled || dayCell.isFuture}
+                emptyVariant={emptyVariant}
+                onClick={() => onSelectDate(dayCell.date)}
               />
             ) : (
               <span aria-hidden className="h-10 w-10" />
@@ -63,4 +70,4 @@ const CalendarMonthGrid = ({
   );
 };
 
-export default CalendarMonthGrid;
+export default CalendarGrid;

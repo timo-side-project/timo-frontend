@@ -15,7 +15,7 @@ app/                                  # 라우트 (App Router) — URL·레이�
   ztpi-test/(complete) ztpi/[ztpiTestId]/
   reflection/[reflectionId]/feedback/
   groups/create/  groups/[groupId]/edit/
-  groups/[groupId]/reflections/[reflectionId]/
+  groups/[groupId]/members/[userId]/
   profile/nickname/  profile/theme/
   test-auth/                          # 개발용 로그인 화면
   api/proxy/[...path]/route.ts        # 개발용 API 프록시 (route handler)
@@ -24,30 +24,32 @@ proxy.ts                              # 미들웨어 (Next 16 미들웨어 파�
 
 src/
   components/
-    ui/           # 범용 UI 컴포넌트 (AvatarButton, Badge, Button, Card, ErrorState, Icon,
-                  #   Modal, ProgressBar, PullToRefresh, Radio, Skeleton, SortSelect,
-                  #   TimeWheelPicker, Toast, ToggleSwitch)
+    ui/           # 범용 UI 컴포넌트 (AvatarButton, Badge, BottomSheet, Button, Calendar,
+                  #   Card, ErrorState, Icon, Modal, ProgressBar, PullToRefresh, Radio,
+                  #   Skeleton, SortSelect, TimeWheelPicker, Toast, ToggleSwitch)
     layout/       # 페이지 레이아웃 (BottomNavBar, PageHeader, BottomCTA)
     features/     # 기능별 묶음 (home, reflection, reflectionDetail, reflectionFeedback,
                   #   calendar, groups, characters, customization, notification, onboarding,
                   #   profile, reward, statistics, test, testAuth, testResult,
                   #   serviceFeedback, users, pwa)
                   #   각 feature: 컴포넌트 폴더 + queries/ + constants/ + hooks/
-  hooks/          # 공용 커스텀 훅 (useDialIndicator, useImagePicker, useLongPress,
-                  #   useSortSelect, useToast)
+  hooks/          # 공용 커스텀 훅 (useBodyScrollLock, useCalendarState, useDialIndicator,
+                  #   useEscapeKey, useImagePicker, useLongPress, useSortSelect, useToast)
   lib/
     api/          # HTTP 클라이언트 — instance.ts, http.ts, schema.ts, error.ts, index.ts
     auth/         # 인증 유틸 (미들웨어용) — isTokenExpired.ts, reissueSession.ts
     config/env.ts # API base URL 결정 (SSR/dev proxy 분기)
-    constants/    # 상수 (character.ts)
+    constants/    # 상수 (character.ts, calendar.ts)
     firebase/     # FCM 푸시 (client.ts, messaging.ts)
     helpers/      # 유틸 (cn, getQueryClient, navigation, calculateProgress,
-                  #   formatTwoDigitNumber, formatRelativeTime, getCharacterAsset,
-                  #   sortByCategory, getSubjectParticle, getObjectParticle)
+                  #   formatTwoDigitNumber, formatRelativeTime, getCalendarDayCells,
+                  #   getCharacterAsset, sortByCategory, getSubjectParticle,
+                  #   getObjectParticle)
     helpers/sentry-webhook/  # Sentry 웹훅 처리 (verifySignature, parseStackTrace,
                   #   analyzeWithGemini, fetchGitHubCode, createGitHubIssue,
                   #   sendDiscordNotification, processor, types)
     proxy/        # 프록시 공용 유틸 — sanitizeProxyHeaders.ts, stripDevCookieAttributes.ts
+  types/          # 전역 공유 타입 (calendar.ts)
   styles/         # globals.css (@theme 디자인 토큰), typography.css
 ```
 
@@ -90,7 +92,7 @@ Next.js 16의 미들웨어 파일(`proxy` 함수를 export). `config.matcher`가
 | `/statistics`                                                                      | 통계                                                                  |
 | `/reflection`, `/reflection/[reflectionId]`, `/reflection/[reflectionId]/feedback` | 회고 (목록·상세·피드백)                                               |
 | `/groups`, `/groups/create`, `/groups/[groupId]/edit`                              | 그룹 회고 (목록·생성·수정)                                            |
-| `/groups/[groupId]/reflections/[reflectionId]`                                     | 친구 회고 상세                                                        |
+| `/groups/[groupId]/members/[userId]`                                               | 친구 회고 (날짜 이동·캘린더)                                          |
 | `/characters`                                                                      | 캐릭터 선택                                                           |
 | `/reward`                                                                          | 보상(커스터마이징) 획득 화면 — 회고 피드백 완료 시 해금분 있으면 진입 |
 | `/notification`                                                                    | 알림                                                                  |
