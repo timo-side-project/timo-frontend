@@ -4,7 +4,10 @@ import { format } from 'date-fns';
 import { useMemo } from 'react';
 
 import BottomSheet from '@/src/components/ui/BottomSheet/BottomSheet';
+import Button from '@/src/components/ui/Button/Button';
 import Calendar from '@/src/components/ui/Calendar/Calendar';
+import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
+import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { useCalendarState } from '@/src/hooks/useCalendarState';
 import {
   CALENDAR_DATE_FORMAT,
@@ -33,7 +36,7 @@ const FriendCalendarSheet = ({
 }: FriendCalendarSheetProps) => {
   const calendarState = useCalendarState({ initialDate: selectedDate });
 
-  const { data } = useGroupMemberCalendarQuery({
+  const { data, isPending, isError, refetch } = useGroupMemberCalendarQuery({
     groupId,
     userId,
     month: format(
@@ -70,18 +73,34 @@ const FriendCalendarSheet = ({
 
   return (
     <BottomSheet isOpen={isOpen} onClose={onClose} ariaLabel="회고 날짜 선택">
-      <Calendar
-        currentMonthLabel={calendarState.currentMonthLabel}
-        days={calendarState.days}
-        currentMonth={calendarState.currentMonth}
-        today={calendarState.today}
-        selectedDate={calendarState.selectedDate}
-        marksByDate={marksByDate}
-        emptyVariant="none"
-        onPrevMonth={calendarState.goPrevMonth}
-        onNextMonth={calendarState.goNextMonth}
-        onSelectDate={handleSelectDate}
-      />
+      {isPending ? (
+        <Skeleton className="h-80 w-full" ariaLabel="캘린더 불러오는 중" />
+      ) : isError ? (
+        <div className="flex flex-col items-center gap-6 py-10">
+          <ErrorState
+            title="캘린더를 불러오지 못했어요."
+            description="잠시 후 다시 시도해주세요."
+          />
+          <Button
+            label="다시 시도"
+            onClick={() => refetch()}
+            variant="secondary"
+          />
+        </div>
+      ) : (
+        <Calendar
+          currentMonthLabel={calendarState.currentMonthLabel}
+          days={calendarState.days}
+          currentMonth={calendarState.currentMonth}
+          today={calendarState.today}
+          selectedDate={calendarState.selectedDate}
+          marksByDate={marksByDate}
+          emptyVariant="none"
+          onPrevMonth={calendarState.goPrevMonth}
+          onNextMonth={calendarState.goNextMonth}
+          onSelectDate={handleSelectDate}
+        />
+      )}
     </BottomSheet>
   );
 };
