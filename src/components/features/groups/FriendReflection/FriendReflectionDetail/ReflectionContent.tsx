@@ -1,6 +1,6 @@
 'use client';
 
-import Detail from '@/src/components/features/reflectionDetail/Detail/Detail';
+import Detail from '@/src/components/ui/Detail/Detail';
 
 import { useReflectionPrivateState } from '../../hooks/useReflectionPrivateState';
 import type { ReflectionDetail } from '../../queries/useReflectionDetailQuery';
