@@ -21,7 +21,11 @@ const GroupFriendReflectionPage = async ({ params }: PageProps) => {
 
   return (
     <div className="space-y-10 pb-20">
-      <FriendReflectionDetail groupId={+groupId} reflectionId={+reflectionId} />
+      <FriendReflectionDetail
+        key={reflectionId}
+        groupId={+groupId}
+        reflectionId={+reflectionId}
+      />
       <BottomNavBar />
     </div>
   );
