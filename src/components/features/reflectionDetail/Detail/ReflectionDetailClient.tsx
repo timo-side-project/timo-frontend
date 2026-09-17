@@ -1,10 +1,10 @@
 'use client';
 
+import Detail from '@/src/components/ui/Detail/Detail';
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 
 import { useReflectionDetail } from '../queries/useReflectionDetail';
-import Detail from './Detail';
 
 interface ReflectionDetailClientProps {
   reflectionId: number;

@@ -35,6 +35,7 @@ const allIcons = {
   commentFill: '/icons/comment-fill.svg',
   commentEmpty: '/icons/comment-empty.svg',
   send: '/icons/send-fill.svg',
+  unlock: '/icons/unlock.svg',
 } as const;
 
 export default allIcons;

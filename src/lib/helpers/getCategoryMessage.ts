@@ -1,9 +1,8 @@
-import type { Category } from '@/src/lib/constants/character';
-
 import {
   CATEGORY_MESSAGE_MAP,
   type CategoryMessageParts,
-} from '../constants/categoryMessages';
+} from '@/src/lib/constants/categoryMessages';
+import type { Category } from '@/src/lib/constants/character';
 
 export const getCategoryMessage = (
   category: Category,
