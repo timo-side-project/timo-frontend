@@ -1,9 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
 
 import { del, post } from '@/src/lib/api';
 
 import { groupKeys } from '../constants/queryKey';
 import { GROUP_ENDPOINT } from '../constants/url';
+
+const togglePrivateResponseSchema = z.undefined();
+type TogglePrivateResponse = z.infer<typeof togglePrivateResponseSchema>;
 
 interface TogglePrivateParams {
   groupId: number;
@@ -15,10 +19,14 @@ const toggleReflectionPrivate = ({
   groupId,
   reflectionId,
   isPublic,
-}: TogglePrivateParams) =>
-  isPublic
-    ? post<never, void>(GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId))
-    : del<never, void>(GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId));
+}: TogglePrivateParams) => {
+  const url = GROUP_ENDPOINT.reflectionPrivate(groupId, reflectionId);
+  const config = { responseSchema: togglePrivateResponseSchema };
+
+  return isPublic
+    ? post<never, TogglePrivateResponse>(url, undefined, config)
+    : del<never, TogglePrivateResponse>(url, undefined, config);
+};
 
 export const useToggleReflectionPrivateMutation = () => {
   const queryClient = useQueryClient();
