@@ -69,7 +69,17 @@ test.describe('회고 공개/비공개 토글', () => {
     const toggleButton = page.getByRole('img', { name: '공개' });
     await expect(toggleButton).toBeVisible();
 
+    const requestPromise = page.waitForRequest(
+      (request) =>
+        request
+          .url()
+          .includes(
+            `/api/proxy/groups/${GROUP_ID}/reflections/${REFLECTION_ID}/private`,
+          ) && request.method() === 'POST',
+    );
+
     await toggleButton.click();
+    await requestPromise;
 
     await expect(page.getByRole('img', { name: '비공개' })).toBeVisible();
   });
@@ -93,7 +103,17 @@ test.describe('회고 공개/비공개 토글', () => {
     const toggleButton = page.getByRole('img', { name: '비공개' });
     await expect(toggleButton).toBeVisible();
 
+    const requestPromise = page.waitForRequest(
+      (request) =>
+        request
+          .url()
+          .includes(
+            `/api/proxy/groups/${GROUP_ID}/reflections/${REFLECTION_ID}/private`,
+          ) && request.method() === 'DELETE',
+    );
+
     await toggleButton.click();
+    await requestPromise;
 
     await expect(page.getByRole('img', { name: '공개' })).toBeVisible();
   });
