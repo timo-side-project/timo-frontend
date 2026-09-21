@@ -48,6 +48,7 @@ description: TIMO 프론트 커밋·PR 생성 — 한국어 커밋 메시지 작
    git diff --name-only main...HEAD | grep -qE 'app/.*(page|route)\.(tsx|ts)|src/.*|package\.json|proxy\.ts|\.claude/(skills|agents)/'
    ```
    해당되면 `docs/architecture.md`·`AGENTS.md`·`docs/tech-stack.md`가 최신인지 확인하고, 낡았으면 **`sync-docs` 스킬로 먼저 갱신**한 뒤 그 변경도 커밋에 포함한다.
+   변경 파일이 `docs/product/*.md` 중 어떤 문서의 frontmatter `sources`에 매칭되면, 그 스펙 문서가 이번 변경을 반영했는지도 확인한다. 반영이 안 됐으면 사용자에게 알린다 (자동 수정하지 않음).
 1. 푸시
    - 첫 푸시(upstream 없음): `git push -u origin <branch>` — `-u`는 upstream을 걸어 이후 `git push`/`pull`을 인자 없이 쓰게 함
    - 이미 tracking 중이면 `-u` 불필요, 그냥 `git push`
