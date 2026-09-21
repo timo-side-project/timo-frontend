@@ -1,0 +1,86 @@
+name: QA PR (수동)
+
+# qa-pr-pipeline 3단계. 지금은 workflow_dispatch(수동)만 — pull_request 자동 트리거는
+# 아직 팀 검증 전이라 켜지 않았다 (docs/plans/qa-pr-pipeline.md 참고).
+#
+# 설계: AI(Claude)는 시나리오 생성 + Playwright 코드 작성까지만 한다.
+# 실행 · 분류 · PR 코멘트 작성은 전부 스크립트가 한다 — Claude에게 GitHub 쓰기 권한을 주지 않는다.
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "QA 리포트를 생성할 PR 번호"
+        required: true
+        type: string
+
+concurrency:
+  group: qa-pr-run-${{ inputs.pr_number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  qa-pr-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout (base 히스토리 포함 — 스펙 매칭용 origin/main diff에 필요)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout PR head
+        run: |
+          git fetch origin "pull/${{ inputs.pr_number }}/head:pr-head"
+          git checkout pr-head
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.20.0
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Claude 구독(Pro/Max/Team) OAuth 토큰 사용 — 별도 API 과금 없이 구독 사용량에서 차감된다.
+      # 시크릿 CLAUDE_CODE_OAUTH_TOKEN이 없으면 이 스텝만 실패한다: `claude setup-token`으로 로컬에서 발급.
+      - name: Generate QA scenarios (Claude — 코드 생성만, 실행/커밋/코멘트 없음)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ inputs.pr_number }}
+
+            .claude/skills/qa-pr-run/SKILL.md의 Phase 1~4(매칭 → 스펙 대조 → 시나리오 작성 → Playwright 코드 생성)만 수행해라.
+            base ref는 origin/main이다. 현재 워킹 디렉토리에 PR 코드가 이미 체크아웃돼 있다.
+            Phase 5(실행) 이후는 하지 마라 — 별도 단계가 실행하고 결과를 분류·코멘트한다.
+            e2e/.generated/ 아래에 스펙 파일을 쓰는 것 외에는 아무것도 하지 마라. PR에 코멘트하지 마라 (권한도 없다).
+          claude_args: |
+            --allowedTools "Read,Grep,Glob,Bash(node .claude/skills/qa-pr/scripts/match-spec-docs.mjs*),Bash(git diff*),Bash(git log*),Bash(mkdir -p e2e/.generated*),Write(e2e/.generated/**)"
+            --disallowedTools "Bash(gh:*)"
+            --max-turns 20
+
+      - name: Run generated scenarios (스크립트 — AI 아님)
+        run: QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --reporter=json > e2e/.generated/results.json
+        continue-on-error: true
+        env:
+          NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+
+      - name: Classify results and comment on PR (스크립트 — AI 아님)
+        run: node .claude/skills/qa-pr-run/scripts/report-and-comment.mjs --comment ${{ inputs.pr_number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

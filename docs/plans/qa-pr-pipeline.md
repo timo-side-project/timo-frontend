@@ -71,12 +71,15 @@ docs/product/
 - 기존 `create-e2e` 스킬 패턴 재사용 (`/test-auth` 로그인, role 기반 locator)
 - 실행 결과를 **프론트 버그 / API 에러(4xx·5xx) / 응답 스키마 불일치** 3가지로 분류
 
-### 3단계. CI 워크플로 + PR 코멘트
+### 3단계. CI 워크플로 + PR 코멘트 — 구현됨, 실사용 전
 
-- `pull_request` 트리거, CI에서 `pnpm dev` 띄워 실행
-- AI는 스펙 생성까지만, **실행·분류·코멘트 작성은 스크립트**가 담당 (AI에 GitHub 쓰기 권한 불필요)
-- 코멘트는 PR당 1개를 갱신 (push마다 새 코멘트 X)
-- fork PR 실행 금지, 경로 필터, `concurrency`로 중복 실행 취소, `--max-turns`·타임아웃으로 비용 상한
+- `.github/workflows/qa-pr.yml` — 지금은 `workflow_dispatch`(PR 번호 입력)로 **수동만**. `pull_request` 자동 트리거는 팀 검증 후로 미룸
+- 인증은 `CLAUDE_CODE_OAUTH_TOKEN`(Claude 구독 Pro/Max/Team) — API 키 종량과금 대신 구독 사용량 차감. `claude setup-token`으로 로컬 발급 후 레포 시크릿 등록 필요(**아직 미등록, 실제 실행 검증 안 됨**)
+- AI는 Phase 1~4(스펙 생성 코드까지)만, `--allowedTools`로 `Bash(gh:*)` 등 GitHub 쓰기 수단 차단
+- 실행·분류·코멘트 작성은 `.claude/skills/qa-pr-run/scripts/report-and-comment.mjs`(AI 아님, 순수 스크립트)가 담당
+- 코멘트는 PR당 1개를 마커(`<!-- qa-pr-run-report -->`)로 찾아 갱신 (push마다 새 코멘트 X)
+- `concurrency`로 같은 PR 중복 실행 취소, `timeout-minutes: 20`, `--max-turns 20`으로 비용 상한
+- fork PR 차단·경로 필터는 아직 안 함 — `workflow_dispatch`는 쓰기 권한자만 실행 가능해서 fork 위험은 낮지만, `pull_request` 자동 전환 시엔 필요
 
 ### 4단계 (필요성 확인 후). import 그래프로 공용 파일 영향 계산
 
