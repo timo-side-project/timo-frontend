@@ -8,7 +8,7 @@
 //   node report-and-comment.mjs --comment <PR번호>  # PR 코멘트로 생성/갱신 (gh CLI, GH_TOKEN 필요)
 
 import { execSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const RESULTS_PATH = 'e2e/.generated/results.json';
 const MARKER = '<!-- qa-pr-run-report -->';
@@ -101,6 +101,7 @@ function upsertComment(prNumber, body) {
   if (!repo) throw new Error('GITHUB_REPOSITORY 환경변수 없음 (CI 밖에서는 --comment 쓰지 않는다)');
 
   const bodyFile = 'e2e/.generated/comment-body.md';
+  mkdirSync('e2e/.generated', { recursive: true }); // Claude가 시나리오를 하나도 못 만든 경우(스킵·매칭 없음) 디렉토리 자체가 없을 수 있다
   writeFileSync(bodyFile, body);
 
   const existing = execSync(
