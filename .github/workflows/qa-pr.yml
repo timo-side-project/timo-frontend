@@ -37,6 +37,12 @@ jobs:
           git fetch origin "pull/${{ inputs.pr_number }}/head:pr-head"
           git checkout pr-head
 
+      # PR 브랜치엔 이 QA 도구 자체가 없을 수 있다(도구가 merge되기 전에 갈라진 PR 등).
+      # 도구는 항상 main 기준으로 돌려야 하므로, PR 코드는 그대로 두고 도구 경로만 main 걸로 덮어쓴다.
+      - name: Restore QA tooling from main (PR 앱 코드는 그대로 둔다)
+        run: |
+          git checkout main -- .claude/skills/qa-pr .claude/skills/qa-pr-run docs/product playwright.config.ts .gitignore
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
