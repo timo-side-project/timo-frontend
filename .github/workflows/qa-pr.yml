@@ -88,7 +88,7 @@ jobs:
           claude_args: |
             --allowedTools "Read,Grep,Glob,Write,Bash(node .claude/skills/qa-pr/scripts/match-spec-docs.mjs*),Bash(git diff*),Bash(git log*),Bash(mkdir -p **/e2e/.generated*)"
             --disallowedTools "Bash(gh:*),Skill"
-            --max-turns 50
+            --max-turns 80
 
       # --timeout 상향: CI 러너는 캐시 없이 Next.js dev 서버를 콜드 컴파일해서
       # 첫 페이지 진입이 기본 30초 테스트 타임아웃을 넘길 여지가 있다.
