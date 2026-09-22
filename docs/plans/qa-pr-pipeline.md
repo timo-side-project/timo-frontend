@@ -17,8 +17,10 @@ AI가 QA를 대체하는 게 아니라, **"이번 PR에서 사람이 어디를 �
 | `docs: 기능별 상세 스펙 문서 추가` | `docs/product/` 8개 문서 (기능별 규칙·예외·확인 필요) |
 | `docs: 기능 스펙 문서 갱신 규칙 추가` | conventions 규칙 + code-review / create-pr / sync-docs 스킬 반영 |
 | `feat: PR diff와 기능 스펙 매칭하는 qa-pr 스킬 추가` | `.claude/skills/qa-pr/` — 1단계 완료 (아래 4번 참고) |
+| `feat: qa-pr 시나리오를 Playwright로 생성·실행하는 qa-pr-run 스킬 추가` | `.claude/skills/qa-pr-run/` — 2단계 완료 |
+| `feat: qa-pr CI 워크플로 추가` 외 다수 | `.github/workflows/qa-pr.yml` — 3단계 완료, `pull_request` 자동 트리거까지 켬 |
 
-> `chore/ai-pr-qa-agent-jyj` 브랜치에서 같은 base로 독자적으로 `qa-pr` 스킬을 만듦(`qa-policy.md`, Phase별 구조, frontmatter 제한). 겹치는 부분 검토해서 좋은 것만 이 브랜치에 반영함 — **두 브랜치가 아직 별도로 존재하니 main에 PR 올리기 전에 조율 필요**.
+> `chore/ai-pr-qa-agent-jyj` 브랜치에서 같은 base로 독자적으로 `qa-pr` 스킬을 만들었던 적 있음(`qa-policy.md` 등 좋은 부분은 이미 반영함) — **조율은 더 이상 신경 쓰지 않기로 함**.
 
 ### 스펙 문서 구조
 
@@ -65,21 +67,30 @@ docs/product/
 - **완료 기준 검증:** 과거 실제 PR 3개(#27 그룹 관리, #29 통계 그래프, #17 테마 잠금) 격리 diff로 돌려봄. 노이즈 적고, 스펙의 "버그 의심" 항목이 매번 해당 PR 핵심 변경과 실제로 겹침 → 통과로 판단
 - **남은 것:** 팀원 리뷰는 아직 안 함(지금까진 1인 판단). jyj 브랜치와 조율 전이라 main PR은 아직
 
-### 2단계. Playwright 코드 생성 + 로컬 실행
+### 2단계. Playwright 코드 생성 + 로컬 실행 — ✅ 완료
 
-- 시나리오를 `e2e/.generated/*.spec.ts`로 생성 (gitignore)
+- `/qa-pr-run` 스킬 — qa-pr의 Phase 1~3(매칭·스펙대조·시나리오)을 그대로 재사용하고, 시나리오를 `e2e/.generated/*.spec.ts`로 생성해서 실제로 실행한다 (gitignore, `playwright.config.ts`의 `testIgnore`로 `pnpm test:e2e` 기본 실행 대상 아님)
 - 기존 `create-e2e` 스킬 패턴 재사용 (`/test-auth` 로그인, role 기반 locator)
-- 실행 결과를 **프론트 버그 / API 에러(4xx·5xx) / 응답 스키마 불일치** 3가지로 분류
+- `api-errors`/`console-errors` 캡처 근거로 실행 결과를 **프론트 버그 / API 에러(4xx·5xx) / 응답 스키마 불일치** 3가지로 분류
+- **검증:** 실제 그룹 참여 시나리오 3개로 로컬 실행 확인 (전부 통과)
 
-### 3단계. CI 워크플로 + PR 코멘트 — 구현됨, 실사용 전
+### 3단계. CI 워크플로 + PR 코멘트 — ✅ 완료, `pull_request` 자동 트리거 켬
 
-- `.github/workflows/qa-pr.yml` — 지금은 `workflow_dispatch`(PR 번호 입력)로 **수동만**. `pull_request` 자동 트리거는 팀 검증 후로 미룸
-- 인증은 `CLAUDE_CODE_OAUTH_TOKEN`(Claude 구독 Pro/Max/Team) — API 키 종량과금 대신 구독 사용량 차감. `claude setup-token`으로 로컬 발급 후 레포 시크릿 등록 필요(**아직 미등록, 실제 실행 검증 안 됨**)
-- AI는 Phase 1~4(스펙 생성 코드까지)만, `--allowedTools`로 `Bash(gh:*)` 등 GitHub 쓰기 수단 차단
-- 실행·분류·코멘트 작성은 `.claude/skills/qa-pr-run/scripts/report-and-comment.mjs`(AI 아님, 순수 스크립트)가 담당
+- `.github/workflows/qa-pr.yml` — **main 대상 PR이 열리거나 갱신되면 자동 실행**. 특정 PR을 다시 돌리고 싶으면 `workflow_dispatch`로 수동 실행도 가능
+- 인증은 `CLAUDE_CODE_OAUTH_TOKEN`(Claude 구독 Pro/Max/Team, 시크릿 등록 완료) — API 키 종량과금 대신 구독 사용량 차감
+- AI는 Phase 1~4(매칭→스펙대조→시나리오→Playwright 코드)만, 분석 내용은 `e2e/.generated/context.md`에 남긴다. `--allowedTools`로 `Bash(gh:*)`·`Skill` 등 GitHub 쓰기·자기호출 수단 차단
+- 실행·분류·코멘트 작성은 `.claude/skills/qa-pr-run/scripts/report-and-comment.mjs`(AI 아님, 순수 스크립트)가 담당 — `context.md` 내용(영향범위·스펙대조·시나리오 근거)을 실행 결과 앞에 이어붙여 코멘트를 만든다
 - 코멘트는 PR당 1개를 마커(`<!-- qa-pr-run-report -->`)로 찾아 갱신 (push마다 새 코멘트 X)
-- `concurrency`로 같은 PR 중복 실행 취소, `timeout-minutes: 20`, `--max-turns 20`으로 비용 상한
-- fork PR 차단·경로 필터는 아직 안 함 — `workflow_dispatch`는 쓰기 권한자만 실행 가능해서 fork 위험은 낮지만, `pull_request` 자동 전환 시엔 필요
+- `concurrency`로 같은 PR 중복 실행 취소, `timeout-minutes: 20`, `--max-turns 80`으로 비용 상한
+- fork PR은 `job.if`로 스킵 (secrets도 애초에 fork엔 안 내려감)
+- **실제 PR(#33, #39)로 검증 완료.** 과정에서 발견·수정한 버그들:
+  - `disable-model-invocation` 스킬을 Skill 도구로 부르면 거부당하는데 Claude가 그대로 포기해버림 → 프롬프트에 "Read로 직접 읽어라" 명시 + `Skill`을 `disallowedTools`에 추가
+  - CI에서 Claude가 쓰는 경로가 절대경로라 `Write(e2e/.generated/**)` 같은 상대경로 패턴이 매칭 안 돼 파일 저장이 계속 거부됨 → 이 스텝은 git commit/push가 없는 휘발성 러너라 `Write` 전체 허용으로 변경
+  - `git checkout pr-head`가 PR 브랜치엔 없는 QA 도구 파일(스킬·스크립트)까지 같이 날려버림 → 도구 경로만 별도로 복원하는 스텝 추가
+  - `--max-turns`가 낮아서(20→35→50→80) 정상 완료된 실행이 상한 초과로 실패 처리됨
+  - `gh api -f body=@파일`은 파일을 안 읽고 문자열 그대로 취급함(`-F`가 맞음) → 코멘트에 `@파일경로` 문자열이 그대로 올라간 적 있음
+  - Playwright 에러 메시지의 ANSI 색상 코드가 그대로 마크다운에 박혀 깨져 보임 → strip 처리 추가
+  - `pull_request` 자동 트리거 전환 시, 도구 복원 소스를 `github.sha` 고정에서 트리거별 분기(자동은 `origin/main`, 수동은 `github.sha`)로 변경 — 안 그러면 자동 실행 때 도구를 PR 자기 자신에서 복원해버려 의미가 없어짐
 
 ### 4단계 (필요성 확인 후). import 그래프로 공용 파일 영향 계산
 
@@ -91,9 +102,12 @@ docs/product/
 - [x] **"버그 의심"·`[확인 필요]` 처리 정책:** 시나리오로 검증하지 않고 `⚠️` 표시로 "사람 확인 체크리스트"에만 넣는다
 - [x] **QA 환경 제약 위치:** `.claude/skills/qa-pr/references/qa-policy.md` (테스트 계정, 모킹 정책, 방해 조건, 모바일 뷰포트, "AI가 확인 못 하는 것" 포함)
 - [x] **1단계 스킬 frontmatter:** `disable-model-invocation: true`(슬래시 커맨드로만 실행) + `allowed-tools`에서 Edit/Write 제외(리포트만, 파일 수정 없음) + `argument-hint: "[base ref]"`
-- [ ] **작업 이슈·브랜치:** 아직 `chore/ai-pr-qa-agent`. 컨벤션(`feature/{이름}-#{이슈번호}`) 아님 — main PR 올리기 전에 정리할지 결정 필요
+- [x] **작업 이슈·브랜치:** `chore/ai-pr-qa-agent`로 진행, PR #44로 main에 머지 완료. 이후 수정은 그때그때 브랜치 따서 머지
+- [x] **jyj 브랜치 조율:** 더 이상 신경 쓰지 않기로 함
+- [x] **`pull_request` 자동 트리거:** 켬 (main 대상 PR 열림/갱신 시 자동 실행)
 - [ ] 스펙 `[확인 필요]` 항목을 누가 기획·백엔드에 확인할지
-- [ ] **jyj 브랜치 조율:** 같은 스킬을 독자적으로 만든 `chore/ai-pr-qa-agent-jyj`와 어느 쪽을 기준으로 머지할지
+- [ ] 팀원(다른 사람) 리뷰 — 지금까지는 1인 판단으로 진행
+- [ ] PR #33 QA 리포트가 찾아낸 "다음 달 이동" 캘린더 이슈가 실제 버그인지 확인 필요
 
 ## 6. 코드베이스 제약 (계획에 영향 주는 사실)
 
