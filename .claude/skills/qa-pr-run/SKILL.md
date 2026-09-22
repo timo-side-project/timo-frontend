@@ -93,7 +93,7 @@ QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --reporter=json > e2e/.gene
 - 실패해도(exit code != 0) 이 명령 자체는 다음 단계로 넘어간다 — 실패가 곧 리포트 대상이다
 - 타임아웃이나 dev 서버 기동 실패 등 Phase 5 자체가 안 돌아가면 그 사실만 보고하고 중단한다 (억지로 재시도하지 않는다)
 
-> CI(`.github/workflows/qa-pr.yml`, workflow_dispatch 수동 트리거)에서는 Phase 6~7이 AI 없이
+> CI(`.github/workflows/qa-pr.yml`)에서는 Phase 6~7이 AI 없이
 > `scripts/report-and-comment.mjs`로 결정적으로 실행되고 PR에 코멘트까지 단다. 로컬에서 사람이
 > `/qa-pr-run`을 돌릴 때는 아래처럼 직접 읽고 분류·리포트한다.
 
@@ -131,9 +131,10 @@ QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --reporter=json > e2e/.gene
 
 ## CI (3단계, 구현됨)
 
-`.github/workflows/qa-pr.yml` — `workflow_dispatch`로 PR 번호를 받아 수동 실행한다(`pull_request` 자동 트리거는 아직 안 켬).
+`.github/workflows/qa-pr.yml` — main 대상 PR이 열리거나 갱신되면(`pull_request`) 자동 실행한다. 특정 PR을 다시 돌릴 때는 `workflow_dispatch`로 PR 번호를 넘겨 수동 실행한다.
 
 - Claude는 Phase 1~4(코드 생성)만 하고, `--allowedTools`로 `Bash(gh:*)` 등 GitHub 쓰기 수단을 아예 차단한다
 - 실행(Phase 5)·분류·코멘트(Phase 6~7)는 `scripts/report-and-comment.mjs`가 AI 없이 결정적으로 한다
-- PR 코멘트는 `<!-- qa-pr-run-report -->` 마커로 찾아 갱신한다(PR당 1개)
+- PR 본문·충돌 상태는 Claude 실행 전에 스크립트가 `e2e/.generated/pr.json`으로 저장한다 (Claude는 `gh`를 못 쓴다)
+- PR 코멘트는 `<!-- qa-pr-run-report -->` 마커로 찾아 갱신한다(PR당 1개). main과 충돌 중이면 맨 위에 경고를 붙인다
 - 인증은 `CLAUDE_CODE_OAUTH_TOKEN`(Claude 구독) — 로컬에서 `claude setup-token`으로 발급해 레포 시크릿에 등록해야 동작한다
