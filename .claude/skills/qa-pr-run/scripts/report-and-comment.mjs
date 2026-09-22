@@ -15,12 +15,19 @@ const CONTEXT_PATH = 'e2e/.generated/context.md';
 const MARKER = '<!-- qa-pr-run-report -->';
 const SCHEMA_KEYWORDS = ['zoderror', 'zod', 'schema', 'invalid_type', 'expected string', 'expected number'];
 
+// eslint-disable-next-line no-control-regex
+const ANSI_CODES = /\x1b\[[0-9;]*m/g;
+
+function stripAnsi(text) {
+  return text.replace(ANSI_CODES, '');
+}
+
 function decode(body) {
   if (!body) return '';
   try {
-    return Buffer.from(body, 'base64').toString('utf8');
+    return stripAnsi(Buffer.from(body, 'base64').toString('utf8'));
   } catch {
-    return body;
+    return stripAnsi(body);
   }
 }
 
@@ -38,7 +45,7 @@ function classify(consoleErrors, apiErrors, failureMessage) {
     });
   if (schemaHit) return { category: '응답 스키마 불일치', evidence: consoleErrors.trim() };
   if (apiErrors.trim()) return { category: 'API 에러(참고용 — 의도적 모킹일 수 있음)', evidence: apiErrors.trim() };
-  return { category: '프론트 버그', evidence: (failureMessage ?? '').split('\n').slice(0, 3).join(' ') };
+  return { category: '프론트 버그', evidence: stripAnsi(failureMessage ?? '').split('\n').slice(0, 3).join(' ') };
 }
 
 function collectTests(suite, list) {
