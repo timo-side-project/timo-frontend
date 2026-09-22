@@ -12,6 +12,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const RESULTS_PATH = 'e2e/.generated/results.json';
 const CONTEXT_PATH = 'e2e/.generated/context.md';
+const PR_INFO_PATH = 'e2e/.generated/pr.json';
 const MARKER = '<!-- qa-pr-run-report -->';
 const SCHEMA_KEYWORDS = ['zoderror', 'zod', 'schema', 'invalid_type', 'expected string', 'expected number'];
 
@@ -72,8 +73,27 @@ function buildContextSection() {
   return readFileSync(CONTEXT_PATH, 'utf8').trim();
 }
 
+// mergeable은 push 직후 UNKNOWN일 수 있어 CONFLICTING일 때만 알린다
+function buildConflictWarning() {
+  if (!existsSync(PR_INFO_PATH)) return [];
+  try {
+    const { mergeable } = JSON.parse(readFileSync(PR_INFO_PATH, 'utf8'));
+    if (mergeable !== 'CONFLICTING') return [];
+  } catch {
+    return [];
+  }
+  return ['> ⚠️ **main과 충돌 중** — 아래 결과는 충돌 해결 전 코드 기준이다. 리베이스 후 다시 확인이 필요하다.', ''];
+}
+
 function buildReport() {
-  const lines = [MARKER, '## QA 리포트 (qa-pr-run, 자동 생성)', '', buildContextSection(), ''];
+  const lines = [
+    MARKER,
+    '## QA 리포트 (qa-pr-run, 자동 생성)',
+    '',
+    ...buildConflictWarning(),
+    buildContextSection(),
+    '',
+  ];
 
   if (!existsSync(RESULTS_PATH)) {
     lines.push('## 실행 결과', '', `\`${RESULTS_PATH}\` 없음 — Phase 5(실행)가 돌지 않았거나 생성된 시나리오가 없음.`);
