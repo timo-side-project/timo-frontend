@@ -82,6 +82,11 @@ jobs:
             --allowedTools "Read,Grep,Glob,Bash(node .claude/skills/qa-pr/scripts/match-spec-docs.mjs*),Bash(git diff*),Bash(git log*),Bash(mkdir -p e2e/.generated*),Write(e2e/.generated/**)"
             --disallowedTools "Bash(gh:*)"
             --max-turns 50
+          show_full_output: true
+
+      # 디버그: Claude가 실제로 뭘 만들었는지 확인용. 문제 없다고 확정되면 제거한다.
+      - name: Debug - list generated files
+        run: ls -la e2e/.generated/ 2>&1 || echo "e2e/.generated 없음"
 
       - name: Run generated scenarios (스크립트 — AI 아님)
         run: QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --reporter=json > e2e/.generated/results.json
