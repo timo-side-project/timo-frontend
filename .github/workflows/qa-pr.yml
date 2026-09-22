@@ -89,14 +89,11 @@ jobs:
             --allowedTools "Read,Grep,Glob,Write,Bash(node .claude/skills/qa-pr/scripts/match-spec-docs.mjs*),Bash(git diff*),Bash(git log*),Bash(mkdir -p **/e2e/.generated*)"
             --disallowedTools "Bash(gh:*),Skill"
             --max-turns 50
-          show_full_output: true
 
-      # 디버그: Claude가 실제로 뭘 만들었는지 확인용. 문제 없다고 확정되면 제거한다.
-      - name: Debug - list generated files
-        run: ls -la e2e/.generated/ 2>&1 || echo "e2e/.generated 없음"
-
+      # --timeout 상향: CI 러너는 캐시 없이 Next.js dev 서버를 콜드 컴파일해서
+      # 첫 페이지 진입이 기본 30초 테스트 타임아웃을 넘길 여지가 있다.
       - name: Run generated scenarios (스크립트 — AI 아님)
-        run: QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --reporter=json > e2e/.generated/results.json
+        run: QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --timeout=90000 --reporter=json > e2e/.generated/results.json
         continue-on-error: true
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
