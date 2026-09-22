@@ -11,6 +11,7 @@ import { execSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 const RESULTS_PATH = 'e2e/.generated/results.json';
+const CONTEXT_PATH = 'e2e/.generated/context.md';
 const MARKER = '<!-- qa-pr-run-report -->';
 const SCHEMA_KEYWORDS = ['zoderror', 'zod', 'schema', 'invalid_type', 'expected string', 'expected number'];
 
@@ -57,9 +58,20 @@ function collectTests(suite, list) {
   for (const sub of suite.suites ?? []) collectTests(sub, list);
 }
 
+function buildContextSection() {
+  if (!existsSync(CONTEXT_PATH)) {
+    return '(Claude가 context.md를 안 남김 — 매칭된 스펙이 없거나 워크플로 검증에 걸려 Phase 1~4 자체가 스킵됐을 수 있음)';
+  }
+  return readFileSync(CONTEXT_PATH, 'utf8').trim();
+}
+
 function buildReport() {
+  const lines = [MARKER, '## QA 리포트 (qa-pr-run, 자동 생성)', '', buildContextSection(), ''];
+
   if (!existsSync(RESULTS_PATH)) {
-    return `${MARKER}\n## QA 실행 리포트\n\n\`${RESULTS_PATH}\` 없음 — Phase 5(실행)가 돌지 않았거나 생성된 시나리오가 없음.`;
+    lines.push('## 실행 결과', '', `\`${RESULTS_PATH}\` 없음 — Phase 5(실행)가 돌지 않았거나 생성된 시나리오가 없음.`);
+    lines.push('', '> 이 리포트는 머지 게이트가 아니다 — 사람이 직접 확인한다.');
+    return lines.join('\n');
   }
 
   const data = JSON.parse(readFileSync(RESULTS_PATH, 'utf8'));
@@ -69,7 +81,7 @@ function buildReport() {
   const passed = tests.filter((t) => t.status === 'passed');
   const failed = tests.filter((t) => t.status !== 'passed');
 
-  const lines = [MARKER, '## QA 실행 리포트 (qa-pr-run, 자동 생성)', ''];
+  lines.push('## 실행 결과', '');
   lines.push(`총 ${tests.length}개 / 통과 ${passed.length}개 / 실패 ${failed.length}개`, '');
 
   if (failed.length === 0) {
