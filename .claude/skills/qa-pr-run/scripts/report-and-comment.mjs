@@ -122,7 +122,7 @@ function upsertComment(prNumber, body) {
   ).trim();
 
   if (existing) {
-    execSync(`gh api -X PATCH repos/${repo}/issues/comments/${existing} -f body=@${bodyFile}`, { stdio: 'inherit' });
+    execSync(`gh api -X PATCH repos/${repo}/issues/comments/${existing} -F body=@${bodyFile}`, { stdio: 'inherit' });
   } else {
     execSync(`gh pr comment ${prNumber} --body-file ${bodyFile}`, { stdio: 'inherit' });
   }
