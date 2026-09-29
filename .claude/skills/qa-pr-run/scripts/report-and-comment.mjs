@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // e2e/.generated/results.json(Playwright --reporter=json)을 읽어 실패를
-// 프론트 버그 / API 에러 / 응답 스키마 불일치로 분류하고 마크다운 리포트를 만든다.
+// 프론트 버그 / API 에러 / 응답 스키마 불일치 / 확인 필요로 분류하고 마크다운 리포트를 만든다.
 // AI 없이 순수 스크립트로 동작 — CI에서 커밋된 코드로 실행하기 위함(qa-pr-pipeline.md 3단계 참고).
 //
 // 사용:
@@ -47,7 +47,19 @@ function classify(consoleErrors, apiErrors, failureMessage) {
     });
   if (schemaHit) return { category: '응답 스키마 불일치', evidence: consoleErrors.trim() };
   if (apiErrors.trim()) return { category: 'API 에러(참고용 — 의도적 모킹일 수 있음)', evidence: apiErrors.trim() };
-  return { category: '프론트 버그', evidence: stripAnsi(failureMessage ?? '').split('\n').slice(0, 3).join(' ') };
+
+  const message = stripAnsi(failureMessage ?? '');
+  const evidence = message.split('\n').slice(0, 3).join(' ');
+
+  // 셀렉터를 못 찾거나 타임아웃이면 생성 테스트가 잘못 짚었을 가능성이 크다 — 버그로 단정하지 않는다
+  const lower = message.toLowerCase();
+  const selectorMiss = lower.includes('tobevisible') || lower.includes('timeout');
+  const hasExpectedReceived = lower.includes('expected') && lower.includes('received');
+  if (selectorMiss && !hasExpectedReceived) {
+    return { category: '확인 필요(테스트 품질 의심)', evidence };
+  }
+
+  return { category: '프론트 버그', evidence };
 }
 
 function collectTests(suite, list) {

@@ -149,6 +149,19 @@ jobs:
       - name: Record run outcome
         run: echo "${{ steps.run-scenarios.outcome }}" > e2e/.generated/run-outcome.txt
 
+      # 생성된 테스트는 gitignore라 러너와 함께 사라진다 — 실패 원인을 사람이 보려면 아티팩트로 남겨야 한다
+      - name: Upload generated scenarios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-pr-generated-${{ env.PR_NUMBER }}
+          path: e2e/.generated
+          retention-days: 7
+          # e2e/.generated는 숨김 경로라 기본 설정이면 아티팩트가 통째로 비어서 올라간다
+          include-hidden-files: true
+          # pr.json은 Claude 단계 전에 항상 생기므로, 비어 있다면 업로드 설정이 잘못된 것이다
+          if-no-files-found: error
+
       - name: Classify results and comment on PR (스크립트 — AI 아님)
         run: node .claude/skills/qa-pr-run/scripts/report-and-comment.mjs --comment "$PR_NUMBER"
         env:
