@@ -149,6 +149,16 @@ jobs:
       - name: Record run outcome
         run: echo "${{ steps.run-scenarios.outcome }}" > e2e/.generated/run-outcome.txt
 
+      # 생성된 테스트는 gitignore라 러너와 함께 사라진다 — 실패 원인을 사람이 보려면 아티팩트로 남겨야 한다
+      - name: Upload generated scenarios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-pr-generated-${{ env.PR_NUMBER }}
+          path: e2e/.generated
+          retention-days: 7
+          if-no-files-found: warn
+
       - name: Classify results and comment on PR (스크립트 — AI 아님)
         run: node .claude/skills/qa-pr-run/scripts/report-and-comment.mjs --comment "$PR_NUMBER"
         env:
