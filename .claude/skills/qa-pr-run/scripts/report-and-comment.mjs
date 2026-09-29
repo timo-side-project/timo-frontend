@@ -117,10 +117,21 @@ function buildReport() {
   for (const suite of data.suites ?? []) collectTests(suite, tests);
 
   const passed = tests.filter((t) => t.status === 'passed');
-  const failed = tests.filter((t) => t.status !== 'passed');
+  // test.fixme/skip은 "사람 확인 필요"로 남긴 것이라 실패가 아니다
+  const skipped = tests.filter((t) => t.status === 'skipped');
+  const failed = tests.filter((t) => t.status !== 'passed' && t.status !== 'skipped');
 
   lines.push('## 실행 결과', '');
-  lines.push(`총 ${tests.length}개 / 통과 ${passed.length}개 / 실패 ${failed.length}개`, '');
+  lines.push(
+    `총 ${tests.length}개 / 통과 ${passed.length}개 / 실패 ${failed.length}개 / 사람 확인 필요 ${skipped.length}개`,
+    '',
+  );
+
+  if (skipped.length) {
+    lines.push('### 사람 확인 필요 (자동 검증 대상 아님)');
+    skipped.forEach((t) => lines.push(`- ${t.title}`));
+    lines.push('');
+  }
 
   if (readRunOutcome() === 'failure') {
     lines.push('Playwright 실행이 실패로 끝났다(exit code != 0). 실패한 시나리오가 없다면 실행 자체가 안 된 것이다.', '');
