@@ -13,6 +13,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 const RESULTS_PATH = 'e2e/.generated/results.json';
 const CONTEXT_PATH = 'e2e/.generated/context.md';
 const PR_INFO_PATH = 'e2e/.generated/pr.json';
+const RUN_OUTCOME_PATH = 'e2e/.generated/run-outcome.txt';
 const MARKER = '<!-- qa-pr-run-report -->';
 const SCHEMA_KEYWORDS = ['zoderror', 'zod', 'schema', 'invalid_type', 'expected string', 'expected number'];
 
@@ -85,6 +86,16 @@ function buildConflictWarning() {
   return ['> ⚠️ **main과 충돌 중** — 아래 결과는 충돌 해결 전 코드 기준이다. 리베이스 후 다시 확인이 필요하다.', ''];
 }
 
+// 워크플로가 Playwright 스텝의 outcome을 적어 둔다 (테스트 0개 + 실패 구분용)
+function readRunOutcome() {
+  if (!existsSync(RUN_OUTCOME_PATH)) return '';
+  try {
+    return readFileSync(RUN_OUTCOME_PATH, 'utf8').trim();
+  } catch {
+    return '';
+  }
+}
+
 function buildReport() {
   const lines = [
     MARKER,
@@ -106,12 +117,32 @@ function buildReport() {
   for (const suite of data.suites ?? []) collectTests(suite, tests);
 
   const passed = tests.filter((t) => t.status === 'passed');
-  const failed = tests.filter((t) => t.status !== 'passed');
+  // test.fixme/skip은 "사람 확인 필요"로 남긴 것이라 실패가 아니다
+  const skipped = tests.filter((t) => t.status === 'skipped');
+  const failed = tests.filter((t) => t.status !== 'passed' && t.status !== 'skipped');
 
   lines.push('## 실행 결과', '');
-  lines.push(`총 ${tests.length}개 / 통과 ${passed.length}개 / 실패 ${failed.length}개`, '');
+  lines.push(
+    `총 ${tests.length}개 / 통과 ${passed.length}개 / 실패 ${failed.length}개 / 사람 확인 필요 ${skipped.length}개`,
+    '',
+  );
 
-  if (failed.length === 0) {
+  if (skipped.length) {
+    lines.push('### 사람 확인 필요 (자동 검증 대상 아님)');
+    skipped.forEach((t) => lines.push(`- ${t.title}`));
+    lines.push('');
+  }
+
+  if (readRunOutcome() === 'failure') {
+    lines.push('Playwright 실행이 실패로 끝났다(exit code != 0). 실패한 시나리오가 없다면 실행 자체가 안 된 것이다.', '');
+  }
+
+  if (tests.length === 0) {
+    // Playwright가 spec 파일을 하나도 못 찾은 경우 — "전부 통과"로 읽히면 안 된다
+    lines.push(
+      '**생성된 시나리오 없음** — Claude가 Phase 4에서 Playwright 파일을 만들지 않았을 수 있다. 위 "생성한 시나리오" 목록은 실행되지 않았다.',
+    );
+  } else if (failed.length === 0) {
     lines.push('실패 없음 — 생성된 시나리오는 전부 통과했다.');
   } else {
     lines.push('### 실패');

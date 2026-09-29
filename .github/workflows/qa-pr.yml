@@ -63,7 +63,13 @@ jobs:
       - name: Save PR info (스크립트 — AI 아님)
         run: |
           mkdir -p e2e/.generated
-          gh pr view "$PR_NUMBER" --json title,body,mergeable > e2e/.generated/pr.json
+          # mergeable은 GitHub가 머지 커밋을 계산하는 동안 UNKNOWN으로 온다 — 잠깐 기다렸다 다시 묻는다
+          for _ in 1 2 3; do
+            gh pr view "$PR_NUMBER" --json title,body,mergeable > e2e/.generated/pr.json
+            [ "$(jq -r .mergeable e2e/.generated/pr.json)" != "UNKNOWN" ] && break
+            sleep 5
+          done
+          jq -r .mergeable e2e/.generated/pr.json
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -133,10 +139,15 @@ jobs:
       # --timeout 상향: CI 러너는 캐시 없이 Next.js dev 서버를 콜드 컴파일해서
       # 첫 페이지 진입이 기본 30초 테스트 타임아웃을 넘길 여지가 있다.
       - name: Run generated scenarios (스크립트 — AI 아님)
+        id: run-scenarios
         run: QA_PR_RUN=1 pnpm exec playwright test e2e/.generated --timeout=90000 --reporter=json > e2e/.generated/results.json
         continue-on-error: true
         env:
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+
+      # 테스트 0개(생성 실패)와 테스트 실패를 리포트에서 구분하기 위해 실행 결과를 남긴다
+      - name: Record run outcome
+        run: echo "${{ steps.run-scenarios.outcome }}" > e2e/.generated/run-outcome.txt
 
       - name: Classify results and comment on PR (스크립트 — AI 아님)
         run: node .claude/skills/qa-pr-run/scripts/report-and-comment.mjs --comment "$PR_NUMBER"
