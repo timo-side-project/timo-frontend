@@ -11,7 +11,7 @@ import GroupItemActions from '../GroupItemActions/GroupItemActions';
 
 interface GroupListSectionProps {
   activeTab: GroupType;
-  onGroupSelect: (id: number | null) => void;
+  onGroupSelect: (group: { id: number; name: string } | null) => void;
 }
 
 const GroupListSection = ({
@@ -36,13 +36,20 @@ const GroupListSection = ({
   const menuGroup = orderedGroups.find((group) => group.id === menuTarget?.id);
 
   useEffect(() => {
-    onGroupSelect(orderedGroups[0]?.id ?? null);
+    const firstGroup = orderedGroups[0];
+    onGroupSelect(
+      firstGroup ? { id: firstGroup.id, name: firstGroup.name } : null,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelect = (id: number) => {
+    const group = orderedGroups.find((item) => item.id === id);
+
+    if (!group) return;
+
     setSelectedId(id);
-    onGroupSelect(id);
+    onGroupSelect(group);
   };
 
   if (orderedGroups.length === 0) {

@@ -97,6 +97,7 @@
 
   --radius-4: 0.25rem;
   --radius-8: 0.5rem;
+  --radius-10: 0.625rem;
   --radius-12: 0.75rem;
   --radius-sm: var(--radius-4);
   --radius-md: var(--radius-8);
