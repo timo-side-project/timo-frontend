@@ -56,6 +56,8 @@ const toReflectionDetail = (
   comments: 2,
   isLiked: false,
   nickname: 'Leon',
+  isMine: false,
+  isPublic: reflection.isPublic,
 });
 
 const createQueryClient = (reflections: MemberCalendarItem[]) => {
