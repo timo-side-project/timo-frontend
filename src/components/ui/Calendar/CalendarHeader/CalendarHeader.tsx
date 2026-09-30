@@ -2,22 +2,22 @@
 
 import Icon from '@/src/components/ui/Icon/Icon';
 
-interface CalendarMonthHeaderProps {
+interface CalendarHeaderProps {
   currentMonthLabel: string;
-  goPrevMonth: () => void;
-  goNextMonth: () => void;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
-const CalendarMonthHeader = ({
+const CalendarHeader = ({
   currentMonthLabel,
-  goPrevMonth,
-  goNextMonth,
-}: CalendarMonthHeaderProps) => {
+  onPrevMonth,
+  onNextMonth,
+}: CalendarHeaderProps) => {
   return (
     <div className="flex items-center justify-center gap-4">
       <button
         type="button"
-        onClick={goPrevMonth}
+        onClick={onPrevMonth}
         aria-label="이전 달"
         className="flex h-8 w-8 items-center justify-center rounded-full text-g-80 hover:bg-g-500"
       >
@@ -26,7 +26,7 @@ const CalendarMonthHeader = ({
       <p className="text-center font-heading-h3">{currentMonthLabel}</p>
       <button
         type="button"
-        onClick={goNextMonth}
+        onClick={onNextMonth}
         aria-label="다음 달"
         className="flex h-8 w-8 items-center justify-center rounded-full text-g-80 hover:bg-g-500"
       >
@@ -36,4 +36,4 @@ const CalendarMonthHeader = ({
   );
 };
 
-export default CalendarMonthHeader;
+export default CalendarHeader;

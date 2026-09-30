@@ -1,5 +1,7 @@
 'use client';
 
+import type { ReactNode } from 'react';
+
 import Detail from '@/src/components/ui/Detail/Detail';
 
 import { useReflectionPrivateState } from '../../hooks/useReflectionPrivateState';
@@ -15,6 +17,7 @@ interface ReflectionContentProps {
   isCommentSheetOpen: boolean;
   onCommentClick: () => void;
   onCommentSheetClose: () => void;
+  children?: ReactNode;
 }
 
 const ReflectionContent = ({
@@ -24,6 +27,7 @@ const ReflectionContent = ({
   isCommentSheetOpen,
   onCommentClick,
   onCommentSheetClose,
+  children,
 }: ReflectionContentProps) => {
   const { isMine } = data;
 
@@ -50,6 +54,8 @@ const ReflectionContent = ({
             : undefined
         }
       />
+
+      {children}
 
       <Detail
         questionCategory={data.question.category}

@@ -13,7 +13,7 @@ import {
   CALENDAR_DATE_FORMAT,
   CALENDAR_GRID_CELL_COUNT,
   CALENDAR_WEEK_STARTS_ON,
-} from '../constants/calendar';
+} from '@/src/lib/constants/calendar';
 
 export interface UseCalendarStateResult {
   today: Date;
@@ -26,15 +26,34 @@ export interface UseCalendarStateResult {
   selectDate: (date: Date) => void;
 }
 
-export const useCalendarState = (): UseCalendarStateResult => {
+interface UseCalendarStateOptions {
+  /** 시작 시 선택해 둘 날짜. 없으면 선택 없이 오늘이 속한 달부터 시작 */
+  initialDate?: Date;
+}
+
+export const useCalendarState = ({
+  initialDate,
+}: UseCalendarStateOptions = {}): UseCalendarStateResult => {
   // 오늘 날짜(초기 렌더에서 한 번만 계산)
   const today = useMemo(() => new Date(), []);
 
-  // 캘린더 기준 월(오늘이 속한 달의 1일)
-  const [currentMonth, setCurrentMonth] = useState(() => startOfMonth(today));
+  // 캘린더 기준 월(시작 날짜가 있으면 그 달, 없으면 이번 달의 1일)
+  const [currentMonth, setCurrentMonth] = useState(() =>
+    startOfMonth(initialDate ?? today),
+  );
 
   // 사용자가 선택한 날짜 (없으면 null)
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(
+    initialDate ?? null,
+  );
+
+  const [prevInitialDate, setPrevInitialDate] = useState(initialDate);
+
+  if (prevInitialDate?.getTime() !== initialDate?.getTime()) {
+    setPrevInitialDate(initialDate);
+    setCurrentMonth(startOfMonth(initialDate ?? today));
+    setSelectedDate(initialDate ?? null);
+  }
 
   // 헤더에 표시할 월 라벨
   const currentMonthLabel = useMemo(
