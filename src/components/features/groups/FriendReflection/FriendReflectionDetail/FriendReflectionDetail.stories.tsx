@@ -26,6 +26,8 @@ const mockReflection: ReflectionDetail = {
   comments: 2,
   isLiked: false,
   nickname: '지민',
+  isMine: false,
+  isPublic: true,
 };
 
 const createQueryClient = (
@@ -72,6 +74,28 @@ export const Default: Story = {
       </ToastProvider>
     </QueryClientProvider>
   ),
+};
+
+export const MyReflection: Story = {
+  args: { reflectionId: 5 },
+  render: (args) => {
+    const reflection: ReflectionDetail = {
+      ...mockReflection,
+      id: 5,
+      nickname: '나',
+      isMine: true,
+      isPublic: true,
+    };
+    return (
+      <QueryClientProvider
+        client={createQueryClient(args.reflectionId, reflection)}
+      >
+        <ToastProvider>
+          <FriendReflectionDetail {...args} />
+        </ToastProvider>
+      </QueryClientProvider>
+    );
+  },
 };
 
 export const PastPositive: Story = {

@@ -3,18 +3,14 @@
 import Image from 'next/image';
 
 import Badge from '@/src/components/ui/Badge/Badge';
+import type { Category } from '@/src/lib/constants/character';
 import { CATEGORY_CHARACTER_MAP } from '@/src/lib/constants/character';
-
-import { getCategoryMessage } from '../../reflectionFeedback/utils/getCategoryMessage';
-import type {
-  FeedbackType,
-  QuestionType,
-} from '../queries/useReflectionDetail';
+import { getCategoryMessage } from '@/src/lib/helpers/getCategoryMessage';
 
 interface DetailProps {
-  questionCategory: QuestionType['category'];
-  questionContent: QuestionType['content'];
-  feedbackContent?: FeedbackType['content'];
+  questionCategory: Category;
+  questionContent: string;
+  feedbackContent?: string | null;
   answerContent: string;
   friendNickname?: string;
 }

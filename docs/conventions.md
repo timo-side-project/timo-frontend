@@ -84,6 +84,11 @@ src/components/features/[feature]/
 
 - 꼭 필요할 때만 `zustand`(v5) 스토어를 만들고, 셀렉터로 필요한 값만 구독한다.
 
+## 기능 스펙 문서
+
+- `docs/product/[feature].md`는 PR 단위 QA의 기준 문서다 (frontmatter `sources`가 담당 코드 경로)
+- 사용자에게 보이는 동작(흐름·문구·예외 처리)을 바꾸면 같은 PR에서 해당 스펙 문서도 갱신한다
+
 ## 커밋 / 브랜치 / PR
 
 - 브랜치: `feature/{작업이름}-#{이슈번호}`

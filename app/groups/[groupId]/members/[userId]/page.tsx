@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 
 import FriendReflectionContent from '@/src/components/features/groups/FriendReflection/FriendReflectionContent/FriendReflectionContent';
-import FriendReflectionHeader from '@/src/components/features/groups/FriendReflection/FriendReflectionHeader/FriendReflectionHeader';
 import BottomNavBar from '@/src/components/layout/BottomNavBar/BottomNavBar';
 
 interface PageProps {
@@ -22,7 +21,6 @@ const GroupFriendReflectionPage = async ({ params }: PageProps) => {
 
   return (
     <div className="space-y-10 pb-20">
-      <FriendReflectionHeader />
       <FriendReflectionContent groupId={+groupId} userId={+userId} />
       <BottomNavBar />
     </div>
