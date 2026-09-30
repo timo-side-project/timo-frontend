@@ -18,6 +18,7 @@ interface FriendCalendarSheetProps {
   isOpen: boolean;
   groupId: number;
   userId: number;
+  isMyPage: boolean;
   selectedDate: Date;
   onClose: () => void;
   onSelectDate: (date: Date) => void;
@@ -27,6 +28,7 @@ const FriendCalendarSheet = ({
   isOpen,
   groupId,
   userId,
+  isMyPage,
   selectedDate,
   onClose,
   onSelectDate,
@@ -55,12 +57,12 @@ const FriendCalendarSheet = ({
               categoryType:
                 CATEGORY_TO_CALENDAR_DAY_TYPE[reflection.question.category],
             }
-          : { categoryType: 'private', isDisabled: true },
+          : { categoryType: 'private', isDisabled: !isMyPage },
       );
     }
 
     return marks;
-  }, [data]);
+  }, [data, isMyPage]);
 
   const handleSelectDate = (date: Date) => {
     calendarState.selectDate(date);

@@ -3,6 +3,7 @@
 import { addDays, format, isSameDay, startOfDay } from 'date-fns';
 import { useMemo, useState } from 'react';
 
+import { useUserDetailQuery } from '@/src/components/features/users/queries/useUserDetailQuery';
 import ErrorState from '@/src/components/ui/ErrorState/ErrorState';
 import Skeleton from '@/src/components/ui/Skeleton/Skeleton';
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
@@ -32,6 +33,9 @@ const FriendReflectionContent = ({
     month: format(selectedDate, CALENDAR_DATE_FORMAT.monthRequest),
   });
 
+  const { data: me, isPending: isMePending } = useUserDetailQuery();
+  const isMyPage = me?.id === userId;
+
   const reflectionByDate = useMemo(() => {
     const mapped = new Map<string, NonNullable<typeof data>[number]>();
 
@@ -50,7 +54,7 @@ const FriendReflectionContent = ({
   const goNextDate = () => setSelectedDate((date) => addDays(date, 1));
 
   const visibleReflection =
-    !isPending && !isError && selectedReflection?.isPublic
+    !isPending && !isError && (selectedReflection?.isPublic || isMyPage)
       ? selectedReflection
       : undefined;
 
@@ -66,7 +70,7 @@ const FriendReflectionContent = ({
   );
 
   const renderPlaceholder = () => {
-    if (isPending) {
+    if (isPending || (selectedReflection && isMePending)) {
       return (
         <div className="space-y-5">
           <Skeleton className="h-6 w-24" ariaLabel="회고 불러오는 중" />
@@ -117,6 +121,7 @@ const FriendReflectionContent = ({
         isOpen={isCalendarOpen}
         groupId={groupId}
         userId={userId}
+        isMyPage={isMyPage}
         selectedDate={selectedDate}
         onClose={() => setIsCalendarOpen(false)}
         onSelectDate={setSelectedDate}
