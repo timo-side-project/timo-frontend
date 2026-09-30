@@ -11,6 +11,7 @@ import { useGroupMemberCalendarQuery } from '../../queries/useGroupMemberCalenda
 import FriendCalendarSheet from '../FriendCalendarSheet/FriendCalendarSheet';
 import FriendReflectionDateNav from '../FriendReflectionDateNav/FriendReflectionDateNav';
 import FriendReflectionDetail from '../FriendReflectionDetail/FriendReflectionDetail';
+import FriendReflectionHeader from '../FriendReflectionHeader/FriendReflectionHeader';
 
 interface FriendReflectionContentProps {
   groupId: number;
@@ -48,7 +49,23 @@ const FriendReflectionContent = ({
   const goPrevDate = () => setSelectedDate((date) => addDays(date, -1));
   const goNextDate = () => setSelectedDate((date) => addDays(date, 1));
 
-  const renderReflection = () => {
+  const visibleReflection =
+    !isPending && !isError && selectedReflection?.isPublic
+      ? selectedReflection
+      : undefined;
+
+  const dateNav = (
+    <FriendReflectionDateNav
+      selectedDate={selectedDate}
+      isNextDisabled={isSameDay(selectedDate, today)}
+      onPrevDate={goPrevDate}
+      onNextDate={goNextDate}
+      onOpenCalendar={() => setIsCalendarOpen(true)}
+      className="pt-7"
+    />
+  );
+
+  const renderPlaceholder = () => {
     if (isPending) {
       return (
         <div className="space-y-5">
@@ -68,36 +85,33 @@ const FriendReflectionContent = ({
       );
     }
 
-    if (!selectedReflection || !selectedReflection.isPublic) {
-      return (
-        <section className="flex h-40 flex-col items-center justify-center gap-1">
-          <p className="font-body-s text-g-0">
-            {selectedReflection ? '비공개 회고예요' : '이 날에는 회고가 없어요'}
-          </p>
-          <p className="font-caption-n text-g-80">다른 날짜를 확인해 보세요</p>
-        </section>
-      );
-    }
-
     return (
-      <FriendReflectionDetail
-        groupId={groupId}
-        reflectionId={selectedReflection.id}
-      />
+      <section className="flex h-40 flex-col items-center justify-center gap-1">
+        <p className="font-body-s text-g-0">
+          {selectedReflection ? '비공개 회고예요' : '이 날에는 회고가 없어요'}
+        </p>
+        <p className="font-caption-n text-g-80">다른 날짜를 확인해 보세요</p>
+      </section>
     );
   };
 
   return (
     <div className="space-y-3">
-      <FriendReflectionDateNav
-        selectedDate={selectedDate}
-        isNextDisabled={isSameDay(selectedDate, today)}
-        onPrevDate={goPrevDate}
-        onNextDate={goNextDate}
-        onOpenCalendar={() => setIsCalendarOpen(true)}
-      />
-
-      {renderReflection()}
+      {visibleReflection ? (
+        <FriendReflectionDetail
+          key={visibleReflection.id}
+          groupId={groupId}
+          reflectionId={visibleReflection.id}
+        >
+          {dateNav}
+        </FriendReflectionDetail>
+      ) : (
+        <>
+          <FriendReflectionHeader />
+          {dateNav}
+          {renderPlaceholder()}
+        </>
+      )}
 
       <FriendCalendarSheet
         isOpen={isCalendarOpen}
