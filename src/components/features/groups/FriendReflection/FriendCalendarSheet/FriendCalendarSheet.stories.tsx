@@ -62,6 +62,7 @@ const meta = {
     isOpen: false,
     groupId: GROUP_ID,
     userId: USER_ID,
+    isMyPage: false,
     selectedDate: today,
     onClose: () => {},
     onSelectDate: () => {},
@@ -96,4 +97,10 @@ export const Default: Story = {
       </QueryClientProvider>
     );
   },
+};
+
+/** 내 캘린더면 비공개(2·5일)도 선택 가능 */
+export const MyPage: Story = {
+  args: { isMyPage: true },
+  render: Default.render,
 };
