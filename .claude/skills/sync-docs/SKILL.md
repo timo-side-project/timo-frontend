@@ -1,6 +1,6 @@
 ---
 name: sync-docs
-description: 코드 구조 변경을 문서에 반영 — 라우트·디렉토리 트리(docs/architecture.md), 스킬·에이전트 목록(AGENTS.md), 의존성·스택(docs/tech-stack.md)을 실제 코드 기준으로 최신화. "docs 최신화", "문서 동기화", "sync docs", "문서 최신화" 요청 시 사용
+description: 코드 구조 변경을 문서에 반영 — 라우트·디렉토리 트리(docs/architecture.md), 스킬·에이전트 목록(AGENTS.md), 의존성·스택(docs/tech-stack.md), 기능 목록 누락(docs/product.md)을 실제 코드 기준으로 최신화. "docs 최신화", "문서 동기화", "sync docs", "문서 최신화" 요청 시 사용
 ---
 
 # TIMO 문서 동기화
@@ -36,6 +36,13 @@ ls proxy.ts middleware.ts 2>/dev/null
   - `package.json` 주요 의존성 버전/추가·제거 반영
 - **docs/conventions.md**
   - **자동 수정하지 않는다.** 규칙 변경은 사람이 결정. 단, 명백히 코드와 어긋난 사실(예: 별칭 경로)이 보이면 **지적만** 하고 확인을 받는다.
+- **docs/product.md**
+  - `src/components/features/` 밑에 새 기능 폴더가 생겼는데 "기능별 요약"에 없으면 **누락만 지적** (설명·용어는 사람이 채움, 임의로 지어내지 않는다)
+  - 문서에 있는 라우트/기능이 코드에서 삭제됐으면 해당 항목 제거
+  - 해금 기준·카피 문구 등 도메인 규칙(코드만으로 파생 안 되는 값)은 자동 수정하지 않는다 — 코드 상수와 어긋나 보이면 **지적만** 하고 확인받는다
+- **docs/product/*.md** (기능별 상세 스펙)
+  - frontmatter의 `sources`·`routes` 경로가 실제로 존재하는지만 확인해서, 삭제·이동된 경로를 고친다
+  - 규칙·예외 본문은 자동 수정하지 않는다 (사람 판단)
 
 ## Phase 3: 리포트
 

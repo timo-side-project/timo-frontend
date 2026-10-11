@@ -3,12 +3,16 @@ export const GROUP_ENDPOINT = {
   group: (groupId: number) => `/groups/${groupId}`,
   friendList: (groupId: number) => `/groups/${groupId}/reflections/today`,
   keywords: (groupId: number) => `/groups/${groupId}/reflections/keywords`,
+  memberCalendar: (groupId: number, userId: number) =>
+    `/groups/${groupId}/members/${userId}/calendar`,
   joinGroup: '/groups/members',
   leaveGroup: (groupId: number) => `/groups/${groupId}/members`,
   reflectionDetail: (groupId: number, reflectionId: number) =>
     `/groups/${groupId}/reflections/${reflectionId}`,
   reflectionLike: (groupId: number, reflectionId: number) =>
     `/groups/${groupId}/reflections/${reflectionId}/like`,
+  reflectionPrivate: (groupId: number, reflectionId: number) =>
+    `/groups/${groupId}/reflections/${reflectionId}/private`,
   reflectionComments: (groupId: number, reflectionId: number) =>
     `/groups/${groupId}/reflections/${reflectionId}/comments`,
   reflectionComment: (

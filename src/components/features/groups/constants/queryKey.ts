@@ -9,6 +9,10 @@ export const groupKeys = {
     [...groupKeys.all(), 'friendList', groupId] as const,
   keywords: (groupId: number | null) =>
     [...groupKeys.all(), 'keywords', groupId] as const,
+  memberCalendarByGroup: (groupId: number) =>
+    [...groupKeys.all(), 'memberCalendar', groupId] as const,
+  memberCalendar: (groupId: number, userId: number, month: string) =>
+    [...groupKeys.all(), 'memberCalendar', groupId, userId, month] as const,
   create: () => [...groupKeys.all(), 'create'] as const,
   joinGroup: () => [...groupKeys.all(), 'joinGroup'] as const,
   update: (groupId: number) => [...groupKeys.all(), 'update', groupId] as const,
@@ -19,6 +23,7 @@ export const groupKeys = {
   comments: (groupId: number, reflectionId: number) =>
     [...groupKeys.all(), 'comments', groupId, reflectionId] as const,
   toggleLike: () => [...groupKeys.all(), 'like', 'toggle'] as const,
+  togglePrivate: () => [...groupKeys.all(), 'private', 'toggle'] as const,
   createComment: () => [...groupKeys.all(), 'comments', 'create'] as const,
   updateComment: () => [...groupKeys.all(), 'comments', 'update'] as const,
   deleteComment: () => [...groupKeys.all(), 'comments', 'delete'] as const,

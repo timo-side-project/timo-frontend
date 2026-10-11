@@ -85,9 +85,8 @@ const GroupsPageClient = ({ joinParam, code }: GroupsPageClientProps) => {
                   groupId={selectedGroup.id}
                   activeTab={activeTab}
                   onSelect={(item) => {
-                    if (item.reflectionId == null) return;
                     router.push(
-                      `/groups/${selectedGroup.id}/reflections/${item.reflectionId}`,
+                      `/groups/${selectedGroup.id}/members/${item.userId}`,
                     );
                   }}
                 />

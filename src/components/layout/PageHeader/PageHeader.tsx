@@ -10,6 +10,8 @@ interface PageHeaderProps {
   onRightClick?: () => void;
   leftSlotVariant?: 'icon' | 'logo';
   rightSlotVariant?: 'icon' | 'logo';
+  leftAriaLabel?: string;
+  rightAriaLabel?: string;
   className?: string;
 }
 
@@ -21,6 +23,8 @@ const PageHeader = ({
   onRightClick,
   leftSlotVariant = 'icon',
   rightSlotVariant = 'icon',
+  leftAriaLabel = 'left action',
+  rightAriaLabel = 'right action',
   className,
 }: PageHeaderProps) => {
   const slotBaseClassName = 'h-10 flex items-center justify-center';
@@ -35,7 +39,7 @@ const PageHeader = ({
         type="button"
         onClick={onLeftClick}
         className={cn(slotBaseClassName, slotVariantClassName[leftSlotVariant])}
-        aria-label="left action"
+        aria-label={leftAriaLabel}
       >
         {leftIcon ?? <div className="h-6 w-6 rounded-full" />}
       </button>
@@ -49,7 +53,7 @@ const PageHeader = ({
           slotBaseClassName,
           slotVariantClassName[rightSlotVariant],
         )}
-        aria-label="right action"
+        aria-label={rightAriaLabel}
       >
         {rightIcon ?? <div className="h-6 w-6 rounded-full" />}
       </button>
