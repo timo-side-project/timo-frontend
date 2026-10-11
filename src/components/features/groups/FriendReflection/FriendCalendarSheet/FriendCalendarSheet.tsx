@@ -1,7 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import BottomSheet from '@/src/components/ui/BottomSheet/BottomSheet';
 import Calendar from '@/src/components/ui/Calendar/Calendar';
@@ -34,6 +34,17 @@ const FriendCalendarSheet = ({
   onSelectDate,
 }: FriendCalendarSheetProps) => {
   const calendarState = useCalendarState({ initialDate: selectedDate });
+
+  // 날짜를 고르지 않고 닫았다가 다시 열면 보고 있던 날짜의 달로 되돌린다
+  const [wasOpen, setWasOpen] = useState(isOpen);
+
+  if (wasOpen !== isOpen) {
+    setWasOpen(isOpen);
+
+    if (isOpen) {
+      calendarState.reset();
+    }
+  }
 
   const { data } = useGroupMemberCalendarQuery({
     groupId,
