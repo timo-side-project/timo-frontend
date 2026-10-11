@@ -2,6 +2,7 @@ export const GROUP_ENDPOINT = {
   groups: '/groups',
   group: (groupId: number) => `/groups/${groupId}`,
   friendList: (groupId: number) => `/groups/${groupId}/reflections/today`,
+  keywords: (groupId: number) => `/groups/${groupId}/reflections/keywords`,
   memberCalendar: (groupId: number, userId: number) =>
     `/groups/${groupId}/members/${userId}/calendar`,
   joinGroup: '/groups/members',
