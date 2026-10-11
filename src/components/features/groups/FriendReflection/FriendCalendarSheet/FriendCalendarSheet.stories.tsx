@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { format, setDate, startOfMonth } from 'date-fns';
+import { addMonths, format, setDate, startOfMonth } from 'date-fns';
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 
 import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
 
@@ -103,4 +104,26 @@ export const Default: Story = {
 export const MyPage: Story = {
   args: { isMyPage: true },
   render: Default.render,
+};
+
+// 다른 달로 넘긴 뒤 날짜를 고르지 않고 닫으면, 다시 열 때 보고 있던 날짜의 달로 돌아온다
+export const ReopenResetsMonth: Story = {
+  render: Default.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement.ownerDocument.body);
+    const currentMonthLabel = format(today, CALENDAR_DATE_FORMAT.monthLabel);
+    const prevMonthLabel = format(
+      addMonths(today, -1),
+      CALENDAR_DATE_FORMAT.monthLabel,
+    );
+
+    await userEvent.click(canvas.getByRole('button', { name: '캘린더 열기' }));
+    await userEvent.click(canvas.getByRole('button', { name: '이전 달' }));
+    await expect(canvas.getByText(prevMonthLabel)).toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole('button', { name: '닫기' }));
+    await userEvent.click(canvas.getByRole('button', { name: '캘린더 열기' }));
+
+    await expect(canvas.getByText(currentMonthLabel)).toBeInTheDocument();
+  },
 };
