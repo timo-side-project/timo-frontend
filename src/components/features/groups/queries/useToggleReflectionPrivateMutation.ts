@@ -41,6 +41,9 @@ export const useToggleReflectionPrivateMutation = () => {
       queryClient.invalidateQueries({
         queryKey: groupKeys.reflectionDetail(groupId, reflectionId),
       });
+      queryClient.invalidateQueries({
+        queryKey: groupKeys.memberCalendarByGroup(groupId),
+      });
     },
   });
 };

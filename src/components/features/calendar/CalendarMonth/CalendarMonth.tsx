@@ -3,15 +3,14 @@
 import { format, isSameDay } from 'date-fns';
 import { useMemo } from 'react';
 
+import Calendar from '@/src/components/ui/Calendar/Calendar';
+import type { UseCalendarStateResult } from '@/src/hooks/useCalendarState';
+import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
+
 import { useSuspenseMonthReflectionQuery } from '../../reflection/queries/useMonthReflectionQuery';
 import type { SelectedSummaryCardData } from '../CalendarPageClient/CalendarPageClient';
-import { CALENDAR_DATE_FORMAT } from '../constants/calendar';
-import type { UseCalendarStateResult } from '../hooks/useCalendarState';
 import { getCategoryTypeByDate } from '../utils/getCategoryTypeByDate';
 import { mapReflectionItems } from '../utils/mapReflectionItems';
-import CalendarMonthGrid from './CalendarMonthGrid/CalendarMonthGrid';
-import CalendarMonthHeader from './CalendarMonthHeader/CalendarMonthHeader';
-import CalendarMonthWeekdays from './CalendarMonthWeekdays/CalendarMonthWeekdays';
 
 interface CalendarMonthPropsWithSummary extends UseCalendarStateResult {
   onSelectSummary: (summary: SelectedSummaryCardData | null) => void;
@@ -75,25 +74,23 @@ const CalendarMonth = ({
     });
   };
 
-  return (
-    <div className="space-y-3">
-      <CalendarMonthHeader
-        currentMonthLabel={currentMonthLabel}
-        goPrevMonth={goPrevMonth}
-        goNextMonth={goNextMonth}
-      />
+  const handleSelectDate = (date: Date) => {
+    selectDate(date);
+    handleSelectSummary(date);
+  };
 
-      <CalendarMonthWeekdays />
-      <CalendarMonthGrid
-        days={days}
-        currentMonth={currentMonth}
-        selectedDate={selectedDate}
-        today={today}
-        categoryTypeByDate={categoryTypeByDate}
-        selectDate={selectDate}
-        onSelectSummary={handleSelectSummary}
-      />
-    </div>
+  return (
+    <Calendar
+      currentMonthLabel={currentMonthLabel}
+      days={days}
+      currentMonth={currentMonth}
+      today={today}
+      selectedDate={selectedDate}
+      marksByDate={categoryTypeByDate}
+      onPrevMonth={goPrevMonth}
+      onNextMonth={goNextMonth}
+      onSelectDate={handleSelectDate}
+    />
   );
 };
 

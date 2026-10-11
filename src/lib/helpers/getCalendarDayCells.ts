@@ -1,15 +1,17 @@
 import { format, isAfter, isSameDay, isSameMonth, startOfDay } from 'date-fns';
 
-import type { CalendarDayCategoryType } from '../CalendarMonth/CalendarDayCell/CalendarDayCell';
-import { CALENDAR_DATE_FORMAT } from '../constants/calendar';
-import type { CalendarDayRecordByDateItem } from './getCategoryTypeByDate';
+import { CALENDAR_DATE_FORMAT } from '@/src/lib/constants/calendar';
+import type {
+  CalendarDayCategoryType,
+  CalendarDayMark,
+} from '@/src/types/calendar';
 
 interface GetCalendarDayCellsParams {
   days: Date[];
   currentMonth: Date;
   selectedDate: Date | null;
   today: Date;
-  categoryTypeByDate: Map<string, CalendarDayRecordByDateItem>;
+  marksByDate: Map<string, CalendarDayMark>;
 }
 
 interface CalendarDayCellProps {
@@ -24,7 +26,7 @@ export interface CalendarDayCellType {
   date: Date;
   isFuture: boolean;
   categoryType: CalendarDayCategoryType | undefined;
-  reflectionId: number | undefined;
+  isDisabled: boolean;
   cellProps: CalendarDayCellProps;
 }
 
@@ -36,7 +38,7 @@ export const getCalendarDayCells = ({
   currentMonth,
   selectedDate,
   today,
-  categoryTypeByDate,
+  marksByDate,
 }: GetCalendarDayCellsParams): CalendarDayCellType[] => {
   const todayStart = startOfDay(today);
 
@@ -48,10 +50,10 @@ export const getCalendarDayCells = ({
     const isOutlined = selectedDate ? isSelected : isToday;
     const isFuture = isAfter(dayStart, todayStart);
     const dayKey = format(day, CALENDAR_DATE_FORMAT.dayKey);
-    const dayRecord = categoryTypeByDate.get(dayKey);
-    const categoryType = dayRecord?.categoryType;
-    const reflectionId = dayRecord?.reflectionId;
+    const dayMark = marksByDate.get(dayKey);
+    const categoryType = dayMark?.categoryType;
     const hasRecord = Boolean(categoryType);
+    const isDisabled = Boolean(dayMark?.isDisabled);
 
     return {
       key: day.toISOString(),
@@ -59,7 +61,7 @@ export const getCalendarDayCells = ({
       date: day,
       isFuture,
       categoryType,
-      reflectionId,
+      isDisabled,
       cellProps: {
         day: day.getDate(),
         hasRecord,
