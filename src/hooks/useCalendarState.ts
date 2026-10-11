@@ -24,6 +24,7 @@ export interface UseCalendarStateResult {
   goPrevMonth: () => void;
   goNextMonth: () => void;
   selectDate: (date: Date) => void;
+  reset: () => void;
 }
 
 interface UseCalendarStateOptions {
@@ -47,12 +48,17 @@ export const useCalendarState = ({
     initialDate ?? null,
   );
 
+  // 기준 월과 선택 날짜를 시작 상태로 되돌린다
+  const reset = () => {
+    setCurrentMonth(startOfMonth(initialDate ?? today));
+    setSelectedDate(initialDate ?? null);
+  };
+
   const [prevInitialDate, setPrevInitialDate] = useState(initialDate);
 
   if (prevInitialDate?.getTime() !== initialDate?.getTime()) {
     setPrevInitialDate(initialDate);
-    setCurrentMonth(startOfMonth(initialDate ?? today));
-    setSelectedDate(initialDate ?? null);
+    reset();
   }
 
   // 헤더에 표시할 월 라벨
@@ -96,5 +102,6 @@ export const useCalendarState = ({
     goPrevMonth,
     goNextMonth,
     selectDate,
+    reset,
   };
 };
